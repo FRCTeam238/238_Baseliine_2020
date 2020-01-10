@@ -59,10 +59,11 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     oi = new OI();
-    // m_chooser.setDefaultOption("Default Auto", "Some auto mode");
-    // chooser.addOption("My Auto", new MyAutoCommand());
-    // SmartDashboard.putData("Auto mode", m_chooser);
+    navigationBoard.init();
+    populateAutomodes();
+  }
 
+  private void populateAutomodes() {
     // initialize the automodes list
     IAutonomousModeDataSource autoModesDataSource = new DataFileAutonomousModeDataSource("/home/lvuser/amode238.txt");
     AutonomousModesReader reader = new AutonomousModesReader(autoModesDataSource);
@@ -93,8 +94,6 @@ public class Robot extends TimedRobot {
       }
       SmartDashboard.putData("Auto Modes", m_chooser);
     }
-
-    navigationBoard.init();
   }
 
   /**

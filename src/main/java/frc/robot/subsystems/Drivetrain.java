@@ -105,7 +105,7 @@ public class Drivetrain extends Subsystem {
     rightMasterDrive.set(ControlMode.PercentOutput, 0);
   }
 
-  public void initTalons() {
+  private void initTalons() {
     var leftDriveFollower1 = RobotMap.SpeedControllers.LeftFollower1;
     var leftDriveFollower2 = RobotMap.SpeedControllers.LeftFollower2;
 
@@ -157,7 +157,7 @@ public class Drivetrain extends Subsystem {
    * percentage This can be found in the CTRE Talon SRX Software Reference Manual
    * Section 12.4: Velocity Closed-Loop Walkthrough Java
    */
-  public void configTalon(TalonSRX talon) {
+  private void configTalon(TalonSRX talon) {
     /*
      * This sets the voltage range the talon can use; should be set at +12.0f and
      * -12.0f
