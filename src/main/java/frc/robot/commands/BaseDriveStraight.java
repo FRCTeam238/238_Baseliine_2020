@@ -36,14 +36,14 @@ public abstract class BaseDriveStraight extends BaseCommand implements IAutonomo
   private double currentVelocity = 0;
 
   public BaseDriveStraight() {
+    requires(Robot.drivetrain);
+
+    drivetrain = Robot.drivetrain;
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    requires(Robot.drivetrain);
-
-    drivetrain = Robot.drivetrain;
   }
 
   // Called repeatedly when this Command is scheduled to run

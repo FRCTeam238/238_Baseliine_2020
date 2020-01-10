@@ -93,6 +93,8 @@ public class Robot extends TimedRobot {
       }
       SmartDashboard.putData("Auto Modes", m_chooser);
     }
+
+    navigationBoard.init();
   }
 
   /**
