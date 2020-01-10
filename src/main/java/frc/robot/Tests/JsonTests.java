@@ -44,7 +44,7 @@ public class JsonTests {
          * "DriveStraightVision", "parameters": [ "3", "4" ] } ] } ]
          */
 
-        String json = "[{\"name\":\"Some auto mode\",\"commands\":[{\"name\":\"DriveStraightNavBoard\",\"parameters\":[\"1\",\"2\"]},{\"name\":\"DriveStraightVision\",\"parameters\":[\"3\",\"4\"]}]}]";
+        String json = "[{\"name\":\"Some auto mode\",\"commands\":[{\"name\":\"LogMessage\",\"parameters\":[\"A message\",\"debug\"]},{\"name\":\"LogMessage\",\"parameters\":[\"Another message\",\"warn\"]}]}]";
         final ObjectMapper mapper = new ObjectMapper();
 
         List<AutonomousModeDescriptor> modeDescriptors = new ArrayList<AutonomousModeDescriptor>();
