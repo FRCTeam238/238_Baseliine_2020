@@ -1,0 +1,16 @@
+{
+  "AutonomousModes": [
+    {
+      "Commands": [
+        {
+          "Name": "LogMessage",
+          "Parameters": [
+            "works!!!!!!!!",
+            "warn"
+          ]
+        }
+      ],
+      "Name": "Automode1"
+    }
+  ]
+}

@@ -15,6 +15,7 @@ import java.util.List;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
@@ -83,9 +84,11 @@ public class AutonomousModesReader {
         }
 
         final ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES, true);
 
         try {
-            modeDescriptors = mapper.readValue(json, new TypeReference<List<AutonomousModeDescriptor>>() {});
+            AutonomousModeDescriptors descriptor = mapper.readValue(json, new TypeReference<AutonomousModeDescriptors>() {});
+            modeDescriptors = descriptor.getAutonomousModes();
         } catch (JsonMappingException e) {
             Logger.Error(e.getStackTrace().toString());
         } catch (JsonProcessingException e) {
