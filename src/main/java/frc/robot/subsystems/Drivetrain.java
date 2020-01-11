@@ -205,7 +205,8 @@ public class Drivetrain extends Subsystem {
     double rightTicks = rightMasterDrive.getSelectedSensorPosition(0);
     double rightDistanceTravelled = rightTicks / TICKS_PER_INCH;
     Logger.Trace("RIGHT TICKS: " + rightTicks);
-    return rightDistanceTravelled;
+    //riddler hap opposite facin motors so power was reversed, compensate by negating
+    return -rightDistanceTravelled;
   }
 
 }

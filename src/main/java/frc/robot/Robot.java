@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import edu.wpi.first.hal.SimDevice;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -35,6 +36,7 @@ public class Robot extends TimedRobot {
   public static NavigationBoard navigationBoard;
   public static Vision vision;
   public static OI oi;
+  private static boolean IsSimulation;
 
   // Dictionary of auto mode names and commands to run
   HashMap<String, CommandGroup> m_autoModes;
@@ -47,6 +49,9 @@ public class Robot extends TimedRobot {
   SendableChooser<String> m_chooser = new SendableChooser<>();
 
   public Robot() {
+    SimDevice robotSim = SimDevice.create("Robot 238");
+    IsSimulation = robotSim != null;
+
     drivetrain = new Drivetrain();
     navigationBoard = new NavigationBoard();
     vision = new Vision();
@@ -64,10 +69,46 @@ public class Robot extends TimedRobot {
   }
 
   private void populateAutomodes() {
+
+    if (!IsSimulation){
     // initialize the automodes list
-    IAutonomousModeDataSource autoModesDataSource = new DataFileAutonomousModeDataSource("/home/lvuser/amode238.txt");
-    AutonomousModesReader reader = new AutonomousModesReader(autoModesDataSource);
-    m_autoModes = reader.getAutonmousModes();
+      IAutonomousModeDataSource autoModesDataSource = new DataFileAutonomousModeDataSource("/home/lvuser/amode238.txt");
+      AutonomousModesReader reader = new AutonomousModesReader(autoModesDataSource);
+      m_autoModes = reader.getAutonmousModes();
+    } else {
+      m_autoModes = new HashMap<>();
+
+      CommandGroup cg = new CommandGroup();
+      DriveStraightNavBoard cmd = new DriveStraightNavBoard();
+      List<String> parameters = new ArrayList<>();
+      parameters.add("5");
+      parameters.add("10");
+      cmd.setParameters(parameters);
+      cg.addSequential(cmd);
+
+      m_autoModes.put("Simulate - Drive Straight: sp 5, dist 10", cg);
+
+      CommandGroup cg2 = new CommandGroup();
+      DriveStraightNavBoard cmd2 = new DriveStraightNavBoard();
+      List<String> parameters2 = new ArrayList<>();
+      parameters2.add("15");
+      parameters2.add("100");
+      cmd2.setParameters(parameters2);
+      cg2.addSequential(cmd2);
+
+      DriveStraightNavBoard cmd3 = new DriveStraightNavBoard();
+      List<String> parameters3 = new ArrayList<>();
+      parameters3.add("5");
+      parameters3.add("1000");
+      cmd3.setParameters(parameters3);
+      cg2.addSequential(cmd3);
+
+      m_autoModes.put("Simulate - Drive Straight: sp 15, dist 100", cg2);
+      // CommandGroup cg3 = new CommandGroup();
+      // cg3.addSequential(cg);
+      // cg3.addSequential(cg2);
+      // m_autoModes.put("Simulate - Auto1/Auto2", cg3);
+    }
 
     if (m_autoModes.size() == 0){
       CommandGroup cg = new CommandGroup();

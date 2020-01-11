@@ -10,6 +10,8 @@ package frc.robot;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
+import frc.core238.wrappers.TalonSRX_238;
+
 /**
  * The RobotMap is a mapping from the ports sensors and actuators are wired into
  * to a variable name. This provides flexibility changing wiring, makes checking
@@ -28,11 +30,11 @@ public final class RobotMap {
     private static final int DRIVE_TRAIN_LEFT_SLAVE1 = 14;
     private static final int DRIVE_TRAIN_LEFT_SLAVE2 = 13;
 
-    public static TalonSRX LeftMaster = new TalonSRX(DRIVE_TRAIN_LEFT_MASTER);
+    public static TalonSRX_238 LeftMaster = new TalonSRX_238(DRIVE_TRAIN_LEFT_MASTER);
     public static VictorSPX LeftFollower1 = new VictorSPX(DRIVE_TRAIN_LEFT_SLAVE1);
     public static VictorSPX LeftFollower2 = new VictorSPX(DRIVE_TRAIN_LEFT_SLAVE2);
   
-    public static TalonSRX RightMaster = new TalonSRX(DRIVE_TRAIN_RIGHT_MASTER);
+    public static TalonSRX_238 RightMaster = new TalonSRX_238(DRIVE_TRAIN_RIGHT_MASTER);
     public static VictorSPX RightFollower1 = new VictorSPX(DRIVE_TRAIN_RIGHT_SLAVE1);
     public static VictorSPX RightFollower2 = new VictorSPX(DRIVE_TRAIN_RIGHT_SLAVE2);
   }
