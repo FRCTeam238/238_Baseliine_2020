@@ -14,10 +14,10 @@ import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
+import frc.core238.Logger;
 import frc.robot.RobotMap;
 import frc.robot.commands.TankDrive;
 import frc.robot.commands.drivetrainparameters.DriverJoysticks;
-import frc.core238.Logger;
 
 /**
  * Add your docs here.
@@ -33,6 +33,9 @@ public class Drivetrain extends Subsystem {
   private final TalonSRX rightMasterDrive = RobotMap.SpeedControllers.RightMaster;
   private final TalonSRX leftMasterDrive = RobotMap.SpeedControllers.LeftMaster;
 
+  private final TalonSRX leftDriveFollower1 = RobotMap.SpeedControllers.LeftFollower1;
+  private final TalonSRX rightDriveFollower1 = RobotMap.SpeedControllers.RightFollower1;
+
   public Drivetrain() {
     initTalons();
   }
@@ -45,7 +48,7 @@ public class Drivetrain extends Subsystem {
 
   public void drive(double left, double right) {
     leftMasterDrive.set(ControlMode.PercentOutput, left);
-    rightMasterDrive.set(ControlMode.PercentOutput, -right);
+    rightMasterDrive.set(ControlMode.PercentOutput, right);
   }
 
   public void drive(double left, double right, double desiredAngle) {
@@ -105,30 +108,34 @@ public class Drivetrain extends Subsystem {
     rightMasterDrive.set(ControlMode.PercentOutput, 0);
   }
 
-  private void initTalons() {
-    var leftDriveFollower1 = RobotMap.SpeedControllers.LeftFollower1;
-    var leftDriveFollower2 = RobotMap.SpeedControllers.LeftFollower2;
+  public void initTalons() {
+    rightMasterDrive.configFactoryDefault();
+    leftMasterDrive.configFactoryDefault();
+    leftDriveFollower1.configFactoryDefault();
+    rightDriveFollower1.configFactoryDefault();
 
-    leftMasterDrive.setInverted(true);
-    leftDriveFollower1.setInverted(true);
-    leftDriveFollower2.setInverted(true);
+    //var leftDriveFollower2 = RobotMap.SpeedControllers.LeftFollower2;
 
     leftDriveFollower1.follow(leftMasterDrive);
-    leftDriveFollower2.follow(leftMasterDrive);
+    //leftDriveFollower2.follow(leftMasterDrive);
+
+    //leftMasterDrive.setInverted(false);
 
     leftMasterDrive.setNeutralMode(NeutralMode.Brake);
     leftDriveFollower1.setNeutralMode(NeutralMode.Brake);
-    leftDriveFollower2.setNeutralMode(NeutralMode.Brake);
+    //leftDriveFollower2.setNeutralMode(NeutralMode.Brake);
 
-    var rightDriveFollower1 = RobotMap.SpeedControllers.RightFollower1;
-    var rightDriveFollower2 = RobotMap.SpeedControllers.RightFollower2;
+    //var rightDriveFollower2 = RobotMap.SpeedControllers.RightFollower2;
 
     rightDriveFollower1.follow(rightMasterDrive);
-    rightDriveFollower2.follow(rightMasterDrive);
+    //rightDriveFollower2.follow(rightMasterDrive);
+
+    rightMasterDrive.setInverted(true);
+    rightDriveFollower1.setInverted(true);
 
     rightMasterDrive.setNeutralMode(NeutralMode.Brake);
     rightDriveFollower1.setNeutralMode(NeutralMode.Brake);
-    rightDriveFollower2.setNeutralMode(NeutralMode.Brake);
+    //rightDriveFollower2.setNeutralMode(NeutralMode.Brake);
 
     rightMasterDrive.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 1, 0);
     leftMasterDrive.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 1, 0);
@@ -205,8 +212,7 @@ public class Drivetrain extends Subsystem {
     double rightTicks = rightMasterDrive.getSelectedSensorPosition(0);
     double rightDistanceTravelled = rightTicks / TICKS_PER_INCH;
     Logger.Trace("RIGHT TICKS: " + rightTicks);
-    //riddler hap opposite facin motors so power was reversed, compensate by negating
-    return -rightDistanceTravelled;
+    return rightDistanceTravelled;
   }
 
 }
