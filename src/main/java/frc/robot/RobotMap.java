@@ -38,4 +38,12 @@ public final class RobotMap {
     public static TalonSRX RightFollower1 = new TalonSRX(DRIVE_TRAIN_RIGHT_SLAVE1);
     //public static VictorSPX RightFollower2 = new VictorSPX(DRIVE_TRAIN_RIGHT_SLAVE2);
   }
+
+  public static class limelightSettings {
+    public static int visionMode = 0;
+    public static int cameraMode = 1;
+    public static int ledsOn = 3;
+    public static int ledsBlink = 2;
+    public static int ledsOff = 1;
+  }
 }
