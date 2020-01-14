@@ -36,7 +36,6 @@ public class Robot extends TimedRobot {
   public static NavigationBoard navigationBoard;
   public static Vision vision;
   public static OI oi;
-  private static boolean IsSimulation;
 
   // Dictionary of auto mode names and commands to run
   HashMap<String, CommandGroup> m_autoModes;
@@ -49,9 +48,6 @@ public class Robot extends TimedRobot {
   SendableChooser<String> m_chooser = new SendableChooser<>();
 
   public Robot() {
-    SimDevice robotSim = SimDevice.create("Robot 238");
-    IsSimulation = robotSim != null;
-
     drivetrain = new Drivetrain();
     navigationBoard = new NavigationBoard();
     vision = new Vision();
@@ -70,7 +66,7 @@ public class Robot extends TimedRobot {
 
   private void populateAutomodes() {
 
-    if (!IsSimulation){
+    if (!isReal()){
     // initialize the automodes list
       IAutonomousModeDataSource autoModesDataSource = new DataFileAutonomousModeDataSource("/home/lvuser/amode238.txt");
       AutonomousModesReader reader = new AutonomousModesReader(autoModesDataSource);
