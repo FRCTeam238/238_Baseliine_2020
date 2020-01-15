@@ -17,7 +17,9 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.core238.autonomous.*;
+import frc.core238.autonomous.AutonomousModesReader;
+import frc.core238.autonomous.DataFileAutonomousModeDataSource;
+import frc.core238.autonomous.IAutonomousModeDataSource;
 import frc.robot.commands.DriveStraightNavBoard;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.NavigationBoard;
@@ -50,7 +52,7 @@ public class Robot extends TimedRobot {
   public Robot() {
     drivetrain = new Drivetrain();
     navigationBoard = new NavigationBoard();
-    vision = new Vision();
+    vision = new Vision(FieldConstants.VisionConstants.targetHeight, FieldConstants.VisionConstants.cameraHeight);
   }
 
   /**

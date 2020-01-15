@@ -12,17 +12,24 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.RobotMap;
+import frc.robot.Trig238;
 
 /**
  * Add your docs here.
  */
 public class Vision extends Subsystem {
 
-  static NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
-  NetworkTableEntry tx = table.getEntry("tx");
-  NetworkTableEntry ty = table.getEntry("tx");
+  NetworkTable table;
+  NetworkTableEntry tx;
+  NetworkTableEntry ty;
 
-  public Vision(){
+  double targetHeight;
+  double cameraHeight;
+  double heightDifference;
+
+  public Vision(double targHeight, double camHeight){
+    targetHeight = targHeight;
+    cameraHeight = camHeight;
     initLimelight();
   }
 
@@ -36,28 +43,33 @@ public class Vision extends Subsystem {
     return true;
   }
 
-  /** @return Yaw (horizontal angle) read by limelight */
+  /** @return yaw (horizontal angle) read by limelight */
   public double getYaw(){
-    //this is where we do the math... need to takeinto account camera position, etc...
-    // can be used by auto commands or by tank drive or by some sort of targeting mechanism, etc...
-    // Note - tried doing this math out, too many unknown variables (assuming turret). We should figure out where the
-    // Limelight is going ASAP
+    // This requires the limelight to be calibrated so that it reads zero while the barrel is lined up with the target
+    // Do this from the web interface before competitions
+    tx = table.getEntry("tx");
     double yaw = tx.getDouble(0.0);
     return yaw;
   }
 
   public void initLimelight(){
+    table = NetworkTableInstance.getDefault().getTable("limelight");
     table.getEntry("camMode").setNumber(RobotMap.limelightSettings.cameraMode);
     table.getEntry("ledMode").setNumber(RobotMap.limelightSettings.ledsOff);
+    
   }
 
-  /** @return Pitch (vertical angle) read by limelight */
+  /** @return pitch (vertical angle) read by limelight */
   public double getPitch(){
+    ty = table.getEntry("ty");
     double pitch = ty.getDouble(0.0);
     return pitch;
   }
 
-  public int getDistanceToTarget(){
-    return 16284;
+  /** @return linear distance from target, in inches */
+  public double getDistanceToTarget(){
+    heightDifference = Math.abs(targetHeight - cameraHeight);
+    double distance = Trig238.calculateDistance(heightDifference, getPitch());
+    return distance;
   }
 }
