@@ -47,13 +47,14 @@ public final class RobotMap {
   }
 
   public static class Joysticks {
-    public static Joystick driverStickLeft;
-    public static Joystick driverStickRight;
-    public static Joystick operatorController;
-
     public static int leftStickPort = 3;
     public static int rightStickPort = 2;
     public static int controllerPort = 1;
+
+    public static Joystick driverStickLeft = new Joystick(leftStickPort);
+    public static Joystick driverStickRight = new Joystick(rightStickPort);
+    public static Joystick operatorController = new Joystick(controllerPort);
+
   }
 
   public static class Buttons {

@@ -17,14 +17,13 @@ import frc.robot.commands.VisionDrive;
  * interface to the commands and command groups that allow control of the robot.
  */
 public class OI {
-  public Joystick driveRightJoystick;
-  public Joystick driverLeftJoystick;;
 
   public OI(){
-    driverLeftJoystick = new Joystick(RobotMap.Joysticks.leftStickPort);    
-    driveRightJoystick = new Joystick(RobotMap.Joysticks.rightStickPort);
-
-    JoystickButton visionTrackButton = new JoystickButton(driverLeftJoystick, RobotMap.Buttons.visionTrack);
+    Joystick leftStick = RobotMap.Joysticks.driverStickLeft;
+    Joystick rightStick = RobotMap.Joysticks.driverStickRight;
+    Joystick controller = RobotMap.Joysticks.operatorController;
+    
+    JoystickButton visionTrackButton = new JoystickButton(leftStick, RobotMap.Buttons.visionTrack);
 
     VisionDrive visionDrive = new VisionDrive();
     visionTrackButton.whileHeld(visionDrive);
