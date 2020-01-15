@@ -5,12 +5,33 @@
         {
           "Name": "LogMessage",
           "Parameters": [
-            "works!!!!!!!!",
-            "warn"
+            "Started",
+            "Debug"
+          ]
+        },
+        {
+          "Name": "DriveStraightNavBoard",
+          "Parameters": [
+            "0.5",
+            "100"
+          ]
+        },
+        {
+          "Name": "DriveStraightNavBoard",
+          "Parameters": [
+            "0.9",
+            "50"
+          ]
+        },
+        {
+          "Name": "LogMessage",
+          "Parameters": [
+            "Completed Driving",
+            "Debug"
           ]
         }
       ],
-      "Name": "Automode1"
+      "Name": "Drives Straight 10"
     }
   ]
 }
