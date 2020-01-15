@@ -30,11 +30,11 @@ public class Drivetrain extends Subsystem {
   private final double kA = 00.00434 * 0.15;
   private final double vSetpoint = 0.078;// 0.078
 
-  private final TalonSRX rightMasterDrive = RobotMap.SpeedControllers.RightMaster;
-  private final TalonSRX leftMasterDrive = RobotMap.SpeedControllers.LeftMaster;
+  private final TalonSRX rightMasterDrive = RobotMap.DrivetrainControllers.RightMaster;
+  private final TalonSRX leftMasterDrive = RobotMap.DrivetrainControllers.LeftMaster;
 
-  private final TalonSRX leftDriveFollower1 = RobotMap.SpeedControllers.LeftFollower1;
-  private final TalonSRX rightDriveFollower1 = RobotMap.SpeedControllers.RightFollower1;
+  private final TalonSRX leftDriveFollower1 = RobotMap.DrivetrainControllers.LeftFollower1;
+  private final TalonSRX rightDriveFollower1 = RobotMap.DrivetrainControllers.RightFollower1;
 
   public Drivetrain() {
     initTalons();
@@ -115,7 +115,7 @@ public class Drivetrain extends Subsystem {
     leftDriveFollower1.configFactoryDefault();
     rightDriveFollower1.configFactoryDefault();
 
-    //var leftDriveFollower2 = RobotMap.SpeedControllers.LeftFollower2;
+    //var leftDriveFollower2 = RobotMap.DrivetrainControllers.LeftFollower2;
 
     leftDriveFollower1.follow(leftMasterDrive);
     //leftDriveFollower2.follow(leftMasterDrive);
@@ -126,7 +126,7 @@ public class Drivetrain extends Subsystem {
     leftDriveFollower1.setNeutralMode(NeutralMode.Brake);
     //leftDriveFollower2.setNeutralMode(NeutralMode.Brake);
 
-    //var rightDriveFollower2 = RobotMap.SpeedControllers.RightFollower2;
+    //var rightDriveFollower2 = RobotMap.DrivetrainControllers.RightFollower2;
 
     rightDriveFollower1.follow(rightMasterDrive);
     //rightDriveFollower2.follow(rightMasterDrive);

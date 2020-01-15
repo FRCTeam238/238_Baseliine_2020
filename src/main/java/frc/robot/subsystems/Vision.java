@@ -54,8 +54,8 @@ public class Vision extends Subsystem {
 
   public void initLimelight(){
     table = NetworkTableInstance.getDefault().getTable("limelight");
-    table.getEntry("camMode").setNumber(RobotMap.limelightSettings.cameraMode);
-    table.getEntry("ledMode").setNumber(RobotMap.limelightSettings.ledsOff);
+    table.getEntry("camMode").setNumber(RobotMap.LimelightSettings.cameraMode);
+    table.getEntry("ledMode").setNumber(RobotMap.LimelightSettings.ledsOff);
     
   }
 

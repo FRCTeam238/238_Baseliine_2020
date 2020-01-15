@@ -21,13 +21,13 @@ public class OI {
   public Joystick driverLeftJoystick;;
 
   public OI(){
-    driverLeftJoystick = new Joystick(3);    
-    driveRightJoystick = new Joystick(2);
+    driverLeftJoystick = new Joystick(RobotMap.Joysticks.leftStickPort);    
+    driveRightJoystick = new Joystick(RobotMap.Joysticks.rightStickPort);
 
-    JoystickButton b = new JoystickButton(driverLeftJoystick, 1);
+    JoystickButton visionTrackButton = new JoystickButton(driverLeftJoystick, RobotMap.Buttons.visionTrack);
 
     VisionDrive visionDrive = new VisionDrive();
-    b.whileHeld(visionDrive);
+    visionTrackButton.whileHeld(visionDrive);
     
   }
   //// CREATING BUTTONS
