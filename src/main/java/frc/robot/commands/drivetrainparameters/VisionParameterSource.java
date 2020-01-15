@@ -22,7 +22,7 @@ public class VisionParameterSource implements IDrivetrainParametersSource {
 
     @Override
     public DrivetrainParameters Get() {
-        int distance = vision.getDistanceToTarget();
+        double distance = vision.getDistanceToTarget();
         double angle = vision.getYaw();
 
         // do the math to calculate left/right power for turning and moving towards target

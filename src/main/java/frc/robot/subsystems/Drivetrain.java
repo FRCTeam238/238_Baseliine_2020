@@ -42,7 +42,8 @@ public class Drivetrain extends Subsystem {
 
   @Override
   public void initDefaultCommand() {
-    TankDrive tankDriveCommand = new TankDrive(new DriverJoysticks());
+    DriverJoysticks myDriverJoysticks = new DriverJoysticks();
+    TankDrive tankDriveCommand = new TankDrive(myDriverJoysticks);
     setDefaultCommand(tankDriveCommand);
   }
 
@@ -199,17 +200,29 @@ public class Drivetrain extends Subsystem {
     rightMasterDrive.setSelectedSensorPosition(0, 0, 0);
   }
 
+  public double getLeftEncoderTicks(){
+    double leftTicks = leftMasterDrive.getSelectedSensorPosition(0);
+    Logger.Trace("LEFT TICKS: " + leftTicks);
+    return leftTicks;
+  }
+
   // return distance travelled in inches
   public double leftDistanceTravelled() {
-    double leftTicks = leftMasterDrive.getSelectedSensorPosition(0);
+    double leftTicks = getLeftEncoderTicks();
     double leftDistanceTravelled = leftTicks / TICKS_PER_INCH;
     Logger.Trace("LEFT TICKS: " + leftTicks + "  Left Distance Travelled  " + leftDistanceTravelled);
     return leftDistanceTravelled;
   }
 
+  public double getRightEncoderTicks(){
+    double rightTicks = rightMasterDrive.getSelectedSensorPosition(0);
+    Logger.Trace("RIGHT TICKS: " + rightTicks);
+    return rightTicks;
+  }
+
   // return distance travelled in inches
   public double rightDistanceTravelled() {
-    double rightTicks = rightMasterDrive.getSelectedSensorPosition(0);
+    double rightTicks = getRightEncoderTicks();
     double rightDistanceTravelled = rightTicks / TICKS_PER_INCH;
     Logger.Trace("RIGHT TICKS: " + rightTicks);
     return rightDistanceTravelled;

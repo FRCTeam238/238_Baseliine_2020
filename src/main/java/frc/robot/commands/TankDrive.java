@@ -30,7 +30,11 @@ public class TankDrive extends BaseCommand {
 
   }
 
-  // Called repeatedly when this Command is scheduled to run
+  /* Called repeatedly when this Command is scheduled to run, default command for drive train, runs continuously
+  By default execute() takes the values from the Joysticks as the parameter source.
+  It then creates a DriveTrainParameters object named "parameters" and puts the values from parameterSource into it.
+  Finally it pulls the individual values from the parameters object and inputs them into the drivetrain drive() method.
+  */
   @Override
   protected void execute() {
     IDrivetrainParametersSource source = parameterSource == null ? defaultParameterSource : parameterSource;

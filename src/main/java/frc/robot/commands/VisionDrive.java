@@ -11,6 +11,11 @@ import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 import frc.robot.commands.drivetrainparameters.VisionParameterSource;
 
+/* 
+  In intitalize(), getDefaultCommand() calls the execute for TankDrive command continuously.
+  Then in execute(), visionPowerSource is input into the TankDrive object tankDrive as the parameterSource.
+*/
+
 public class VisionDrive extends Command {
   VisionParameterSource visionPowerSource;
   TankDrive tankDrive;
