@@ -19,8 +19,8 @@ public class DriverJoysticks implements IDrivetrainParametersSource {
     private Joystick right;
 
     public DriverJoysticks() {
-        this.right = Robot.oi.driveRightJoystick;
-        this.left = Robot.oi.driverLeftJoystick;
+        this.right = Robot.oi.rightStick;
+        this.left = Robot.oi.leftStick;
     }
 
     @Override

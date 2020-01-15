@@ -18,10 +18,11 @@ import frc.robot.commands.VisionDrive;
  */
 public class OI {
 
+  public Joystick leftStick = RobotMap.Joysticks.driverStickLeft;
+  public Joystick rightStick = RobotMap.Joysticks.driverStickRight;
+  public Joystick controller = RobotMap.Joysticks.operatorController;
+
   public OI(){
-    Joystick leftStick = RobotMap.Joysticks.driverStickLeft;
-    Joystick rightStick = RobotMap.Joysticks.driverStickRight;
-    Joystick controller = RobotMap.Joysticks.operatorController;
     
     JoystickButton visionTrackButton = new JoystickButton(leftStick, RobotMap.Buttons.visionTrack);
 
