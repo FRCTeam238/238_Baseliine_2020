@@ -24,7 +24,7 @@ public final class RobotMap {
     public static final int DRIVE_TRAIN_LEFT_SLAVE1 = 6;
     public static final int DRIVE_TRAIN_LEFT_SLAVE2 = 13;
 
-    public static TalonSRX LeftMaster = new TalonSRX(DRIVE_TRAIN_LEFT_MASTER);
+    public static TalonSRX_238 LeftMaster = new TalonSRX_238(DRIVE_TRAIN_LEFT_MASTER);
     public static TalonSRX LeftFollower1 = new TalonSRX(DRIVE_TRAIN_LEFT_SLAVE1);
     //public static VictorSPX LeftFollower2 = new VictorSPX(DRIVE_TRAIN_LEFT_SLAVE2);
   

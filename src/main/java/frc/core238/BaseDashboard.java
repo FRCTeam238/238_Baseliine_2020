@@ -56,6 +56,10 @@ public class BaseDashboard {
         return theWidget;
     }
 
+    
+
+
+
     public class WidgetOptions<T> {
         private Integer _x = 0;
         private Integer _y = 0;

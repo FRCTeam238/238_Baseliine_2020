@@ -38,6 +38,7 @@ public class Robot extends TimedRobot {
   public static NavigationBoard navigationBoard;
   public static Vision vision;
   public static OI oi;
+  public static Dashboard238 dashboard238;
 
   // Dictionary of auto mode names and commands to run
   HashMap<String, CommandGroup> m_autoModes;
@@ -53,6 +54,7 @@ public class Robot extends TimedRobot {
     drivetrain = new Drivetrain();
     navigationBoard = new NavigationBoard();
     vision = new Vision(FieldConstants.VisionConstants.targetHeight, FieldConstants.VisionConstants.cameraHeight);
+    dashboard238 = new Dashboard238();
   }
 
   /**
@@ -63,6 +65,7 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     oi = new OI();
     navigationBoard.init();
+    dashboard238.init();
     populateAutomodes();
   }
 
