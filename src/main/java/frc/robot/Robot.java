@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import edu.wpi.first.hal.SimDevice;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -116,8 +115,8 @@ public class Robot extends TimedRobot {
       CommandGroup cg = new CommandGroup();
       DriveStraightNavBoard cmd = new DriveStraightNavBoard();
       List<String> parameters = new ArrayList<>();
-      parameters.add("10");
-      parameters.add("10");
+      parameters.add("0.5");
+      parameters.add("1000000");
       cmd.setParameters(parameters);
       cg.addSequential(cmd);
       m_autoModes.put("No auto modes found -- default command!", cg);

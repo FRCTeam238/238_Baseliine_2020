@@ -7,15 +7,19 @@
 
 package frc.robot.subsystems;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
+import edu.wpi.first.wpilibj.Sendable;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import frc.core238.Logger;
+import frc.core238.wrappers.SendableWrapper;
 import frc.robot.RobotMap;
 import frc.robot.commands.TankDrive;
 import frc.robot.commands.drivetrainparameters.DriverJoysticks;
@@ -25,7 +29,7 @@ import frc.robot.commands.drivetrainparameters.DriverJoysticks;
  */
 public class Drivetrain extends Subsystem {
 
- // private LiveWindow lw = LiveWindow.getInstance();
+  // private LiveWindow lw = LiveWindow.getInstance();
 
   public final static double TICKS_PER_INCH = 194;
   private final static double ANGLE_KP = 3;
@@ -41,12 +45,13 @@ public class Drivetrain extends Subsystem {
 
   public Drivetrain() {
     initTalons();
+    initLiveWindow();
   }
 
   @Override
   public void initDefaultCommand() {
     DriverJoysticks myDriverJoysticks = new DriverJoysticks();
-    TankDrive tankDriveCommand = new TankDrive(myDriverJoysticks);
+    TankDrive tankDriveCommand = new TankDrive(myDriverJoysticks, this);
     setDefaultCommand(tankDriveCommand);
   }
 
@@ -67,7 +72,7 @@ public class Drivetrain extends Subsystem {
       double angleVelocityAddend = desiredAngle * ANGLE_KP;
       angleVelocityAddend = Math.min(50, Math.max(angleVelocityAddend, -50));
 
-      accelerate(left + angleVelocityAddend, right - angleVelocityAddend, left, right);     
+      accelerate(left + angleVelocityAddend, right - angleVelocityAddend, left, right);
     }
   }
 
@@ -118,28 +123,28 @@ public class Drivetrain extends Subsystem {
     leftDriveFollower1.configFactoryDefault();
     rightDriveFollower1.configFactoryDefault();
 
-    //var leftDriveFollower2 = RobotMap.DrivetrainControllers.LeftFollower2;
+    // var leftDriveFollower2 = RobotMap.DrivetrainControllers.LeftFollower2;
 
     leftDriveFollower1.follow(leftMasterDrive);
-    //leftDriveFollower2.follow(leftMasterDrive);
+    // leftDriveFollower2.follow(leftMasterDrive);
 
-    //leftMasterDrive.setInverted(false);
+    // leftMasterDrive.setInverted(false);
 
     leftMasterDrive.setNeutralMode(NeutralMode.Brake);
     leftDriveFollower1.setNeutralMode(NeutralMode.Brake);
-    //leftDriveFollower2.setNeutralMode(NeutralMode.Brake);
+    // leftDriveFollower2.setNeutralMode(NeutralMode.Brake);
 
-    //var rightDriveFollower2 = RobotMap.DrivetrainControllers.RightFollower2;
+    // var rightDriveFollower2 = RobotMap.DrivetrainControllers.RightFollower2;
 
     rightDriveFollower1.follow(rightMasterDrive);
-    //rightDriveFollower2.follow(rightMasterDrive);
+    // rightDriveFollower2.follow(rightMasterDrive);
 
     rightMasterDrive.setInverted(true);
     rightDriveFollower1.setInverted(true);
 
     rightMasterDrive.setNeutralMode(NeutralMode.Brake);
     rightDriveFollower1.setNeutralMode(NeutralMode.Brake);
-    //rightDriveFollower2.setNeutralMode(NeutralMode.Brake);
+    // rightDriveFollower2.setNeutralMode(NeutralMode.Brake);
 
     rightMasterDrive.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 1, 0);
     leftMasterDrive.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 1, 0);
@@ -203,7 +208,7 @@ public class Drivetrain extends Subsystem {
     rightMasterDrive.setSelectedSensorPosition(0, 0, 0);
   }
 
-  public double getLeftEncoderTicks(){
+  public double getLeftEncoderTicks() {
     double leftTicks = leftMasterDrive.getSelectedSensorPosition(0);
     Logger.Trace("LEFT TICKS: " + leftTicks);
     return leftTicks;
@@ -217,7 +222,7 @@ public class Drivetrain extends Subsystem {
     return leftDistanceTravelled;
   }
 
-  public double getRightEncoderTicks(){
+  public double getRightEncoderTicks() {
     double rightTicks = rightMasterDrive.getSelectedSensorPosition(0);
     Logger.Trace("RIGHT TICKS: " + rightTicks);
     return rightTicks;
@@ -229,6 +234,31 @@ public class Drivetrain extends Subsystem {
     double rightDistanceTravelled = rightTicks / TICKS_PER_INCH;
     Logger.Trace("RIGHT TICKS: " + rightTicks);
     return rightDistanceTravelled;
+  }
+
+  private void initLiveWindow() {
+    SendableWrapper leftEncoder = new SendableWrapper(builder -> {
+      builder.addDoubleProperty("Ticks", this::getLeftEncoderTicks, null);
+    });
+
+    SendableWrapper rightEncoder = new SendableWrapper(builder -> {
+      builder.addDoubleProperty("Ticks", this::getRightEncoderTicks, null);
+    });
+
+    SendableWrapper rigthSpeedController = new SendableWrapper(builder -> {
+      builder.setSmartDashboardType("Speed Controller");
+      builder.addDoubleProperty("Value", () -> rightMasterDrive.getMotorOutputPercent(), null);
+    });
+
+    addChild("Left Encoder", leftEncoder);
+    addChild("Right Encoder", rightEncoder);
+    addChild("Right Speed Controller", rigthSpeedController);
+  }
+
+  private List<SendableWrapper> _sendables = new ArrayList<>();
+  private void addChild(String name, SendableWrapper wrapper){
+    _sendables.add(wrapper);
+    addChild(name, (Sendable)wrapper);
   }
 
 }

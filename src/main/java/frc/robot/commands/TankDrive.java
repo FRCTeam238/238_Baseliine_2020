@@ -7,7 +7,6 @@
 
 package frc.robot.commands;
 
-import frc.robot.Robot;
 import frc.robot.commands.drivetrainparameters.DrivetrainParameters;
 import frc.robot.commands.drivetrainparameters.IDrivetrainParametersSource;
 import frc.robot.subsystems.Drivetrain;
@@ -17,10 +16,11 @@ public class TankDrive extends BaseCommand {
   private IDrivetrainParametersSource parameterSource;
   private IDrivetrainParametersSource defaultParameterSource;
  
-  public TankDrive(IDrivetrainParametersSource defaultParameterSource) {
-    requires(Robot.drivetrain);
+  public TankDrive(IDrivetrainParametersSource defaultParameterSource, Drivetrain drivetrain) {
+    // added drivetrain as a constructor parameter as sim mode was returning Robot.drivetrain = null
+    requires(drivetrain);
  
-    this.drivetrain = Robot.drivetrain;
+    this.drivetrain = drivetrain;
     this.defaultParameterSource = defaultParameterSource;
   }
 
