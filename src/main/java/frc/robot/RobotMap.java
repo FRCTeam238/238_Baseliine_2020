@@ -10,7 +10,7 @@ package frc.robot;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.Joystick;
-import frc.core238.wrappers.TalonSRX_238;
+import frc.core238.wrappers.TalonSRX_238;;
 
 /** Used to map hardware ports and define hardware objects - motor controllers, joysticks, cameras, etc */
 public final class RobotMap {
@@ -25,11 +25,11 @@ public final class RobotMap {
     public static final int DRIVE_TRAIN_LEFT_SLAVE1 = 6;
     public static final int DRIVE_TRAIN_LEFT_SLAVE2 = 13;
 
-    public static TalonSRX LeftMaster = new TalonSRX(DRIVE_TRAIN_LEFT_MASTER);
+    public static TalonSRX LeftMaster = TalonSRX_238.create(DRIVE_TRAIN_LEFT_MASTER, Robot.isSimulation());//new TalonSRX(DRIVE_TRAIN_LEFT_MASTER);
     public static TalonSRX LeftFollower1 = new TalonSRX(DRIVE_TRAIN_LEFT_SLAVE1);
     //public static VictorSPX LeftFollower2 = new VictorSPX(DRIVE_TRAIN_LEFT_SLAVE2);
   
-    public static TalonSRX RightMaster = new TalonSRX(DRIVE_TRAIN_RIGHT_MASTER);
+    public static TalonSRX RightMaster = TalonSRX_238.create(DRIVE_TRAIN_RIGHT_MASTER, Robot.isSimulation());
     public static TalonSRX RightFollower1 = new TalonSRX(DRIVE_TRAIN_RIGHT_SLAVE1);
     //public static VictorSPX RightFollower2 = new VictorSPX(DRIVE_TRAIN_RIGHT_SLAVE2);
   }

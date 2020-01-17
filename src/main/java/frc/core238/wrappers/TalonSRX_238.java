@@ -118,4 +118,13 @@ public class TalonSRX_238 extends TalonSRX {
         }
         return super.setSelectedSensorPosition(position, pidIdx, timeout);
     }
+
+    @Override
+    public double getMotorOutputPercent() {
+        return _simOutput.get();
+    }
+
+    public static TalonSRX create(int deviceNumber, Boolean isSimulation) {
+        return isSimulation ? new TalonSRX_238(deviceNumber) : new TalonSRX(deviceNumber);
+    }
 }
