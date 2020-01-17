@@ -10,6 +10,7 @@ package frc.robot;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.Joystick;
+import frc.core238.wrappers.TalonSRX_238;
 
 /** Used to map hardware ports and define hardware objects - motor controllers, joysticks, cameras, etc */
 public final class RobotMap {
@@ -56,5 +57,20 @@ public final class RobotMap {
   /** Button mapping, for joysticks and controllers */
   public static class Buttons {
     public static int visionTrack = 1;
+
+    public static int shooterbutton = 2;
+
+  }
+
+  public static class Shooter{
+    //TODO: change to real number
+    public static int SHOOTER_MASTER = 100;
+    public static TalonSRX shooterMaster = new TalonSRX(SHOOTER_MASTER);
+  }
+
+  public static class Intake{
+    //TODO: change to real number
+    public static int INTAKE_MASTER = 101;
+    public static TalonSRX rightIntake = new TalonSRX(INTAKE_MASTER);
   }
 }
