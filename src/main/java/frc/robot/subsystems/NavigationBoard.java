@@ -7,15 +7,14 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.command.Subsystem;
-import frc.core238.Logger;
-
-
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.core238.Logger;
 
 public class NavigationBoard extends Subsystem {
 
@@ -82,6 +81,9 @@ public class NavigationBoard extends Subsystem {
 	public double getRoll() {
 		return ahrs.getRoll();
 	}
+	public double getPitch(){
+		return ahrs.getPitch();
+	}
 	public double getYaw() {
 		//TODO: add comments on what this is actually doing 
 		currentYaw = ((ahrs.getYaw() % 360) + 360) % 360;
@@ -99,20 +101,20 @@ public class NavigationBoard extends Subsystem {
 	{
 		Timer.delay(0.020);
 	
-		/*SmartDashboard.putBoolean(  "IMU_Connected",        ahrs.isConnected());
+		SmartDashboard.putBoolean(  "IMU_Connected",        ahrs.isConnected());
       SmartDashboard.putBoolean(  "IMU_IsCalibrating",    ahrs.isCalibrating());
 
-		  SmartDashboard.putNumber("Gyro_X", ahrs.getRawGyroX());
+		/*  SmartDashboard.putNumber("Gyro_X", ahrs.getRawGyroX());
 		  SmartDashboard.putNumber("Gyro_Y", ahrs.getRawGyroY());
 		  SmartDashboard.putNumber("Gyro_Z", ahrs.getRawGyroZ());
 
 		  SmartDashboard.putNumber("Accel_X", ahrs.getRawAccelX());
 		  SmartDashboard.putNumber("Accel_Y", ahrs.getRawAccelY());
-		  SmartDashboard.putNumber("Accel_Z", ahrs.getRawAccelZ());*/
+		  SmartDashboard.putNumber("Accel_Z", ahrs.getRawAccelZ()); */
 
-		//RM SmartDashboard.putNumber("IMU_Yaw", ahrs.getYaw());
-		//RM SmartDashboard.putNumber("IMU_Pitch", ahrs.getPitch());
-		//RM SmartDashboard.putNumber("IMU_Roll", ahrs.getRoll());
+		SmartDashboard.putNumber("IMU_Yaw", getYaw());
+		SmartDashboard.putNumber("IMU_Pitch", getPitch());
+		SmartDashboard.putNumber("IMU_Roll", getRoll()); 
 
 		//RM SmartDashboard.putNumber("Refresh Rate", ahrs.getActualUpdateRate());
 		// haveWeCollided();

@@ -11,6 +11,7 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
 import frc.robot.Trig238;
 
@@ -52,11 +53,22 @@ public class Vision extends Subsystem {
     return yaw;
   }
 
+  public void cameraMode(){
+    table.getEntry("camMode").setNumber(RobotMap.LimelightSettings.cameraMode);
+  }
+  public void trackingMode(){
+    table.getEntry("camMode").setNumber(RobotMap.LimelightSettings.visionMode);
+  }
+  public void ledsOn(){
+    table.getEntry("ledMode").setNumber(RobotMap.LimelightSettings.ledsOn);
+  }
+  public void ledsOff(){
+    table.getEntry("ledMode").setNumber(RobotMap.LimelightSettings.ledsOff);
+  }
   public void initLimelight(){
     table = NetworkTableInstance.getDefault().getTable("limelight");
-    table.getEntry("camMode").setNumber(RobotMap.LimelightSettings.cameraMode);
-    table.getEntry("ledMode").setNumber(RobotMap.LimelightSettings.ledsOff);
-    
+    cameraMode();
+    ledsOff();
   }
 
   /** @return pitch (vertical angle) read by limelight */
@@ -71,5 +83,11 @@ public class Vision extends Subsystem {
     heightDifference = Math.abs(targetHeight - cameraHeight);
     double distance = Trig238.calculateDistance(heightDifference, getPitch());
     return distance;
+  }
+
+  public void postValues(){
+    SmartDashboard.putNumber("Limelight Yaw", getYaw());
+    SmartDashboard.putNumber("Limelight Pitch", getPitch());
+    SmartDashboard.putNumber("Limelight Distance to Target", getDistanceToTarget());
   }
 }

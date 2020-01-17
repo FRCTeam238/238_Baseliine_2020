@@ -66,6 +66,7 @@ public class Robot extends TimedRobot {
     oi = new OI();
     navigationBoard.init();
     dashboard238.init();
+    vision.initLimelight();
     populateAutomodes();
   }
 
@@ -227,5 +228,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void testPeriodic() {
+    // vision.trackingMode();
+    // vision.ledsOn();
+    // navigationBoard.navxValues();
+    // vision.postValues();
   }
 }
