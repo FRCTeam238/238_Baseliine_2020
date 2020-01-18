@@ -245,14 +245,27 @@ public class Drivetrain extends Subsystem {
       builder.addDoubleProperty("Ticks", this::getRightEncoderTicks, null);
     });
 
-    SendableWrapper rigthSpeedController = new SendableWrapper(builder -> {
+    SendableWrapper leftSpeedController = new SendableWrapper(builder -> {
+      builder.setSmartDashboardType("Speed Controller");
+      builder.addDoubleProperty("Value", () -> leftMasterDrive.getMotorOutputPercent(), null);
+    });
+
+    SendableWrapper rightSpeedController = new SendableWrapper(builder -> {
       builder.setSmartDashboardType("Speed Controller");
       builder.addDoubleProperty("Value", () -> rightMasterDrive.getMotorOutputPercent(), null);
     });
 
+    /*
+    SendableWrapper leftInches = new SendableWrapper(builder -> {
+      builder.addDoubleProperty("Inches", this::leftDistanceTravelled, null);
+    });
+    */
+
     addChild("Left Encoder", leftEncoder);
     addChild("Right Encoder", rightEncoder);
-    addChild("Right Speed Controller", rigthSpeedController);
+    addChild("Left Speed Controller", leftSpeedController);
+    addChild("Right Speed Controller", rightSpeedController);
+    //addChild("Left Inches", leftInches);
   }
 
   private List<SendableWrapper> _sendables = new ArrayList<>();

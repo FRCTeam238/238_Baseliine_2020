@@ -11,8 +11,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -25,6 +23,7 @@ import frc.robot.commands.DriveStraightNavBoard;
 import frc.robot.subsystems.CTRE_PID;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.NavigationBoard;
+import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Vision;
 
 /**
@@ -42,6 +41,7 @@ public class Robot extends TimedRobot {
   public static OI oi;
   public static Dashboard238 dashboard238;
   public static CTRE_PID ctrePID;
+  public static Shooter shooter;
 
   // Dictionary of auto mode names and commands to run
   HashMap<String, CommandGroup> m_autoModes;
@@ -57,6 +57,7 @@ public class Robot extends TimedRobot {
     drivetrain = new Drivetrain();
     navigationBoard = new NavigationBoard();
     vision = new Vision(FieldConstants.VisionConstants.targetHeight, FieldConstants.VisionConstants.cameraHeight);
+    shooter = new Shooter();
     dashboard238 = new Dashboard238();
     ctrePID = new CTRE_PID();
   }

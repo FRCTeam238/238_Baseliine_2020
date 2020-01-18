@@ -10,9 +10,15 @@ package frc.robot;
 import java.util.HashMap;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.Sendable;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Drivetrain;
 
 /**
  * Add your docs here.
@@ -21,6 +27,8 @@ public class Dashboard238 {
 
     private HashMap<String, NetworkTableEntry> dashboardEntries = new HashMap<>();
     ShuffleboardTab diagnosticTab;
+    SimpleWidget leftEncoder;
+    Sendable vision;
     
     public void init() {
         diagnosticTab = Shuffleboard.getTab("DiagnosticTab");
@@ -55,5 +63,10 @@ public class Dashboard238 {
         dashboardEntries.put(elementName, theWidget.getEntry());
         theWidget.withSize(sizeX, sizeY).withPosition(posX, posY);
     }
+
+    //public void setLeftEncoderTicks(){
+    //    double leftTicks = Robot.drivetrain.getLeftEncoderTicks();
+    //    vision.addChild(leftEncoder);
+    //}
 
 }

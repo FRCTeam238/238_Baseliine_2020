@@ -10,6 +10,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import frc.core238.wrappers.SendableWrapper;
 import frc.robot.RobotMap;
 
 /**
@@ -20,6 +21,7 @@ public class Shooter extends Subsystem {
 
     public Shooter() {
         initTalons();
+        initLiveWindow();
     }
 
     public void initTalons() {
@@ -51,4 +53,18 @@ public class Shooter extends Subsystem {
     public void stop(){
         shooterMasterDive.set(ControlMode.PercentOutput, 0);
     }
+
+    private void initLiveWindow(){
+        SendableWrapper power = new SendableWrapper(builder -> {
+        builder.addDoubleProperty("Power", this::getPower, null);
+        });
+        
+        SendableWrapper encoderTicks = new SendableWrapper(builder -> {
+        builder.addDoubleProperty("Ticks", this::getEncoderTicks, null);
+        });
+        
+        addChild("Power", power);
+        addChild("EncoderTicks", encoderTicks);
+    }
+    
 }

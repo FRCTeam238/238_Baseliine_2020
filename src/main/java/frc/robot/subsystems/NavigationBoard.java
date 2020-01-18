@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.core238.Logger;
+import frc.core238.wrappers.SendableWrapper;
 
 public class NavigationBoard extends Subsystem {
 
@@ -55,6 +56,7 @@ public class NavigationBoard extends Subsystem {
 		start = 0;
 		current = 0;
 		elapsed = 0;
+		initLiveWindow();
 	}
 
 	public boolean getLineSensor()
@@ -188,5 +190,21 @@ public class NavigationBoard extends Subsystem {
 
   }
 
+  private void initLiveWindow(){
+	SendableWrapper pitch = new SendableWrapper(builder -> {
+	builder.addDoubleProperty("Angle", this::getPitch, null);
+	});
+	
+	SendableWrapper roll = new SendableWrapper(builder -> {
+	builder.addDoubleProperty("Angle", this::getRoll, null);
+	});
 
+	SendableWrapper yaw = new SendableWrapper(builder -> {
+	builder.addDoubleProperty("Angle", this::getYaw, null);
+	});
+	
+	addChild("Pitch", pitch);
+	addChild("Roll", roll);
+	addChild("Yaw", yaw);
+}
 }
