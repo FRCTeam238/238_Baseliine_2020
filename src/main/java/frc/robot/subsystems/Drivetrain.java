@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
@@ -31,17 +30,26 @@ public class Drivetrain extends Subsystem {
 
   // private LiveWindow lw = LiveWindow.getInstance();
 
-  public final static double TICKS_PER_INCH = 194;
+  public final static double TICKS_PER_INCH = 217.299;
   private final static double ANGLE_KP = 3;
   private final double kV = 0.00434;// 0.00455
   private final double kA = 00.00434 * 0.15;
   private final double vSetpoint = 0.078;// 0.078
 
-  private final TalonSRX rightMasterDrive = RobotMap.DrivetrainControllers.RightMaster;
-  private final TalonSRX leftMasterDrive = RobotMap.DrivetrainControllers.LeftMaster;
+  private final static TalonSRX rightMasterDrive = RobotMap.DrivetrainControllers.RightMaster;
+  private final static TalonSRX leftMasterDrive = RobotMap.DrivetrainControllers.LeftMaster;
 
   private final TalonSRX leftDriveFollower1 = RobotMap.DrivetrainControllers.LeftFollower1;
   private final TalonSRX rightDriveFollower1 = RobotMap.DrivetrainControllers.RightFollower1;
+
+  public static double kP = 0.5;
+  public static double kI = 1;
+  public static double kD = 1;
+  public static double kF = 1;
+  public static int kIzone = 100;
+  public static int kPIDLoopIdx = 0;
+  public static int kTimeoutMs = 30;
+  public static double rampRate = 0.1;
 
   public Drivetrain() {
     initTalons();
@@ -76,6 +84,12 @@ public class Drivetrain extends Subsystem {
     }
   }
 
+  public void driveWithTicks(double distance) {
+    double ticks = distance * TICKS_PER_INCH;
+    CTRE_PID.moveToPosition(rightMasterDrive, ticks);
+    CTRE_PID.moveToPosition(leftMasterDrive, ticks);
+  }
+
   // method to accelerate rather than set straigt power
   public void accelerate(double leftSpeed, double rightSpeed, double leftAccel, double rightAccel) {
 
@@ -94,9 +108,6 @@ public class Drivetrain extends Subsystem {
     rightWantedVoltage += kV * rightSpeed;
     rightWantedVoltage += kA * rightAccel;
     rightWantedVoltage += rightWantedVoltage > 0 ? vSetpoint : -vSetpoint;
-
-    leftMasterDrive.config_kF(0, TALON_F_VALUE_LEFT * 10.0, 0);
-    rightMasterDrive.config_kF(0, TALON_F_VALUE_RIGHT * 10.0, 0);
 
     leftMasterDrive.set(ControlMode.Velocity, (-leftSpeed) * TICKS_PER_INCH / 10.0);
     rightMasterDrive.set(ControlMode.Velocity, (-rightSpeed) * TICKS_PER_INCH / 10.0);
@@ -125,10 +136,11 @@ public class Drivetrain extends Subsystem {
 
     // var leftDriveFollower2 = RobotMap.DrivetrainControllers.LeftFollower2;
 
+    leftMasterDrive.setInverted(true);
+    leftDriveFollower1.setInverted(true);
+
     leftDriveFollower1.follow(leftMasterDrive);
     // leftDriveFollower2.follow(leftMasterDrive);
-
-    // leftMasterDrive.setInverted(false);
 
     leftMasterDrive.setNeutralMode(NeutralMode.Brake);
     leftDriveFollower1.setNeutralMode(NeutralMode.Brake);
@@ -139,9 +151,6 @@ public class Drivetrain extends Subsystem {
     rightDriveFollower1.follow(rightMasterDrive);
     // rightDriveFollower2.follow(rightMasterDrive);
 
-    rightMasterDrive.setInverted(true);
-    rightDriveFollower1.setInverted(true);
-
     rightMasterDrive.setNeutralMode(NeutralMode.Brake);
     rightDriveFollower1.setNeutralMode(NeutralMode.Brake);
     // rightDriveFollower2.setNeutralMode(NeutralMode.Brake);
@@ -149,67 +158,18 @@ public class Drivetrain extends Subsystem {
     rightMasterDrive.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 1, 0);
     leftMasterDrive.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 1, 0);
 
-    leftMasterDrive.config_kF(0, TALON_F_VALUE_LEFT, 0);
-    rightMasterDrive.config_kF(0, TALON_F_VALUE_RIGHT, 0);
-
-    leftMasterDrive.configOpenloopRamp(0.1, 100);
-    rightMasterDrive.configOpenloopRamp(0.1, 100);
-
-    leftMasterDrive.configClosedloopRamp(0.1, 100);
-    rightMasterDrive.configClosedloopRamp(0.1, 100);
-
-    leftMasterDrive.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
-    rightMasterDrive.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
-
-    configTalon(leftMasterDrive);
-    configTalon(rightMasterDrive);
+    CTRE_PID.initTalonPID(kP, kI, kD, kF, kIzone, leftMasterDrive, kTimeoutMs, kPIDLoopIdx, rampRate);
+    CTRE_PID.initTalonPID(kP, kI, kD, kF, kIzone, rightMasterDrive, kTimeoutMs, kPIDLoopIdx, rampRate);
 
     Logger.Debug("initTalons Is Sucessful!");
   }
 
-  /**
-   * configTalon is used to configure the master talons for velocity tuning so
-   * they can be set to go to a specific velocity rather than just use a voltage
-   * percentage This can be found in the CTRE Talon SRX Software Reference Manual
-   * Section 12.4: Velocity Closed-Loop Walkthrough Java
-   */
-  private void configTalon(TalonSRX talon) {
-    /*
-     * This sets the voltage range the talon can use; should be set at +12.0f and
-     * -12.0f
-     */
-    // talon.configNominalOutputVoltage(+0.0f, -0.0f);
-    // talon.configPeakOutputVoltage(+12.0f, -12.0f);
-
-    /*
-     * This sets the FPID values to correct error in the motor's velocity
-     */
-    // talon.setProfile(CrusaderCommon.TALON_NO_VALUE);
-    // .3113);
-    talon.config_kP(0, TALON_P_VALUE, 0); // .8);//064543);
-    talon.config_kI(0, TALON_NO_VALUE, 0);
-    talon.config_kD(0, TALON_D_VALUE, 0);
-
-    talon.set(ControlMode.Velocity, 0);
-
+  public static void resetEncoders() {
+    CTRE_PID.zeroEncoders(kPIDLoopIdx, kTimeoutMs, rightMasterDrive);
+    CTRE_PID.zeroEncoders(kPIDLoopIdx, kTimeoutMs, leftMasterDrive);
   }
-
-  private final static double TALON_F_VALUE_LEFT = 0.00455;// 0.0725 old autonomous
-  private final static double TALON_F_VALUE_RIGHT = 0.00455;// 0.0735 old autonomous
-  private final static double TALON_P_VALUE = 0.2;// 0.5
-  private final static double TALON_D_VALUE = 0;
-  private final static int TALON_NO_VALUE = 0;
-
-  /**
-   * Resets the encoders by setting them to 0
-   */
-  public void resetEncoders() {
-    leftMasterDrive.setSelectedSensorPosition(0, 0, 0);
-    rightMasterDrive.setSelectedSensorPosition(0, 0, 0);
-  }
-
   public double getLeftEncoderTicks() {
-    double leftTicks = leftMasterDrive.getSelectedSensorPosition(0);
+    double leftTicks = CTRE_PID.getTicks(leftMasterDrive);
     Logger.Trace("LEFT TICKS: " + leftTicks);
     return leftTicks;
   }
@@ -223,7 +183,7 @@ public class Drivetrain extends Subsystem {
   }
 
   public double getRightEncoderTicks() {
-    double rightTicks = rightMasterDrive.getSelectedSensorPosition(0);
+    double rightTicks = CTRE_PID.getTicks(rightMasterDrive);
     Logger.Trace("RIGHT TICKS: " + rightTicks);
     return rightTicks;
   }

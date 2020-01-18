@@ -12,8 +12,6 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Constants;
 import frc.robot.RobotMap;
 
 /**
@@ -31,75 +29,49 @@ public class CTRE_PID extends Subsystem {
     // setDefaultCommand(new MySpecialCommand());
   }
 
-  /** Takes distance in inches and returns sensor ticks */
-  public double calcTicks(double distance){
-    double inchesPerRev = Constants.robotGeometry.wheelCircumference * Math.PI;
-    double revs = distance / inchesPerRev;
-    double ticks = revs * Constants.robotGeometry.ticksPerRev;
-    return ticks;
+  public static void zeroEncoders(int kPIDLoopIdx, int kTimeoutMs, TalonSRX talon){
+    talon.setSelectedSensorPosition(0, kPIDLoopIdx, kTimeoutMs);
   }
 
-  public void zeroEncoders(){
-    rightTalon.setSelectedSensorPosition(0, Constants.CTRE_PID.kPIDLoopIdx, Constants.CTRE_PID.kTimeoutMs);
-    leftTalon.setSelectedSensorPosition(0, Constants.CTRE_PID.kPIDLoopIdx, Constants.CTRE_PID.kTimeoutMs);
-  }
+  public static void initTalonPID(double kP, double kI, double kD, double kF, int kIzone, TalonSRX talon, int kTimeoutMs, int kPIDLoopIdx, double rampRate){
 
-  public void prepTalons(){
     /* Config the peak and nominal outputs ([-1, 1] represents [-100, 100]%) */
-    leftTalon.configNominalOutputForward(0, Constants.CTRE_PID.kTimeoutMs);
-    leftTalon.configNominalOutputReverse(0, Constants.CTRE_PID.kTimeoutMs);
-    leftTalon.configPeakOutputForward(1, Constants.CTRE_PID.kTimeoutMs);
-    leftTalon.configPeakOutputReverse(-1, Constants.CTRE_PID.kTimeoutMs);
-
-    rightTalon.configNominalOutputForward(0, Constants.CTRE_PID.kTimeoutMs);
-    rightTalon.configNominalOutputReverse(0, Constants.CTRE_PID.kTimeoutMs);
-    rightTalon.configPeakOutputForward(1, Constants.CTRE_PID.kTimeoutMs);
-    rightTalon.configPeakOutputReverse(-1, Constants.CTRE_PID.kTimeoutMs);
+    talon.configNominalOutputForward(0, kTimeoutMs);
+    talon.configNominalOutputReverse(0, kTimeoutMs);
+    talon.configPeakOutputForward(1, kTimeoutMs);
+    talon.configPeakOutputReverse(-1, kTimeoutMs);
 
     /**
      * Config the allowable closed-loop error, Closed-Loop output will be
      * neutral within this range.
      */
-    leftTalon.configAllowableClosedloopError(0, Constants.CTRE_PID.kPIDLoopIdx, Constants.CTRE_PID.kTimeoutMs);
-    rightTalon.configAllowableClosedloopError(0, Constants.CTRE_PID.kPIDLoopIdx, Constants.CTRE_PID.kTimeoutMs);
+    talon.configAllowableClosedloopError(0, kPIDLoopIdx, kTimeoutMs);
 
     /* Config closed loop gains for Primary closed loop (Current) */
-    leftTalon.config_kP(Constants.CTRE_PID.kPIDLoopIdx, Constants.CTRE_PID.kP, Constants.CTRE_PID.kTimeoutMs);
-    leftTalon.config_kI(Constants.CTRE_PID.kPIDLoopIdx, Constants.CTRE_PID.kI, Constants.CTRE_PID.kTimeoutMs);
-    leftTalon.config_kD(Constants.CTRE_PID.kPIDLoopIdx, Constants.CTRE_PID.kD, Constants.CTRE_PID.kTimeoutMs);
-    leftTalon.config_kF(Constants.CTRE_PID.kPIDLoopIdx, Constants.CTRE_PID.kF, Constants.CTRE_PID.kTimeoutMs);
-    leftTalon.config_IntegralZone(Constants.CTRE_PID.kPIDLoopIdx, Constants.CTRE_PID.kIzone, Constants.CTRE_PID.kTimeoutMs);
-
-    rightTalon.config_kP(Constants.CTRE_PID.kPIDLoopIdx, Constants.CTRE_PID.kP, Constants.CTRE_PID.kTimeoutMs);
-    rightTalon.config_kI(Constants.CTRE_PID.kPIDLoopIdx, Constants.CTRE_PID.kI, Constants.CTRE_PID.kTimeoutMs);
-    rightTalon.config_kD(Constants.CTRE_PID.kPIDLoopIdx, Constants.CTRE_PID.kD, Constants.CTRE_PID.kTimeoutMs);
-    rightTalon.config_kF(Constants.CTRE_PID.kPIDLoopIdx, Constants.CTRE_PID.kF, Constants.CTRE_PID.kTimeoutMs);
-    rightTalon.config_IntegralZone(Constants.CTRE_PID.kPIDLoopIdx, Constants.CTRE_PID.kIzone, Constants.CTRE_PID.kTimeoutMs);
+    talon.config_kP(kPIDLoopIdx, kP, kTimeoutMs);
+    talon.config_kI(kPIDLoopIdx, kI, kTimeoutMs);
+    talon.config_kD(kPIDLoopIdx, kD, kTimeoutMs);
+    talon.config_kF(kPIDLoopIdx, kF, kTimeoutMs);
+    talon.config_IntegralZone(kPIDLoopIdx, kIzone, kTimeoutMs);
     
     // Config encoders
-    rightTalon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, Constants.CTRE_PID.kPIDLoopIdx, Constants.CTRE_PID.kTimeoutMs);
-    leftTalon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, Constants.CTRE_PID.kPIDLoopIdx, Constants.CTRE_PID.kTimeoutMs);
+    talon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, kPIDLoopIdx, kTimeoutMs);
+
+    talon.configClosedloopRamp(rampRate, kTimeoutMs);
 
     // Ensure motor output and encoder velocity are proportional to each other
     // If they become inverted, set these to true
-    rightTalon.setSensorPhase(false);
-    leftTalon.setSensorPhase(false);
+    talon.setSensorPhase(false);
 
-    zeroEncoders();
+    zeroEncoders(kPIDLoopIdx, kTimeoutMs, talon);
   }
 
-  public void driveStraight(double inches){
-    zeroEncoders();
-    double targetTicks = calcTicks(inches);
-    SmartDashboard.putNumber("Target ticks", targetTicks);
-    rightTalon.set(ControlMode.Position, targetTicks);
-    leftTalon.set(ControlMode.Position, targetTicks);
+  public static double getTicks(TalonSRX talon){
+    double ticks = talon.getSelectedSensorPosition();
+    return ticks;
   }
 
-  public double getTicks(){
-    double rightTicks = rightTalon.getSelectedSensorPosition();
-    double leftTicks = leftTalon.getSelectedSensorPosition();
-    double averageTicks = (rightTicks + leftTicks) / 2;
-    return averageTicks;
+  public static void moveToPosition(TalonSRX talon, double ticks){
+    talon.set(ControlMode.Position, ticks);
   }
 }

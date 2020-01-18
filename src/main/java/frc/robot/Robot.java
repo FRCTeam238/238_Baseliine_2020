@@ -20,7 +20,6 @@ import frc.core238.autonomous.AutonomousModesReader;
 import frc.core238.autonomous.DataFileAutonomousModeDataSource;
 import frc.core238.autonomous.IAutonomousModeDataSource;
 import frc.robot.commands.DriveStraightNavBoard;
-import frc.robot.subsystems.CTRE_PID;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.NavigationBoard;
 import frc.robot.subsystems.Shooter;
@@ -40,7 +39,6 @@ public class Robot extends TimedRobot {
   public static Vision vision;
   public static OI oi;
   public static Dashboard238 dashboard238;
-  public static CTRE_PID ctrePID;
   public static Shooter shooter;
 
   // Dictionary of auto mode names and commands to run
@@ -59,7 +57,6 @@ public class Robot extends TimedRobot {
     vision = new Vision(FieldConstants.VisionConstants.targetHeight, FieldConstants.VisionConstants.cameraHeight);
     shooter = new Shooter();
     dashboard238 = new Dashboard238();
-    ctrePID = new CTRE_PID();
   }
 
   /**
@@ -72,7 +69,6 @@ public class Robot extends TimedRobot {
     navigationBoard.init();
     dashboard238.init();
     vision.initLimelight();
-    ctrePID.prepTalons();
     populateAutomodes();
   }
 
@@ -219,11 +215,6 @@ public class Robot extends TimedRobot {
     if (m_autoCommandGroup != null) {
       m_autoCommandGroup.cancel();
     }
-    /* double targetTicks = ctrePID.calcTicks(120);
-    SmartDashboard.putNumber("Tick target", targetTicks);
-    SmartDashboard.putNumber("Current ticks", ctrePID.getTicks());
-    RobotMap.DrivetrainControllers.LeftMaster.set(ControlMode.Position, targetTicks);
-    RobotMap.DrivetrainControllers.LeftMaster.set(ControlMode.Position, targetTicks); */
   }
 
   /**
