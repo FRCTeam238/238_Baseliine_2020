@@ -17,7 +17,7 @@ import frc.robot.RobotMap;
  * Add your docs here.
  */
 public class Intake extends Subsystem {
-    private final TalonSRX intakeMasterDrive = RobotMap.Shooter.shooterMaster;
+    private final TalonSRX intakeMasterDrive = RobotMap.Intake.rightIntake;
 
     public Intake() {
         initTalons();
