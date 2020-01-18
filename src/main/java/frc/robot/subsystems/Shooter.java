@@ -17,7 +17,17 @@ import frc.robot.RobotMap;
  * Add your docs here.
  */
 public class Shooter extends Subsystem {
-    private final TalonSRX shooterMasterDive = RobotMap.Shooter.shooterMaster;
+    private final TalonSRX shooterMasterDrive = RobotMap.ShooterDevices.shooterMaster;
+
+    private final double kP = 1;
+    private final double kI = 1;
+    private final double kD = 1;
+    /*
+     * private double integral = 0; private double derivative = 0; private double
+     * previousError = 0; private double desiredSpeed = 0; private double
+     * encoderTicks; private double previousEncoderTicks; private double error;
+     * private double speed;
+     */
 
     public Shooter() {
         initTalons();
@@ -25,46 +35,89 @@ public class Shooter extends Subsystem {
     }
 
     public void initTalons() {
-        shooterMasterDive.configFactoryDefault();
+        shooterMasterDrive.configFactoryDefault();
     }
 
     @Override
-    public void initDefaultCommand() { 
+    public void initDefaultCommand() {
     }
 
-    public void resetEncoder(){
-        shooterMasterDive.setSelectedSensorPosition(0,0,0);
+    private void resetEncoder() {
+        shooterMasterDrive.setSelectedSensorPosition(0, 0, 0);
     }
-    public double getEncoderTicks(){
-        double encoderTicks = shooterMasterDive.getSelectedSensorPosition();
+
+    private double getEncoderTicks() {
+        double encoderTicks = shooterMasterDrive.getSelectedSensorPosition();
         return encoderTicks;
     }
 
-    public void setPower(double speedValue){
-        shooterMasterDive.set(ControlMode.PercentOutput, speedValue);
+    private void pid_loop() {
+
+        /*
+         * previousEncoderTicks = encoderTicks; encoderTicks = getEncoderTicks(); speed
+         * = (encoderTicks - previousEncoderTicks)/; //assuming that this loops 50 times
+         * per second, 0.02 seconds for looop error = speed - desiredSpeed; integral +=
+         * error*0.02; //continually adds up derivative = (error - previousError)/0.02
+         */
+
     }
 
-    public double getPower(){
-        double power = shooterMasterDive.getMotorOutputPercent();
+    public void setSpeed(double speedValue) {
+        shooterMasterDrive.set(ControlMode.Velocity, speedValue);
+    }
+
+    public double getPower() {
+        double power = shooterMasterDrive.getMotorOutputPercent();
         return power;
-        
     }
 
-    public void stop(){
-        shooterMasterDive.set(ControlMode.PercentOutput, 0);
+    public double getSpeed() {
+        double speed = shooterMasterDrive.getSelectedSensorVelocity();
+        return speed;
     }
 
-    private void initLiveWindow(){
+    public double getDesiredSpeed() {
+        double wantedSpeed = shooterMasterDrive.getClosedLoopTarget();
+        return wantedSpeed;
+    }
+
+    public double getSpeedError() {
+        double currentSpeed = getSpeed();
+        double wantedSpeed = getDesiredSpeed();
+        double currentError = wantedSpeed - currentSpeed;
+        return currentError;
+    }
+
+    public void stop() {
+        shooterMasterDrive.set(ControlMode.PercentOutput, 0);
+    }
+
+    private void initLiveWindow() {
         SendableWrapper power = new SendableWrapper(builder -> {
-        builder.addDoubleProperty("Power", this::getPower, null);
+            builder.addDoubleProperty("Power", this::getPower, null);
         });
-        
+
+        SendableWrapper speed = new SendableWrapper(builder -> {
+            builder.addDoubleProperty("Speed", this::getSpeed, null);
+        });
+
+        SendableWrapper desiredSpeed = new SendableWrapper(builder -> {
+            builder.addDoubleProperty("Desired Speed", this::getDesiredSpeed, null);
+        });
+
+        SendableWrapper speedError = new SendableWrapper(builder -> {
+            builder.addDoubleProperty("Speed Error", this::getSpeedError, null);
+        });
+
         SendableWrapper encoderTicks = new SendableWrapper(builder -> {
-        builder.addDoubleProperty("Ticks", this::getEncoderTicks, null);
+            builder.addDoubleProperty("Ticks", this::getEncoderTicks, null);
         });
-        
+
         addChild("Power", power);
+        addChild("Speed", speed);
+        addChild("Desired Speed", desiredSpeed);
+        addChild("Speed Error", speedError);
         addChild("EncoderTicks", encoderTicks);
     }
-    
+
 }
