@@ -6,10 +6,10 @@ package frc.robot;
 public final class Constants {
 
   public static class CTRE_PID {
-    public static double kP = 0;
-    public static double kI = 0;
-    public static double kD = 0;
-    public static double kF = 0;
+    public static double kP = 0.5;
+    public static double kI = 1;
+    public static double kD = 1;
+    public static double kF = 1;
     public static int kIzone = 100;
     public static int kPIDLoopIdx = 0;
     public static int kTimeoutMs = 30;

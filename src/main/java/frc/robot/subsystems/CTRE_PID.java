@@ -12,6 +12,7 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.RobotMap;
 
@@ -31,7 +32,7 @@ public class CTRE_PID extends Subsystem {
   }
 
   /** Takes distance in inches and returns sensor ticks */
-  public double getTicks(double distance){
+  public double calcTicks(double distance){
     double inchesPerRev = Constants.robotGeometry.wheelCircumference * Math.PI;
     double revs = distance / inchesPerRev;
     double ticks = revs * Constants.robotGeometry.ticksPerRev;
@@ -89,8 +90,16 @@ public class CTRE_PID extends Subsystem {
 
   public void driveStraight(double inches){
     zeroEncoders();
-    double targetTicks = getTicks(inches);
+    double targetTicks = calcTicks(inches);
+    SmartDashboard.putNumber("Target ticks", targetTicks);
     rightTalon.set(ControlMode.Position, targetTicks);
     leftTalon.set(ControlMode.Position, targetTicks);
+  }
+
+  public double getTicks(){
+    double rightTicks = rightTalon.getSelectedSensorPosition();
+    double leftTicks = leftTalon.getSelectedSensorPosition();
+    double averageTicks = (rightTicks + leftTicks) / 2;
+    return averageTicks;
   }
 }

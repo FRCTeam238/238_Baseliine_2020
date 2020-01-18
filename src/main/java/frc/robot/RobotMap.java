@@ -17,12 +17,12 @@ public final class RobotMap {
 
   /** Motor controllers for the drive train */
   public static class DrivetrainControllers {
-    public static final int DRIVE_TRAIN_RIGHT_MASTER = 8;
-    public static final int DRIVE_TRAIN_RIGHT_SLAVE1 = 7;
+    public static final int DRIVE_TRAIN_RIGHT_MASTER = 0;
+    public static final int DRIVE_TRAIN_RIGHT_SLAVE1 = 1;
     public static final int DRIVE_TRAIN_RIGHT_SLAVE2 = 2;
 
-    public static final int DRIVE_TRAIN_LEFT_MASTER = 5;
-    public static final int DRIVE_TRAIN_LEFT_SLAVE1 = 6;
+    public static final int DRIVE_TRAIN_LEFT_MASTER = 15;
+    public static final int DRIVE_TRAIN_LEFT_SLAVE1 = 14;
     public static final int DRIVE_TRAIN_LEFT_SLAVE2 = 13;
 
     public static TalonSRX LeftMaster = TalonSRX_238.create(DRIVE_TRAIN_LEFT_MASTER, Robot.isSimulation());//new TalonSRX(DRIVE_TRAIN_LEFT_MASTER);
