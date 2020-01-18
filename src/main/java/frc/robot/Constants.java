@@ -14,4 +14,8 @@ public final class Constants {
     public static int kPIDLoopIdx = 0;
     public static int kTimeoutMs = 30;
   }
+  public static class robotGeometry {
+    public static double wheelCircumference = 6; // Inches
+    public static double ticksPerRev = 4096;
+  }
 }

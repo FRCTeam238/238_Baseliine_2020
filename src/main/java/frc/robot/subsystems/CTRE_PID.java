@@ -7,6 +7,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
@@ -27,6 +28,19 @@ public class CTRE_PID extends Subsystem {
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.
     // setDefaultCommand(new MySpecialCommand());
+  }
+
+  /** Takes distance in inches and returns sensor ticks */
+  public double getTicks(double distance){
+    double inchesPerRev = Constants.robotGeometry.wheelCircumference * Math.PI;
+    double revs = distance / inchesPerRev;
+    double ticks = revs * Constants.robotGeometry.ticksPerRev;
+    return ticks;
+  }
+
+  public void zeroEncoders(){
+    rightTalon.setSelectedSensorPosition(0, Constants.CTRE_PID.kPIDLoopIdx, Constants.CTRE_PID.kTimeoutMs);
+    leftTalon.setSelectedSensorPosition(0, Constants.CTRE_PID.kPIDLoopIdx, Constants.CTRE_PID.kTimeoutMs);
   }
 
   public void prepTalons(){
@@ -70,8 +84,13 @@ public class CTRE_PID extends Subsystem {
     rightTalon.setSensorPhase(false);
     leftTalon.setSensorPhase(false);
 
-    // Zeroes encoders
-    rightTalon.setSelectedSensorPosition(0, Constants.CTRE_PID.kPIDLoopIdx, Constants.CTRE_PID.kTimeoutMs);
-    leftTalon.setSelectedSensorPosition(0, Constants.CTRE_PID.kPIDLoopIdx, Constants.CTRE_PID.kTimeoutMs);
+    zeroEncoders();
+  }
+
+  public void driveStraight(double inches){
+    zeroEncoders();
+    double targetTicks = getTicks(inches);
+    rightTalon.set(ControlMode.Position, targetTicks);
+    leftTalon.set(ControlMode.Position, targetTicks);
   }
 }
