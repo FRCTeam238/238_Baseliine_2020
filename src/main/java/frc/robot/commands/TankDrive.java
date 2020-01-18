@@ -7,6 +7,7 @@
 
 package frc.robot.commands;
 
+import frc.robot.RobotMap;
 import frc.robot.commands.drivetrainparameters.DrivetrainParameters;
 import frc.robot.commands.drivetrainparameters.IDrivetrainParametersSource;
 import frc.robot.subsystems.Drivetrain;
@@ -15,6 +16,8 @@ public class TankDrive extends BaseCommand {
   private Drivetrain drivetrain;
   private IDrivetrainParametersSource parameterSource;
   private IDrivetrainParametersSource defaultParameterSource;
+
+  private boolean isStarted = false;
  
   public TankDrive(IDrivetrainParametersSource defaultParameterSource, Drivetrain drivetrain) {
     // added drivetrain as a constructor parameter as sim mode was returning Robot.drivetrain = null
@@ -37,9 +40,9 @@ public class TankDrive extends BaseCommand {
   */
   @Override
   protected void execute() {
-    IDrivetrainParametersSource source = parameterSource == null ? defaultParameterSource : parameterSource;
-    DrivetrainParameters parameters = source.Get();
-    drivetrain.drive(parameters.Left, parameters.Right, parameters.Angle);
+      IDrivetrainParametersSource source = parameterSource == null ? defaultParameterSource : parameterSource;
+      DrivetrainParameters parameters = source.Get();
+      drivetrain.drive(parameters.Left, parameters.Right, parameters.Angle);
   }
 
   // Make this return true when this Command no longer needs to run execute()

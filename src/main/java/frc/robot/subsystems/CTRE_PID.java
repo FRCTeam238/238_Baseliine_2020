@@ -61,7 +61,7 @@ public class CTRE_PID extends Subsystem {
 
     // Ensure motor output and encoder velocity are proportional to each other
     // If they become inverted, set these to true
-    talon.setSensorPhase(false);
+    talon.setSensorPhase(true);
 
     zeroEncoders(kPIDLoopIdx, kTimeoutMs, talon);
   }

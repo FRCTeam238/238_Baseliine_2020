@@ -17,6 +17,7 @@ import frc.robot.Robot;
 public class DriverJoysticks implements IDrivetrainParametersSource {
     private Joystick left;
     private Joystick right;
+    private boolean isInverted = false;
 
     public DriverJoysticks() {
         this.right = Robot.oi.rightStick;
@@ -25,8 +26,15 @@ public class DriverJoysticks implements IDrivetrainParametersSource {
 
     @Override
     public DrivetrainParameters Get() {
-        double leftJsValue = left.getY();
-        double rightJsValue = right.getY();
+        double rightJsValue;
+        double leftJsValue;
+        if(isInverted){
+            leftJsValue = -left.getY();
+            rightJsValue = -right.getY();
+        }else{
+            leftJsValue = left.getY();
+            rightJsValue = right.getY();
+        }
 
         //should have some sort of abstraction in case we want to pull number from somewhere else
         double tuningValue = SmartDashboard.getNumber("DRIVETRAIN TUNING", 0.2);
@@ -36,5 +44,13 @@ public class DriverJoysticks implements IDrivetrainParametersSource {
         double leftPower = (tuningValue * (leftJsValue * leftJsValue * leftJsValue) + (1-tuningValue) * leftJsValue);
         double rightPower = (tuningValue * (rightJsValue * rightJsValue * rightJsValue) + (1-tuningValue) * rightJsValue);
         return new DrivetrainParameters(leftPower, rightPower, 0);
+    }
+
+    public void invertJoysticks(){
+        if(isInverted == true){
+            isInverted = false;
+        }else{
+            isInverted = true;
+        }
     }
 }

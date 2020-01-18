@@ -10,7 +10,9 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import frc.robot.commands.DriveStraightPID;
 import frc.robot.commands.VisionDrive;
+import frc.robot.subsystems.Drivetrain;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -21,12 +23,16 @@ public class OI {
   public Joystick leftStick = RobotMap.Joysticks.driverStickLeft;
   public Joystick rightStick = RobotMap.Joysticks.driverStickRight;
   public Joystick controller = RobotMap.Joysticks.operatorController;
+  public Drivetrain drivetrain;
 
   public OI(){
     
     JoystickButton visionTrackButton = new JoystickButton(leftStick, RobotMap.Buttons.visionTrack);
+    JoystickButton driveTenFeetButton = new JoystickButton(leftStick, RobotMap.Buttons.driveTenFeet);
 
     VisionDrive visionDrive = new VisionDrive();
+    DriveStraightPID driveTenFeetPID = new DriveStraightPID(-48);
+    driveTenFeetButton.whenPressed(driveTenFeetPID);
     visionTrackButton.whileHeld(visionDrive);
     
   }

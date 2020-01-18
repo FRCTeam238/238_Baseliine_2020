@@ -17,6 +17,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.Sendable;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.core238.Logger;
 import frc.core238.wrappers.SendableWrapper;
 import frc.robot.RobotMap;
@@ -30,7 +31,7 @@ public class Drivetrain extends Subsystem {
 
   // private LiveWindow lw = LiveWindow.getInstance();
 
-  public final static double TICKS_PER_INCH = 217.299;
+  public final static double TICKS_PER_INCH = 193;
   private final static double ANGLE_KP = 3;
   private final double kV = 0.00434;// 0.00455
   private final double kA = 00.00434 * 0.15;
@@ -42,10 +43,10 @@ public class Drivetrain extends Subsystem {
   private final TalonSRX leftDriveFollower1 = RobotMap.DrivetrainControllers.LeftFollower1;
   private final TalonSRX rightDriveFollower1 = RobotMap.DrivetrainControllers.RightFollower1;
 
-  public static double kP = 0.5;
-  public static double kI = 1;
-  public static double kD = 1;
-  public static double kF = 1;
+  public static double kP = 0.1;
+  public static double kI = 0;
+  public static double kD = 0;
+  public static double kF = 0;
   public static int kIzone = 100;
   public static int kPIDLoopIdx = 0;
   public static int kTimeoutMs = 30;
@@ -54,13 +55,16 @@ public class Drivetrain extends Subsystem {
   public Drivetrain() {
     initTalons();
     initLiveWindow();
+    
   }
 
   @Override
   public void initDefaultCommand() {
     DriverJoysticks myDriverJoysticks = new DriverJoysticks();
+    myDriverJoysticks.invertJoysticks();
     TankDrive tankDriveCommand = new TankDrive(myDriverJoysticks, this);
     setDefaultCommand(tankDriveCommand);
+    SmartDashboard.putData("Drivetrain command", this);
   }
 
   public void drive(double left, double right) {
@@ -84,8 +88,12 @@ public class Drivetrain extends Subsystem {
     }
   }
 
-  public void driveWithTicks(double distance) {
-    double ticks = distance * TICKS_PER_INCH;
+  public static double calcTicks(double distance){
+    return distance * TICKS_PER_INCH;
+  }
+  /** Drive a number of inches using TalonSRX PID loops */
+  public static void driveWithTicks(double distance) {
+    double ticks = calcTicks(distance);
     CTRE_PID.moveToPosition(rightMasterDrive, ticks);
     CTRE_PID.moveToPosition(leftMasterDrive, ticks);
   }
@@ -136,9 +144,6 @@ public class Drivetrain extends Subsystem {
 
     // var leftDriveFollower2 = RobotMap.DrivetrainControllers.LeftFollower2;
 
-    leftMasterDrive.setInverted(true);
-    leftDriveFollower1.setInverted(true);
-
     leftDriveFollower1.follow(leftMasterDrive);
     // leftDriveFollower2.follow(leftMasterDrive);
 
@@ -147,6 +152,9 @@ public class Drivetrain extends Subsystem {
     // leftDriveFollower2.setNeutralMode(NeutralMode.Brake);
 
     // var rightDriveFollower2 = RobotMap.DrivetrainControllers.RightFollower2;
+
+    rightMasterDrive.setInverted(true);
+    rightDriveFollower1.setInverted(true);
 
     rightDriveFollower1.follow(rightMasterDrive);
     // rightDriveFollower2.follow(rightMasterDrive);
@@ -158,10 +166,14 @@ public class Drivetrain extends Subsystem {
     rightMasterDrive.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 1, 0);
     leftMasterDrive.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 1, 0);
 
-    CTRE_PID.initTalonPID(kP, kI, kD, kF, kIzone, leftMasterDrive, kTimeoutMs, kPIDLoopIdx, rampRate);
-    CTRE_PID.initTalonPID(kP, kI, kD, kF, kIzone, rightMasterDrive, kTimeoutMs, kPIDLoopIdx, rampRate);
+    initPID();
 
     Logger.Debug("initTalons Is Sucessful!");
+  }
+
+  public static void initPID(){
+    CTRE_PID.initTalonPID(kP, kI, kD, kF, kIzone, leftMasterDrive, kTimeoutMs, kPIDLoopIdx, rampRate);
+    CTRE_PID.initTalonPID(kP, kI, kD, kF, kIzone, rightMasterDrive, kTimeoutMs, kPIDLoopIdx, rampRate);
   }
 
   public static void resetEncoders() {
@@ -196,6 +208,17 @@ public class Drivetrain extends Subsystem {
     return rightDistanceTravelled;
   }
 
+  public static boolean isAtPosition(double distance){
+    double desiredTicks = calcTicks(distance);
+    double rightPosition = CTRE_PID.getTicks(rightMasterDrive);
+    double leftPosition = CTRE_PID.getTicks(leftMasterDrive);
+    double averagePosition = (rightPosition + leftPosition) / 2;
+    Logger.Debug("Current position: " + averagePosition);
+    Logger.Debug("Desired position: " + desiredTicks);
+    boolean isDone = (Math.abs(averagePosition) >= Math.abs(desiredTicks));
+    return isDone;
+  }
+
   private void initLiveWindow() {
     SendableWrapper leftEncoder = new SendableWrapper(builder -> {
       builder.addDoubleProperty("Ticks", this::getLeftEncoderTicks, null);
@@ -215,6 +238,20 @@ public class Drivetrain extends Subsystem {
       builder.addDoubleProperty("Value", () -> rightMasterDrive.getMotorOutputPercent(), null);
     });
 
+    SendableWrapper kPValue = new SendableWrapper(builder -> {
+      builder.addDoubleProperty("kP", () -> kP, (value)-> kP = value);
+    });
+
+    SendableWrapper kIValue = new SendableWrapper(builder -> {
+      builder.addDoubleProperty("kI", () -> kI, (value)-> kI = value);
+    });
+
+    SendableWrapper kDValue = new SendableWrapper(builder -> {
+      builder.addDoubleProperty("kD", () -> kD, (value)-> kD = value);
+    });
+
+
+
     /*
     SendableWrapper leftInches = new SendableWrapper(builder -> {
       builder.addDoubleProperty("Inches", this::leftDistanceTravelled, null);
@@ -225,6 +262,9 @@ public class Drivetrain extends Subsystem {
     addChild("Right Encoder", rightEncoder);
     addChild("Left Speed Controller", leftSpeedController);
     addChild("Right Speed Controller", rightSpeedController);
+    addChild("kP", kPValue);
+    addChild("kI", kIValue);
+    addChild("kD", kDValue);
     //addChild("Left Inches", leftInches);
   }
 

@@ -20,8 +20,10 @@ import frc.core238.autonomous.AutonomousModesReader;
 import frc.core238.autonomous.DataFileAutonomousModeDataSource;
 import frc.core238.autonomous.IAutonomousModeDataSource;
 import frc.robot.commands.DriveStraightNavBoard;
+import frc.robot.commands.DriveStraightPID;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.NavigationBoard;
+import frc.robot.commands.ResetDriveEncoders;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Vision;
 
@@ -70,6 +72,7 @@ public class Robot extends TimedRobot {
     dashboard238.init();
     vision.initLimelight();
     populateAutomodes();
+    SmartDashboard.putData("Zero Encoders", new ResetDriveEncoders());
   }
 
   private void populateAutomodes() {
@@ -83,14 +86,17 @@ public class Robot extends TimedRobot {
       m_autoModes = new HashMap<>();
 
       CommandGroup cg = new CommandGroup();
-      DriveStraightNavBoard cmd = new DriveStraightNavBoard();
-      List<String> parameters = new ArrayList<>();
-      parameters.add("5");
-      parameters.add("10");
-      cmd.setParameters(parameters);
-      cg.addSequential(cmd);
+      // DriveStraightNavBoard cmd = new DriveStraightNavBoard();
+      DriveStraightPID drivefrwrd = new DriveStraightPID(48);
+      DriveStraightPID drivebckwrd = new DriveStraightPID(-72);
+      //List<String> parameters = new ArrayList<>();
+      //parameters.add("5");
+      //parameters.add("10");
+      //cmd.setParameters(parameters);
+      cg.addSequential(drivefrwrd);
+      cg.addSequential(drivebckwrd);
 
-      m_autoModes.put("Simulate - Drive Straight: sp 5, dist 10", cg);
+      m_autoModes.put("Drive forward, then backward", cg);
 
       CommandGroup cg2 = new CommandGroup();
       DriveStraightNavBoard cmd2 = new DriveStraightNavBoard();
@@ -107,7 +113,7 @@ public class Robot extends TimedRobot {
       cmd3.setParameters(parameters3);
       cg2.addSequential(cmd3);
 
-      m_autoModes.put("Simulate - Drive Straight: sp 15, dist 100", cg2);
+      //m_autoModes.put("Simulate - Drive Straight: sp 15, dist 100", cg2);
       // CommandGroup cg3 = new CommandGroup();
       // cg3.addSequential(cg);
       // cg3.addSequential(cg2);
