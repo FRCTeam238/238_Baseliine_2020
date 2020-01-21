@@ -62,15 +62,33 @@ public final class RobotMap {
 
   }
 
-  public static class ShooterDevices{
+  public static class ShooterDevices {
     //TODO: change to real number
     public static int SHOOTER_MASTER = 100;
-    public static TalonSRX shooterMaster = new TalonSRX(SHOOTER_MASTER);
+    public static TalonSRX shooterMaster = TalonSRX_238.create(SHOOTER_MASTER, Robot.isSimulation());
   }
 
-  public static class Intake{
+  public static class IntakeDevices {
     //TODO: change to real number
     public static int INTAKE_MASTER = 101;
-    public static TalonSRX rightIntake = new TalonSRX(INTAKE_MASTER);
+    public static TalonSRX rightIntake = TalonSRX_238.create(INTAKE_MASTER, Robot.isSimulation());
+  }
+
+  public static class TurretDevices {
+    //TODO: change to real number 
+    public static int TURRET_MASTER = 102;
+    public static TalonSRX turretTalon = TalonSRX_238.create(TURRET_MASTER, Robot.isSimulation());
+  }
+
+  public static class FeederDevices {
+    //TODO: change to real number
+    public static int FEEDER_MASTER = 103;
+    public static TalonSRX feederTalon = TalonSRX_238.create(FEEDER_MASTER, Robot.isSimulation()); 
+  }
+
+  public static class HangerDevices {
+    //TODO: change to real number
+    public static int HANGER_DEVICES = 103;
+    public static TalonSRX hangerTalon = TalonSRX_238.create(HANGER_DEVICES, Robot.isSimulation()); 
   }
 }

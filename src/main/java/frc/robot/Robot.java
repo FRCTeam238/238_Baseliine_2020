@@ -22,9 +22,13 @@ import frc.core238.autonomous.IAutonomousModeDataSource;
 import frc.robot.commands.DriveStraightNavBoard;
 import frc.robot.commands.DriveStraightPID;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Feeder;
+import frc.robot.subsystems.Hanger;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.NavigationBoard;
 import frc.robot.commands.ResetDriveEncoders;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Turret;
 import frc.robot.subsystems.Vision;
 
 /**
@@ -42,6 +46,10 @@ public class Robot extends TimedRobot {
   public static OI oi;
   public static Dashboard238 dashboard238;
   public static Shooter shooter;
+  public static Turret turret;
+  public static Feeder feeder;
+  public static Hanger hanger;
+  public static Intake intake;
 
   // Dictionary of auto mode names and commands to run
   HashMap<String, CommandGroup> m_autoModes;
@@ -59,6 +67,10 @@ public class Robot extends TimedRobot {
     vision = new Vision(FieldConstants.VisionConstants.targetHeight, FieldConstants.VisionConstants.cameraHeight);
     shooter = new Shooter();
     dashboard238 = new Dashboard238();
+    turret = new Turret();
+    feeder = new Feeder();
+    hanger = new Hanger();
+    intake = new Intake();
   }
 
   /**

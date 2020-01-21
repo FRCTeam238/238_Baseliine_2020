@@ -7,8 +7,13 @@
 
 package frc.robot.subsystems;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+
+import edu.wpi.first.wpilibj.Sendable;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.core238.wrappers.SendableWrapper;
 import frc.robot.RobotMap;
@@ -118,6 +123,12 @@ public class Shooter extends Subsystem {
         addChild("Desired Speed", desiredSpeed);
         addChild("Speed Error", speedError);
         addChild("EncoderTicks", encoderTicks);
+    }
+
+    private List<SendableWrapper> _sendables = new ArrayList<>();
+    private void addChild(String name, SendableWrapper wrapper){
+      _sendables.add(wrapper);
+      addChild(name, (Sendable)wrapper);
     }
 
 }
