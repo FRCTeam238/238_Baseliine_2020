@@ -21,12 +21,13 @@ import frc.core238.autonomous.DataFileAutonomousModeDataSource;
 import frc.core238.autonomous.IAutonomousModeDataSource;
 import frc.robot.commands.DriveStraightNavBoard;
 import frc.robot.commands.DriveStraightPID;
+import frc.robot.commands.ResetDriveEncoders;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Hanger;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.NavigationBoard;
-import frc.robot.commands.ResetDriveEncoders;
+import frc.robot.subsystems.PanelManipulator;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Turret;
 import frc.robot.subsystems.Vision;
@@ -50,6 +51,7 @@ public class Robot extends TimedRobot {
   public static Feeder feeder;
   public static Hanger hanger;
   public static Intake intake;
+  public static PanelManipulator panelManipulator;
 
   // Dictionary of auto mode names and commands to run
   HashMap<String, CommandGroup> m_autoModes;
@@ -67,22 +69,19 @@ public class Robot extends TimedRobot {
     vision = new Vision(FieldConstants.VisionConstants.targetHeight, FieldConstants.VisionConstants.cameraHeight);
     shooter = new Shooter();
     dashboard238 = new Dashboard238();
-    turret = new Turret();
     feeder = new Feeder();
     hanger = new Hanger();
     intake = new Intake();
+    panelManipulator = new PanelManipulator();
   }
-
-  /**
-   * This function is run when the robot is first started up and should be used
-   * for any initialization code.
-   */
+  
   @Override
   public void robotInit() {
     oi = new OI();
     navigationBoard.init();
     dashboard238.init();
     vision.initLimelight();
+    panelManipulator.initSensor();
     populateAutomodes();
     SmartDashboard.putData("Zero Encoders", new ResetDriveEncoders());
   }
@@ -252,5 +251,7 @@ public class Robot extends TimedRobot {
     // vision.ledsOn();
     // navigationBoard.navxValues();
     // vision.postValues();
+    // panelManipulator.postColor();
+    
   }
 }
