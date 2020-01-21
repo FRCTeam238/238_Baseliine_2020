@@ -29,16 +29,14 @@ public class DriveStraightPID extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    Drivetrain.initPID();
-    Drivetrain.resetEncoders();
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    if(!isStarted){
+    if(!isStarted) {
       Logger.Debug("PID Loop Active");
-      Drivetrain.driveWithTicks(distance);
+      drivetrain.driveWithTicks(distance);
     }
   }
 

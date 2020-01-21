@@ -16,6 +16,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.Sendable;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.core238.wrappers.SendableWrapper;
+import frc.core238.wrappers.TalonSRX_238;
 import frc.robot.RobotMap;
 
 /**
@@ -40,7 +41,8 @@ public class Shooter extends Subsystem {
     }
 
     public void initTalons() {
-        shooterMasterDrive.configFactoryDefault();
+        //shooterMasterDrive.configFactoryDefault();
+       // TalonSRX_238.initPID(kP, kI, kD, kF, kIzone, shooterMasterDrive, kTimeoutMs, kPIDLoopIdx, rampRate);
     }
 
     @Override

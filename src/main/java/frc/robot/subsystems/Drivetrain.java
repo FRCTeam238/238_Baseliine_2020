@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.core238.Logger;
 import frc.core238.wrappers.SendableWrapper;
+import frc.core238.wrappers.TalonSRX_238;
 import frc.robot.RobotMap;
 import frc.robot.commands.TankDrive;
 import frc.robot.commands.drivetrainparameters.DriverJoysticks;
@@ -88,14 +89,17 @@ public class Drivetrain extends Subsystem {
     }
   }
 
-  public static double calcTicks(double distance){
+  private static double calcTicks(double distance){
     return distance * TICKS_PER_INCH;
   }
+
   /** Drive a number of inches using TalonSRX PID loops */
-  public static void driveWithTicks(double distance) {
+  public void driveWithTicks(double distance) {
+    initPID();
+    resetEncoders();
     double ticks = calcTicks(distance);
-    CTRE_PID.moveToPosition(rightMasterDrive, ticks);
-    CTRE_PID.moveToPosition(leftMasterDrive, ticks);
+    setPosition(rightMasterDrive, ticks);
+    setPosition(leftMasterDrive, ticks);
   }
 
   // method to accelerate rather than set straigt power
@@ -137,31 +141,20 @@ public class Drivetrain extends Subsystem {
   }
 
   public void initTalons() {
-    rightMasterDrive.configFactoryDefault();
-    leftMasterDrive.configFactoryDefault();
-    leftDriveFollower1.configFactoryDefault();
-    rightDriveFollower1.configFactoryDefault();
 
-    // var leftDriveFollower2 = RobotMap.DrivetrainControllers.LeftFollower2;
+    //TalonSRX_238 factory method returns preconfigured talks with defaults, no need to reset to defaults
 
     leftDriveFollower1.follow(leftMasterDrive);
-    // leftDriveFollower2.follow(leftMasterDrive);
+    rightDriveFollower1.follow(rightMasterDrive);
 
     leftMasterDrive.setNeutralMode(NeutralMode.Brake);
     leftDriveFollower1.setNeutralMode(NeutralMode.Brake);
-    // leftDriveFollower2.setNeutralMode(NeutralMode.Brake);
-
-    // var rightDriveFollower2 = RobotMap.DrivetrainControllers.RightFollower2;
 
     rightMasterDrive.setInverted(true);
     rightDriveFollower1.setInverted(true);
 
-    rightDriveFollower1.follow(rightMasterDrive);
-    // rightDriveFollower2.follow(rightMasterDrive);
-
     rightMasterDrive.setNeutralMode(NeutralMode.Brake);
     rightDriveFollower1.setNeutralMode(NeutralMode.Brake);
-    // rightDriveFollower2.setNeutralMode(NeutralMode.Brake);
 
     rightMasterDrive.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 1, 0);
     leftMasterDrive.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 1, 0);
@@ -171,17 +164,18 @@ public class Drivetrain extends Subsystem {
     Logger.Debug("initTalons Is Sucessful!");
   }
 
-  public static void initPID(){
-    CTRE_PID.initTalonPID(kP, kI, kD, kF, kIzone, leftMasterDrive, kTimeoutMs, kPIDLoopIdx, rampRate);
-    CTRE_PID.initTalonPID(kP, kI, kD, kF, kIzone, rightMasterDrive, kTimeoutMs, kPIDLoopIdx, rampRate);
+  public void initPID() {
+    TalonSRX_238.initPID(leftMasterDrive, kP, kI, kD, kF, kIzone, kTimeoutMs, kPIDLoopIdx, rampRate);
+    TalonSRX_238.initPID(rightMasterDrive, kP, kI, kD, kF, kIzone, kTimeoutMs, kPIDLoopIdx, rampRate);
   }
 
   public static void resetEncoders() {
-    CTRE_PID.zeroEncoders(kPIDLoopIdx, kTimeoutMs, rightMasterDrive);
-    CTRE_PID.zeroEncoders(kPIDLoopIdx, kTimeoutMs, leftMasterDrive);
+    TalonSRX_238.zeroEncoder(rightMasterDrive, kPIDLoopIdx, kTimeoutMs);
+    TalonSRX_238.zeroEncoder(leftMasterDrive, kPIDLoopIdx, kTimeoutMs);
   }
+
   public double getLeftEncoderTicks() {
-    double leftTicks = CTRE_PID.getTicks(leftMasterDrive);
+    double leftTicks = getTicks(leftMasterDrive);
     Logger.Trace("LEFT TICKS: " + leftTicks);
     return leftTicks;
   }
@@ -195,7 +189,7 @@ public class Drivetrain extends Subsystem {
   }
 
   public double getRightEncoderTicks() {
-    double rightTicks = CTRE_PID.getTicks(rightMasterDrive);
+    double rightTicks = getTicks(rightMasterDrive);
     Logger.Trace("RIGHT TICKS: " + rightTicks);
     return rightTicks;
   }
@@ -208,15 +202,24 @@ public class Drivetrain extends Subsystem {
     return rightDistanceTravelled;
   }
 
-  public static boolean isAtPosition(double distance){
+  public boolean isAtPosition(double distance) {
     double desiredTicks = calcTicks(distance);
-    double rightPosition = CTRE_PID.getTicks(rightMasterDrive);
-    double leftPosition = CTRE_PID.getTicks(leftMasterDrive);
+    double rightPosition = getTicks(rightMasterDrive);
+    double leftPosition = getTicks(leftMasterDrive);
     double averagePosition = (rightPosition + leftPosition) / 2;
     Logger.Debug("Current position: " + averagePosition);
     Logger.Debug("Desired position: " + desiredTicks);
     boolean isDone = (Math.abs(averagePosition) >= Math.abs(desiredTicks));
     return isDone;
+  }
+
+  private static double getTicks(TalonSRX talon){
+    return talon.getSelectedSensorPosition();
+  }
+
+  private static void setPosition(TalonSRX talon, double ticks) {
+    resetEncoders();
+    talon.set(ControlMode.Position, ticks);
   }
 
   private void initLiveWindow() {

@@ -9,6 +9,9 @@ package frc.core238.wrappers;
 
 import com.ctre.phoenix.ErrorCode;
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.time.StopWatch;
 
@@ -125,6 +128,47 @@ public class TalonSRX_238 extends TalonSRX {
     }
 
     public static TalonSRX create(int deviceNumber, Boolean isSimulation) {
-        return isSimulation ? new TalonSRX_238(deviceNumber) : new TalonSRX(deviceNumber);
+        TalonSRX talon = isSimulation ? new TalonSRX_238(deviceNumber) : new TalonSRX(deviceNumber);
+        talon.configFactoryDefault();
+        talon.setNeutralMode(NeutralMode.Brake);    
+        talon.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 1, 0);
+        return talon;
     }
+
+    public static void initPID(TalonSRX talon, double kP, double kI, double kD, double kF, int kIzone, int kTimeoutMs, int kPIDLoopIdx, double rampRate){
+
+        /* Config the peak and nominal outputs ([-1, 1] represents [-100, 100]%) */
+        talon.configNominalOutputForward(0, kTimeoutMs);
+        talon.configNominalOutputReverse(0, kTimeoutMs);
+        talon.configPeakOutputForward(1, kTimeoutMs);
+        talon.configPeakOutputReverse(-1, kTimeoutMs);
+    
+        /**
+         * Config the allowable closed-loop error, Closed-Loop output will be
+         * neutral within this range.
+         */
+        talon.configAllowableClosedloopError(0, kPIDLoopIdx, kTimeoutMs);
+    
+        /* Config closed loop gains for Primary closed loop (Current) */
+        talon.config_kP(kPIDLoopIdx, kP, kTimeoutMs);
+        talon.config_kI(kPIDLoopIdx, kI, kTimeoutMs);
+        talon.config_kD(kPIDLoopIdx, kD, kTimeoutMs);
+        talon.config_kF(kPIDLoopIdx, kF, kTimeoutMs);
+        talon.config_IntegralZone(kPIDLoopIdx, kIzone, kTimeoutMs);
+        
+        // Config encoders
+        talon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, kPIDLoopIdx, kTimeoutMs);
+    
+        talon.configClosedloopRamp(rampRate, kTimeoutMs);
+    
+        // Ensure motor output and encoder velocity are proportional to each other
+        // If they become inverted, set these to true
+        talon.setSensorPhase(true);
+    
+        zeroEncoder(talon, kPIDLoopIdx, kTimeoutMs);
+      }
+
+      public static void zeroEncoder(TalonSRX talon, int kPIDLoopIdx, int kTimeoutMs){
+        talon.setSelectedSensorPosition(0, kPIDLoopIdx, kTimeoutMs);
+      }
 }
