@@ -241,34 +241,22 @@ public class Drivetrain extends Subsystem {
       builder.addDoubleProperty("Value", () -> rightMasterDrive.getMotorOutputPercent(), null);
     });
 
-    SendableWrapper kPValue = new SendableWrapper(builder -> {
-      builder.addDoubleProperty("kP", () -> kP, (value)-> kP = value);
+    SendableWrapper pidSendable = new SendableWrapper(builder -> {
+      builder.setSmartDashboardType("PIDController");
+      builder.addDoubleProperty("p", () -> kP, (value)-> kP = value);
+      builder.addDoubleProperty("i", () -> kI, (value)-> kI = value);
+      builder.addDoubleProperty("d", () -> kD, (value)-> kD = value);
+      builder.addBooleanProperty("enabled", () -> rightMasterDrive.getControlMode() == ControlMode.Position, null);
+      builder.addDoubleProperty("setpoint", () -> 0.0 , null);
+      builder.addDoubleProperty("f", () -> kD, (value)-> kD = value);
+
     });
 
-    SendableWrapper kIValue = new SendableWrapper(builder -> {
-      builder.addDoubleProperty("kI", () -> kI, (value)-> kI = value);
-    });
-
-    SendableWrapper kDValue = new SendableWrapper(builder -> {
-      builder.addDoubleProperty("kD", () -> kD, (value)-> kD = value);
-    });
-
-
-
-    /*
-    SendableWrapper leftInches = new SendableWrapper(builder -> {
-      builder.addDoubleProperty("Inches", this::leftDistanceTravelled, null);
-    });
-    */
-
+    addChild("PIDController", pidSendable);
     addChild("Left Encoder", leftEncoder);
     addChild("Right Encoder", rightEncoder);
     addChild("Left Speed Controller", leftSpeedController);
     addChild("Right Speed Controller", rightSpeedController);
-    addChild("kP", kPValue);
-    addChild("kI", kIValue);
-    addChild("kD", kDValue);
-    //addChild("Left Inches", leftInches);
   }
 
   private List<SendableWrapper> _sendables = new ArrayList<>();
