@@ -18,9 +18,9 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import frc.core238.Logger;
-import frc.robot.commands.BaseCommand;
 import frc.robot.commands.IAutonomousCommand;
 
 /**
@@ -64,7 +64,7 @@ public class AutonomousModesReader {
                 autoCommand.setIsAutonomousMode(true);
 
                 // add to list
-                commands.addSequential((BaseCommand) autoCommand);
+                commands.addSequential((Command) autoCommand);
             });
 
             // add to dictionary

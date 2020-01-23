@@ -9,7 +9,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.core238.Logger;
-import frc.robot.subsystems.Drivetrain;
+import frc.robot.Robot;
 
 public class ResetDriveEncoders extends Command {
   public ResetDriveEncoders() {
@@ -26,7 +26,7 @@ public class ResetDriveEncoders extends Command {
   @Override
   protected void execute() {
     Logger.Debug("Encoders have been reset");
-    Drivetrain.resetEncoders();
+    Robot.drivetrain.resetEncoders();
     
   }
 

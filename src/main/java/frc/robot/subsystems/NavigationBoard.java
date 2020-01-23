@@ -39,14 +39,18 @@ public class NavigationBoard extends Subsystem {
 	double current = 0;
 	double elapsed = 0;
 
-	public void init()
+	public NavigationBoard(){
+		init();
+	}
+
+	private void init()
 	{
 		//lineSensorInput = new DigitalInput(CrusaderCommon.LINE_SENSOR);
 
 
 		ahrs = new AHRS(SPI.Port.kMXP);
+		zeroYaw();
 		currentYaw = ahrs.getYaw();
-
 		currentRoll = ahrs.getRoll();
 		//		myUltrasonic = new Ultrasonic(CrusaderCommon.SONIC_OUTPUT_PORT,CrusaderCommon.SONIC_INPUT_PORT);
 		//		myUltrasonic.setEnabled(true);
@@ -83,14 +87,30 @@ public class NavigationBoard extends Subsystem {
 	public double getRoll() {
 		return ahrs.getRoll();
 	}
+
 	public double getPitch(){
 		return ahrs.getPitch();
 	}
+
 	public double getYaw() {
 		//TODO: add comments on what this is actually doing 
 		currentYaw = ((ahrs.getYaw() % 360) + 360) % 360;
 		return currentYaw;
 	}
+
+	public double getAngle() {
+		return ahrs.getAngle();
+	}
+
+	  /**
+   * Returns the heading of the robot in form required for odometry.
+   *
+   * @return the robot's heading in degrees, from 180 to 180 with positive value
+   *         for left turn.
+   */
+  public double getHeading() {
+    return Math.IEEEremainder(getAngle(), 360.0d) * -1.0d;
+  }
 
 		
 	// useful for turns, set yaw and query for isAtTargetYaw

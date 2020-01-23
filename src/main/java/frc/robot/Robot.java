@@ -22,7 +22,9 @@ import frc.core238.autonomous.IAutonomousModeDataSource;
 import frc.robot.commands.DriveStraightNavBoard;
 import frc.robot.commands.DriveStraightPID;
 import frc.robot.commands.ResetDriveEncoders;
+import frc.robot.commands.TrajectoryDrive;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.DrivetrainTrajectoryWrapper;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Hanger;
 import frc.robot.subsystems.Intake;
@@ -41,7 +43,7 @@ import frc.robot.subsystems.Vision;
  */
 public class Robot extends TimedRobot {
 
-  public static Drivetrain drivetrain;
+  public static DrivetrainTrajectoryWrapper drivetrain;
   public static NavigationBoard navigationBoard;
   public static Vision vision;
   public static OI oi;
@@ -64,8 +66,8 @@ public class Robot extends TimedRobot {
   SendableChooser<String> m_chooser = new SendableChooser<>();
 
   public Robot() {
-    drivetrain = new Drivetrain();
     navigationBoard = new NavigationBoard();
+    drivetrain = new DrivetrainTrajectoryWrapper();
     vision = new Vision(FieldConstants.VisionConstants.targetHeight, FieldConstants.VisionConstants.cameraHeight);
     shooter = new Shooter();
     dashboard238 = new Dashboard238();
@@ -73,12 +75,14 @@ public class Robot extends TimedRobot {
     hanger = new Hanger();
     intake = new Intake();
     panelManipulator = new PanelManipulator();
+
+    //SmartDashboard.putData(TrajectoryDrive.getExampleCommand());
   }
   
   @Override
   public void robotInit() {
     oi = new OI();
-    navigationBoard.init();
+    //navigationBoard.init();
     dashboard238.init();
     vision.initLimelight();
     panelManipulator.initSensor();

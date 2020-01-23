@@ -38,8 +38,8 @@ public class Drivetrain extends Subsystem {
   private final double kA = 00.00434 * 0.15;
   private final double vSetpoint = 0.078;// 0.078
 
-  private final static TalonSRX rightMasterDrive = RobotMap.DrivetrainControllers.RightMaster;
-  private final static TalonSRX leftMasterDrive = RobotMap.DrivetrainControllers.LeftMaster;
+  protected final static TalonSRX rightMasterDrive = RobotMap.DrivetrainControllers.RightMaster;
+  protected final static TalonSRX leftMasterDrive = RobotMap.DrivetrainControllers.LeftMaster;
 
   private final TalonSRX leftDriveFollower1 = RobotMap.DrivetrainControllers.LeftFollower1;
   private final TalonSRX rightDriveFollower1 = RobotMap.DrivetrainControllers.RightFollower1;
@@ -169,7 +169,7 @@ public class Drivetrain extends Subsystem {
     TalonSRX_238.initPID(rightMasterDrive, kP, kI, kD, kF, kIzone, kTimeoutMs, kPIDLoopIdx, rampRate);
   }
 
-  public static void resetEncoders() {
+  public void resetEncoders() {
     TalonSRX_238.zeroEncoder(rightMasterDrive, kPIDLoopIdx, kTimeoutMs);
     TalonSRX_238.zeroEncoder(leftMasterDrive, kPIDLoopIdx, kTimeoutMs);
   }
@@ -218,7 +218,6 @@ public class Drivetrain extends Subsystem {
   }
 
   private static void setPosition(TalonSRX talon, double ticks) {
-    resetEncoders();
     talon.set(ControlMode.Position, ticks);
   }
 
