@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.Tests;
+package frc.tests;
 
 import java.io.IOException;
 import java.lang.reflect.Modifier;
