@@ -15,6 +15,8 @@ import frc.robot.subsystems.Vision;
  */
 public class VisionParameterSource implements IDrivetrainParametersSource {
     private Vision vision;
+    double kPAngle = 0.125;
+    double kPDistance = 0.5;
 
     public VisionParameterSource() {
         vision = Robot.vision;
@@ -22,12 +24,12 @@ public class VisionParameterSource implements IDrivetrainParametersSource {
 
     @Override
     public DrivetrainParameters Get() {
-        double distance = vision.getDistanceToTarget();
         double angle = vision.getYaw();
+        double anglePower = angle * kPAngle;
 
-        // do the math to calculate left/right power for turning and moving towards target
-        double power = distance*.1;
+        double distance = vision.getDistanceToTarget();
+        double distancePower = distance * kPDistance;
 
-        return new DrivetrainParameters(power, power, angle);
+        return new DrivetrainParameters(anglePower, -anglePower, angle);
     }
 }
