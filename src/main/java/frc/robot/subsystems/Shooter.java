@@ -12,6 +12,10 @@ import java.util.List;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANEncoder;
+import com.revrobotics.CANPIDController;
+import com.revrobotics.ControlType;
 
 import edu.wpi.first.wpilibj.Sendable;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -23,26 +27,42 @@ import frc.robot.RobotMap;
  * Add your docs here.
  */
 public class Shooter extends Subsystem {
-    private final TalonSRX shooterMasterDrive = RobotMap.ShooterDevices.shooterMaster;
+    private final CANSparkMax shooterMasterDrive = RobotMap.ShooterDevices.shooterMaster;
+    private final TalonSRX test = new TalonSRX(44);
+    private CANPIDController shooterPID;
+    private CANEncoder shooterEncoder;
 
     private final double kP = 1;
     private final double kI = 1;
     private final double kD = 1;
+    private final double kIZ = 1;
+    private final double kFF = 1;
+    private final double kMinOutput = 1;
+    private final double kMaxOutput = 1;
+
     /*
-     * private double integral = 0; private double derivative = 0; private double
+     * private double integral = 0; private double derivative
+     *  = 0; private double
      * previousError = 0; private double desiredSpeed = 0; private double
      * encoderTicks; private double previousEncoderTicks; private double error;
      * private double speed;
      */
 
     public Shooter() {
-        initTalons();
+        initSparkMax();
         initLiveWindow();
     }
 
-    public void initTalons() {
-        //shooterMasterDrive.configFactoryDefault();
-       // TalonSRX_238.initPID(kP, kI, kD, kF, kIzone, shooterMasterDrive, kTimeoutMs, kPIDLoopIdx, rampRate);
+    public void initSparkMax() {
+        shooterMasterDrive.restoreFactoryDefaults();
+        shooterPID = shooterMasterDrive.getPIDController();
+        shooterEncoder = shooterMasterDrive.getEncoder();
+        shooterPID.setP(kP);
+        shooterPID.setI(kI);
+        shooterPID.setD(kD);
+        shooterPID.setIZone(kIZ);
+        shooterPID.setFF(kFF);
+        shooterPID.setOutputRange(kMinOutput, kMaxOutput);
     }
 
     @Override
@@ -50,11 +70,12 @@ public class Shooter extends Subsystem {
     }
 
     private void resetEncoder() {
-        shooterMasterDrive.setSelectedSensorPosition(0, 0, 0);
+        shooterEncoder.setPosition(0);
     }
 
     private double getEncoderTicks() {
-        double encoderTicks = shooterMasterDrive.getSelectedSensorPosition();
+        //GIVES IN ROTATIONS
+        double encoderTicks = shooterEncoder.getPosition();
         return encoderTicks;
     }
 
@@ -70,33 +91,25 @@ public class Shooter extends Subsystem {
     }
 
     public void setSpeed(double speedValue) {
-        shooterMasterDrive.set(ControlMode.Velocity, speedValue);
+        shooterPID.setReference(speedValue, ControlType.kVoltage);
     }
 
+
+    //Changed from percent to raw
     public double getPower() {
-        double power = shooterMasterDrive.getMotorOutputPercent();
+        double power = shooterMasterDrive.getOutputCurrent();
         return power;
     }
 
     public double getSpeed() {
-        double speed = shooterMasterDrive.getSelectedSensorVelocity();
+        double speed = shooterEncoder.getVelocity();
         return speed;
     }
 
-    public double getDesiredSpeed() {
-        double wantedSpeed = shooterMasterDrive.getClosedLoopTarget();
-        return wantedSpeed;
-    }
-
-    public double getSpeedError() {
-        double currentSpeed = getSpeed();
-        double wantedSpeed = getDesiredSpeed();
-        double currentError = wantedSpeed - currentSpeed;
-        return currentError;
-    }
 
     public void stop() {
-        shooterMasterDrive.set(ControlMode.PercentOutput, 0);
+        //shooterMasterDrive.set(ControlMode.PercentOutput, 0);
+        shooterMasterDrive.stopMotor();
     }
 
     private void initLiveWindow() {
@@ -108,29 +121,15 @@ public class Shooter extends Subsystem {
             builder.addDoubleProperty("Speed", this::getSpeed, null);
         });
 
-        SendableWrapper desiredSpeed = new SendableWrapper(builder -> {
-            builder.addDoubleProperty("Desired Speed", this::getDesiredSpeed, null);
-        });
-
-        SendableWrapper speedError = new SendableWrapper(builder -> {
-            builder.addDoubleProperty("Speed Error", this::getSpeedError, null);
-        });
-
-        SendableWrapper encoderTicks = new SendableWrapper(builder -> {
-            builder.addDoubleProperty("Ticks", this::getEncoderTicks, null);
-        });
 
         addChild("Power", power);
         addChild("Speed", speed);
-        addChild("Desired Speed", desiredSpeed);
-        addChild("Speed Error", speedError);
-        addChild("EncoderTicks", encoderTicks);
     }
 
     private List<SendableWrapper> _sendables = new ArrayList<>();
     private void addChild(String name, SendableWrapper wrapper){
       _sendables.add(wrapper);
-      addChild(name, (Sendable)wrapper);
+      addChild(name, (Sendable)wrapper); 
     }
 
 }
