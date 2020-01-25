@@ -16,11 +16,11 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANPIDController;
 import com.revrobotics.ControlType;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.Sendable;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.core238.wrappers.SendableWrapper;
-import frc.core238.wrappers.TalonSRX_238;
 import frc.robot.RobotMap;
 
 /**
@@ -28,16 +28,19 @@ import frc.robot.RobotMap;
  */
 public class Shooter extends Subsystem {
     private final CANSparkMax shooterMasterDrive = RobotMap.ShooterDevices.shooterMaster;
+    //private CANSparkMax shooterFollowerDrive;
+    private final int followerID = 44;
+    //NOT THE REAL ID
     private CANPIDController shooterPID;
     private CANEncoder shooterEncoder;
 
-    private final double kP = 1;
-    private final double kI = 1;
-    private final double kD = 1;
-    private final double kIZ = 1;
-    private final double kFF = 1;
-    private final double kMinOutput = 1;
-    private final double kMaxOutput = 1;
+    private double kP = 0.06;
+    private double kI = 0.05;
+    private double kD = 0.0075;
+    private double kIZ = 0;
+    private double kFF = 0;
+    private double kMinOutput = 0;
+    private double kMaxOutput = 12;
 
     /*
      * private double integral = 0; private double derivative
@@ -54,6 +57,9 @@ public class Shooter extends Subsystem {
 
     public void initSparkMax() {
         shooterMasterDrive.restoreFactoryDefaults();
+        //shooterFollowerDrive = new CANSparkMax(followerID, MotorType.kBrushless);
+        //shooterFollowerDrive.restoreFactoryDefaults();
+        //shooterFollowerDrive.follow(shooterMasterDrive);
         shooterPID = shooterMasterDrive.getPIDController();
         shooterEncoder = shooterMasterDrive.getEncoder();
         shooterPID.setP(kP);
