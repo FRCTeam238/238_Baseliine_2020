@@ -28,7 +28,6 @@ import frc.robot.RobotMap;
  */
 public class Shooter extends Subsystem {
     private final CANSparkMax shooterMasterDrive = RobotMap.ShooterDevices.shooterMaster;
-    private final TalonSRX test = new TalonSRX(44);
     private CANPIDController shooterPID;
     private CANEncoder shooterEncoder;
 
@@ -91,7 +90,7 @@ public class Shooter extends Subsystem {
     }
 
     public void setSpeed(double speedValue) {
-        shooterPID.setReference(speedValue, ControlType.kVoltage);
+        shooterPID.setReference(speedValue, ControlType.kVelocity);
     }
 
 

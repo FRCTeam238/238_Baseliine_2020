@@ -8,6 +8,8 @@
 package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.Joystick;
 import frc.core238.wrappers.TalonSRX_238;;
@@ -65,7 +67,7 @@ public final class RobotMap {
   public static class ShooterDevices {
     //TODO: change to real number
     public static int SHOOTER_MASTER = 100;
-    public static TalonSRX shooterMaster = TalonSRX_238.create(SHOOTER_MASTER, Robot.isSimulation());
+    public static CANSparkMax shooterMaster = new CANSparkMax(SHOOTER_MASTER, MotorType.kBrushless);
   }
 
   public static class IntakeDevices {

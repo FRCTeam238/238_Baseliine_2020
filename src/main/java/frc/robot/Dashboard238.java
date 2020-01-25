@@ -36,6 +36,13 @@ public class Dashboard238 {
         // create widgets
         buildElement(diagnosticTab, "LEncoder", 0, 1, 1, 1, 0);
         buildElement(diagnosticTab, "REncoder", 0, 1, 1, 1, 1);
+        buildElement(diagnosticTab, "P", 0, 1, 1, 3, 0);
+        buildElement(diagnosticTab, "I", 0, 1, 1, 3, 1);
+        buildElement(diagnosticTab, "D", 0, 1, 1, 3, 2);
+        buildElement(diagnosticTab, "Iz", 0, 1, 1, 3, 3);
+        buildElement(diagnosticTab, "FF", 0, 1, 1, 4, 0);
+        buildElement(diagnosticTab, "MinOutput", 0, 1, 1, 3, 1);
+        buildElement(diagnosticTab, "MaxOutput", 0, 1, 1, 3, 2);
         // put on tabs
         // create get and set method
 
@@ -68,5 +75,17 @@ public class Dashboard238 {
     //    double leftTicks = Robot.drivetrain.getLeftEncoderTicks();
     //    vision.addChild(leftEncoder);
     //}
+
+    public void getPIDvalues(){
+        double kP;
+        double kI;
+        double kD;
+        double kIz;
+        double kFF;
+        double kMinOutput;
+        double kMaxOutput;
+        
+    }
+        
 
 }
