@@ -12,6 +12,7 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Assert;
 import org.junit.Test;
 
+import edu.wpi.first.wpilibj.util.Color;
 import frc.robot.subsystems.PanelManipulator;
 
 /**
@@ -19,13 +20,33 @@ import frc.robot.subsystems.PanelManipulator;
  */
 public class ColorTest {
     @Test
-    public void ColorTestOne() {
-        String startColor = "R";
-        String endColor = "G";
+    public void ColorLess() {
+        Color startColor = Color.kRed;
+        Color endColor = Color.kGreen;
 
         double distanceToColor = PanelManipulator.colorSensing(startColor, endColor);
         
         //Assert.assertEquals("Distance to Color: ", 3, distanceToColor, 0);
+    }
+
+    @Test
+    public void ColorMore() {
+        Color startColor = Color.kGreen;
+        Color endColor = Color.kBlue;
+
+        double distanceToColor = PanelManipulator.colorSensing(startColor, endColor);
+        
+        Assert.assertEquals("Distance to Color: ", 3, distanceToColor, 0);
+    }
+
+    @Test
+    public void ColorSame() {
+        Color startColor = Color.kRed;
+        Color endColor = Color.kRed;
+
+        double distanceToColor = PanelManipulator.colorSensing(startColor, endColor);
+        
+        Assert.assertEquals("Distance to Color: ", 0, distanceToColor, 0);
     }
 
     // tripe AAA = 1)arrange, 2)act, 3)assert

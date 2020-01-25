@@ -11,6 +11,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import com.revrobotics.ColorSensorV3;
+
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.CommandGroup;
@@ -18,11 +21,13 @@ import edu.wpi.first.wpilibj.command.InstantCommand;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color;
 import frc.core238.autonomous.AutonomousModesReader;
 import frc.core238.autonomous.DataFileAutonomousModeDataSource;
 import frc.core238.autonomous.IAutonomousModeDataSource;
 import frc.robot.commands.DriveStraightNavBoard;
 import frc.robot.commands.DriveStraightPID;
+import frc.robot.commands.PanelManipulatorCommand;
 import frc.robot.commands.ResetDriveEncoders;
 import frc.robot.commands.TrajectoryDriveCommand;
 import frc.robot.subsystems.Drivetrain;
@@ -260,8 +265,19 @@ public class Robot extends TimedRobot {
   /**
    * This function is called periodically during test mode.
    */
+
+   String gameData;
   @Override
   public void testPeriodic() {
+    // gameData = DriverStation.getInstance().getGameSpecificMessage();
+    // SmartDashboard.putString("Assigned Color", gameData);
+    // Color assignedColor = PanelManipulatorCommand.getColorFromDriverStaion(gameData);
+    // Color currentColor = panelManipulator.getColor();
+    // PanelManipulator.colorSensing(currentColor, assignedColor);
+
+    //String randomColor = currentColor.toString();
+    //SmartDashboard.putString("iuerg", randomColor);
+    //panelManipulator.postColor();
     // vision.trackingMode();
     // vision.ledsOn();
     // navigationBoard.navxValues();

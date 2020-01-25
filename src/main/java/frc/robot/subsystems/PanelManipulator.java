@@ -7,8 +7,6 @@
 
 package frc.robot.subsystems;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
@@ -43,6 +41,8 @@ public class PanelManipulator extends Subsystem {
   }
 
   public PanelManipulator() {
+    SmartDashboard.putString("Current Color", "Yellow");
+    SmartDashboard.putString("Assigned Color", "No!!!!");
   }
 
   public void initSensor(){
@@ -85,6 +85,21 @@ public class PanelManipulator extends Subsystem {
     }
   }
 
+  public Color toColor(String color) {
+    switch(color.toLowerCase(Locale.ROOT)){
+      case("green") :
+        return Color.kGreen;
+      case("red") :
+        return Color.kRed;
+      case("blue") :
+        return Color.kBlue;
+      case("yellow") :
+        return Color.kYellow;
+      default :
+        return Color.kBlack;
+    }
+  }
+
   public void postColor(){
     ColorMatchResult matchResult = match.matchClosestColor(getColor());
     String colorString;
@@ -103,33 +118,36 @@ public class PanelManipulator extends Subsystem {
     SmartDashboard.putString("Detected Color", colorString);
   }
 
-  public static String[] colorList = new String[]{"G","R","Y","B"};
-  public static double colorSensing(String currentColor, String desiredColor) {
-    int colorRepeat;
-    int colorCount;
-    int i;
-    for (colorCount = 0; colorCount < 4; colorCount++) {
-      if (colorList[colorCount] == currentColor) {
-        i = colorCount;
-        break;
-      }
+ // public String getColorDashBoard(String assignedColor) {
+    //assignedColor = SmartDashboard.getString("Assigned Color", "Green");
+    //return assignedColor;
+  //}
+
+  public static Color[] colorList = new Color[]{Color.kGreen, Color.kRed, Color.kYellow, Color.kBlue};//{"G","R","Y","B"};
+  public static double colorSensing(Color currentColor, Color desiredColor) {
+
+    if (currentColor == desiredColor) {
+      return 0;
     }
-    for (i = colorCount; i <= 7; i++) {
-     // currentColor = colorList.get(0);
-     if (i < 3){
-     currentColor = colorList[i];
+    int currentColorIndex = -1;
+    int desiredColorIndex = -1;
+    int distanceAway = 0;
+   for (int i = 0; i < colorList.length; i++) {
+     if (colorList[i] == currentColor) {
+        currentColorIndex = i;
      }
-     if(i>3){
-       colorRepeat = i-4;
-       currentColor = colorList[colorRepeat];
+     if (colorList[i] == desiredColor) {
+       desiredColorIndex = i;
      }
-      
-     if(currentColor == desiredColor){
-       i=i+1;
-      return i;
-     }
-     
-    }
+   }
+   if (desiredColorIndex < currentColorIndex) {
+    distanceAway = desiredColorIndex - currentColorIndex + 4;
+    return distanceAway;
+   }
+   if (currentColorIndex < desiredColorIndex) {
+     distanceAway = desiredColorIndex - currentColorIndex;
+     return distanceAway;
+   }   
     return -1;
   }
 
