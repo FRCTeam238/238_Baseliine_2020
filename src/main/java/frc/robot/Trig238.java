@@ -36,6 +36,7 @@ public class Trig238 {
 
     // This assumes that the ball is not sliding against the wheel nor the outside edge of the shooter
     // Make sure all units are consistent, as in no measuring one value in inches and another in centimeters
+    //ballRadius is COMPRESSED ball radius
     public static double calculateSingleWheelShooterVelocity(double ballVelocity, double wheelRadius, double ballRadius){
         double multiplier = 2*wheelRadius + 3*ballRadius;
         multiplier = multiplier / (wheelRadius + ballRadius);

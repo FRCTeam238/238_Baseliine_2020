@@ -13,6 +13,7 @@ import java.util.List;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.CommandGroup;
+import edu.wpi.first.wpilibj.command.InstantCommand;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -88,6 +89,10 @@ public class Robot extends TimedRobot {
     panelManipulator.initSensor();
     populateAutomodes();
     SmartDashboard.putData("Zero Encoders", new ResetDriveEncoders());
+
+
+    InstantCommand command = new InstantCommand(() -> shooter.setSpeed(60));
+    SmartDashboard.putData("TestsparkMax", command);
   }
 
   private void populateAutomodes() {
