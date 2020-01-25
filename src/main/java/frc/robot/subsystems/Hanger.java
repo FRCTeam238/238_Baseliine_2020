@@ -7,16 +7,24 @@
 
 package frc.robot.subsystems;
 
+import java.lang.reflect.Field;
+
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
+import frc.robot.FieldConstants;
 import frc.robot.RobotMap;
 
 /**
  * Add your docs here.
  */
 public class Hanger extends Subsystem {
-    private final TalonSRX turretMasterDrive = RobotMap.HangerDevices.hangerTalon;
+
+    private final TalonSRX hangerMasterDrive = RobotMap.HangerDevices.hangerTalon;
+    double hangHeight = FieldConstants.hangHeight;
+    double ticksPerInch;
+	public Object resetEncoder;
 
     public Hanger() {
     }
@@ -27,13 +35,31 @@ public class Hanger extends Subsystem {
 
     }
 
-    private void resetEncoder() {
-        turretMasterDrive.setSelectedSensorPosition(0, 0, 0);
+    public void resetEncoder() {
+        hangerMasterDrive.setSelectedSensorPosition(0, 0, 0);
     }
 
-    private double getEncoderTicks() {
-        double encoderTicks = turretMasterDrive.getSelectedSensorPosition();
+    private double getPosition() {
+        double encoderTicks = hangerMasterDrive.getSelectedSensorPosition();
         return encoderTicks;
     }
 
+    public void hang(){
+        hangerMasterDrive.set(ControlMode.Position, inchesToTicks(hangHeight));
+    }
+
+    private double inchesToTicks(double inches){
+        double ticks = inches * ticksPerInch;
+        return ticks;
+    }
+
+    private double ticksToInches(double ticks){
+        double inches = ticks / ticksPerInch;
+        return inches;
+    }
+
+    private double getHeight(){
+        double height = ticksToInches(getPosition());
+        return height;
+    }
 }
