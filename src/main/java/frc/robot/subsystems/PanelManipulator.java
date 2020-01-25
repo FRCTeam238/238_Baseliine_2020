@@ -7,6 +7,8 @@
 
 package frc.robot.subsystems;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
@@ -38,6 +40,9 @@ public class PanelManipulator extends Subsystem {
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.
     // setDefaultCommand(new MySpecialCommand());
+  }
+
+  public PanelManipulator() {
   }
 
   public void initSensor(){
@@ -97,4 +102,35 @@ public class PanelManipulator extends Subsystem {
     SmartDashboard.putNumber("Confidence", matchResult.confidence);
     SmartDashboard.putString("Detected Color", colorString);
   }
+
+  public static String[] colorList = new String[]{"G","R","Y","B"};
+  public static double colorSensing(String currentColor, String desiredColor) {
+    int colorRepeat;
+    int colorCount;
+    int i;
+    for (colorCount = 0; colorCount < 4; colorCount++) {
+      if (colorList[colorCount] == currentColor) {
+        i = colorCount;
+        break;
+      }
+    }
+    for (i = colorCount; i <= 7; i++) {
+     // currentColor = colorList.get(0);
+     if (i < 3){
+     currentColor = colorList[i];
+     }
+     if(i>3){
+       colorRepeat = i-4;
+       currentColor = colorList[colorRepeat];
+     }
+      
+     if(currentColor == desiredColor){
+       i=i+1;
+      return i;
+     }
+     
+    }
+    return -1;
+  }
+
 }
