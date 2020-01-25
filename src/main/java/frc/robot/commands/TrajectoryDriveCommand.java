@@ -24,11 +24,13 @@ import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConst
 import frc.core238.autonomous.AutonomousModeAnnotation;
 import frc.robot.Robot;
 import frc.robot.subsystems.DrivetrainTrajectoryWrapper;
+import frc.robot.subsystems.NavigationBoard;
 
 @AutonomousModeAnnotation(parameterNames = { "TrajectoryName" })
 public class TrajectoryDriveCommand extends CommandGroup implements IAutonomousCommand {
 
   private DrivetrainTrajectoryWrapper drivetrain = Robot.drivetrain;
+  NavigationBoard navBoard = Robot.navigationBoard;
   private boolean isAutonomousMode = false;
   private String trajectoryName;
 
@@ -57,11 +59,6 @@ public class TrajectoryDriveCommand extends CommandGroup implements IAutonomousC
   @Override
   public void setParameters(List<String> parameters) {
     trajectoryName = parameters.get(0);
-  }
-
-  // Called just before this Command runs the first time
-  @Override
-  protected void initialize() {
     Trajectory trajectory;
     try {
       trajectory = TrajectoryUtil
@@ -70,6 +67,13 @@ public class TrajectoryDriveCommand extends CommandGroup implements IAutonomousC
     } catch (IOException e) {
       e.printStackTrace();
     }
+  }
+
+  // Called just before this Command runs the first time
+  @Override
+  protected void initialize() {
+    drivetrain.resetEncoders();
+    navBoard.zeroYaw();
   }
 
   /*public static TrajectoryDriveCommand getExampleCommand() {

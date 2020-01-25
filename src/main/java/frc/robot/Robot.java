@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.InstantCommand;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -93,6 +94,11 @@ public class Robot extends TimedRobot {
 
     InstantCommand command = new InstantCommand(() -> shooter.setSpeed(60));
     SmartDashboard.putData("TestsparkMax", command);
+    List<String> params= new ArrayList<>();
+    params.add("StraightOffLine");
+    TrajectoryDriveCommand driveStraightTrajectory = new TrajectoryDriveCommand();
+    driveStraightTrajectory.setParameters(params);
+    SmartDashboard.putData("Drive Straight - trajectory", driveStraightTrajectory);
   }
 
   private void populateAutomodes() {
@@ -259,7 +265,7 @@ public class Robot extends TimedRobot {
     // vision.trackingMode();
     // vision.ledsOn();
     // navigationBoard.navxValues();
-    // vision.postValues();
+    vision.postValues();
     // panelManipulator.postColor();
     
   }

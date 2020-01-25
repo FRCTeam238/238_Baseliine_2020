@@ -39,17 +39,17 @@ public class DrivetrainTrajectoryWrapper extends Drivetrain {
         public static final double WHEEL_CIRCUMFERENCE_INCHES = WHEEL_DIAMETER_INCHES * Math.PI;
         public static final double WHEEL_CIRCUMFERENCE_METERS = Units.inchesToMeters(WHEEL_DIAMETER_INCHES) * Math.PI;
 
-        public static final double TRACK_WIDTH_METERS = 0.555625;
+        public static final double TRACK_WIDTH_METERS = 0.520720375;
         public static final DifferentialDriveKinematics DRIVE_KINEMATICS = new DifferentialDriveKinematics(TRACK_WIDTH_METERS);
 
         /** Voltage needed to overcome the motor’s static friction. kS */
-        public static final double kS = 0.829;
+        public static final double kS = 2.94;
 
         /** Voltage needed to hold (or "cruise") at a given constant velocity. kV */
-        public static final double kV = 3.04;
+        public static final double kV = 2.88;
 
         /** Voltage needed to induce a given acceleration in the motor shaft. kA */
-        public static final double kA = 0.676;
+        public static final double kA = 0.00592;
 
         public static final SimpleMotorFeedforward FEED_FORWARD = new SimpleMotorFeedforward(kS, kV, kA);
 
@@ -57,7 +57,7 @@ public class DrivetrainTrajectoryWrapper extends Drivetrain {
         public static final double OPEN_LOOP_RAMP = .25;
     }
 
-    public static final int SENSOR_UNITS_PER_ROTATION = 4096;
+    public static final int SENSOR_UNITS_PER_ROTATION = 1024;
     public static final double WHEEL_DIAMETER_INCHES = 6d;
     public static final double WHEEL_CIRCUMFERENCE_INCHES = WHEEL_DIAMETER_INCHES * Math.PI;
     public static final double WHEEL_CIRCUMFERENCE_METERS = Units.inchesToMeters(WHEEL_DIAMETER_INCHES) * Math.PI;

@@ -112,6 +112,7 @@ public class NavigationBoard extends Subsystem {
     return Math.IEEEremainder(getAngle(), 360.0d) * -1.0d;
   }
 
+
 		
 	// useful for turns, set yaw and query for isAtTargetYaw
 	public void setTargetYaw(double targetValue) {

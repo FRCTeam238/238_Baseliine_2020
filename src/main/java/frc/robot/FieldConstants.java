@@ -30,4 +30,6 @@ public class FieldConstants {
         }
     }
 
+    public static double hangHeight = 5;
+
 }
