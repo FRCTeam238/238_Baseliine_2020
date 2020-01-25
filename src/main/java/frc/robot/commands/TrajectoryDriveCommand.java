@@ -26,7 +26,7 @@ import frc.robot.Robot;
 import frc.robot.subsystems.DrivetrainTrajectoryWrapper;
 
 @AutonomousModeAnnotation(parameterNames = { "TrajectoryName" })
-public class TrajectoryDrive extends CommandGroup implements IAutonomousCommand {
+public class TrajectoryDriveCommand extends CommandGroup implements IAutonomousCommand {
 
   private DrivetrainTrajectoryWrapper drivetrain = Robot.drivetrain;
   private boolean isAutonomousMode = false;
@@ -35,12 +35,12 @@ public class TrajectoryDrive extends CommandGroup implements IAutonomousCommand 
   /**
    * Add your docs here.
    */
-  public TrajectoryDrive(Trajectory trajectory) {
+  /*public TrajectoryDriveCommand(Trajectory trajectory) {
     requires(Robot.drivetrain);
     addSequential(drivetrain.createCommandForTrajectory(trajectory));
-  }
+  } */
 
-  public TrajectoryDrive() {
+  public TrajectoryDriveCommand() {
     requires(Robot.drivetrain);
   }
 
@@ -72,7 +72,7 @@ public class TrajectoryDrive extends CommandGroup implements IAutonomousCommand 
     }
   }
 
-  public static TrajectoryDrive getExampleCommand() {
+  /*public static TrajectoryDriveCommand getExampleCommand() {
 
     // Create a voltage constraint to ensure we don't accelerate too fast
     var autoVoltageConstraint = new DifferentialDriveVoltageConstraint(
@@ -97,8 +97,8 @@ public class TrajectoryDrive extends CommandGroup implements IAutonomousCommand 
         new Pose2d(3, 0, new Rotation2d(0)),
         // Pass config
         config);
-    return new TrajectoryDrive(exampleTrajectory);
-  }
+    return new TrajectoryDriveCommand(exampleTrajectory);
+  } */
 
   public static class AutoConstants {
     public static double kMaxSpeedMetersPerSecond = 1;

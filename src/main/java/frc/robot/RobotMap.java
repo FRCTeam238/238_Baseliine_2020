@@ -59,9 +59,17 @@ public final class RobotMap {
   /** Button mapping, for joysticks and controllers */
   public static class Buttons {
     public static int visionTrack = 1;
-    public static int driveTenFeet = 6;
-    public static int shooter = 2;
 
+    public static int driveTenFeet = 6;
+
+    public static int spinUpShooter;
+    public static int shoot = 2;
+
+    public static int deployManipulator;
+    public static int rotationControl;
+    public static int positionControl;
+
+    public static int climb;
   }
 
   public static class ShooterDevices {

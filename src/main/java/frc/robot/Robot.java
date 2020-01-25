@@ -22,7 +22,7 @@ import frc.core238.autonomous.IAutonomousModeDataSource;
 import frc.robot.commands.DriveStraightNavBoard;
 import frc.robot.commands.DriveStraightPID;
 import frc.robot.commands.ResetDriveEncoders;
-import frc.robot.commands.TrajectoryDrive;
+import frc.robot.commands.TrajectoryDriveCommand;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.DrivetrainTrajectoryWrapper;
 import frc.robot.subsystems.Feeder;

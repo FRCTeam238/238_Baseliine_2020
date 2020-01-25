@@ -26,12 +26,23 @@ public class OI {
   public Drivetrain drivetrain;
 
   public OI(){
-    
-    JoystickButton visionTrackButton = new JoystickButton(leftStick, RobotMap.Buttons.visionTrack);
-    JoystickButton driveTenFeetButton = new JoystickButton(leftStick, RobotMap.Buttons.driveTenFeet);
 
     VisionDrive visionDrive = new VisionDrive();
     DriveStraightPID driveTenFeetPID = new DriveStraightPID(-48);
+    
+    JoystickButton visionTrackButton = new JoystickButton(leftStick, RobotMap.Buttons.visionTrack);
+
+    JoystickButton driveTenFeetButton = new JoystickButton(leftStick, RobotMap.Buttons.driveTenFeet);
+
+    JoystickButton climbButton = new JoystickButton(controller, RobotMap.Buttons.climb);
+
+    JoystickButton deployManipulatorButton = new JoystickButton(controller, RobotMap.Buttons.deployManipulator);
+    JoystickButton rotationControlButton = new JoystickButton(controller, RobotMap.Buttons.rotationControl);
+    JoystickButton positionControlButton = new JoystickButton(controller, RobotMap.Buttons.positionControl);
+
+    JoystickButton spinUpShooterButton = new JoystickButton(controller, RobotMap.Buttons.spinUpShooter);
+    JoystickButton shootButton = new JoystickButton(controller, RobotMap.Buttons.shoot);
+
     driveTenFeetButton.whenPressed(driveTenFeetPID);
     visionTrackButton.whileHeld(visionDrive);
     
