@@ -73,6 +73,7 @@ public class TrajectoryDriveCommand extends CommandGroup implements IAutonomousC
   @Override
   protected void initialize() {
     drivetrain.resetEncoders();
+    drivetrain.initPID();
     navBoard.zeroYaw();
   }
 

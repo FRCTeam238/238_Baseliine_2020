@@ -44,7 +44,7 @@ public class Drivetrain extends Subsystem {
   private final TalonSRX leftDriveFollower1 = RobotMap.DrivetrainControllers.LeftFollower1;
   private final TalonSRX rightDriveFollower1 = RobotMap.DrivetrainControllers.RightFollower1;
 
-  public static double kP = 0.0141;
+  public static double kP = 1;
   public static double kI = 0;
   public static double kD = 0;
   public static double kF = 0;

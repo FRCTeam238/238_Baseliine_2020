@@ -57,7 +57,7 @@ public class DrivetrainTrajectoryWrapper extends Drivetrain {
         public static final double OPEN_LOOP_RAMP = .25;
     }
 
-    public static final int SENSOR_UNITS_PER_ROTATION = 1024;
+    public static final int SENSOR_UNITS_PER_ROTATION = 4096;
     public static final double WHEEL_DIAMETER_INCHES = 6d;
     public static final double WHEEL_CIRCUMFERENCE_INCHES = WHEEL_DIAMETER_INCHES * Math.PI;
     public static final double WHEEL_CIRCUMFERENCE_METERS = Units.inchesToMeters(WHEEL_DIAMETER_INCHES) * Math.PI;
@@ -123,10 +123,10 @@ public class DrivetrainTrajectoryWrapper extends Drivetrain {
         var leftFeedForwardVolts = DriveTrainConstants.FEED_FORWARD.calculate(leftVelocity, leftAccel);
         var rightFeedForwardVolts = DriveTrainConstants.FEED_FORWARD.calculate(rightVelocity, rightAccel);
 
-        leftMasterDrive.set(ControlMode.Velocity, metersPerSecToStepsPerDecisec(leftVelocity),
-                DemandType.ArbitraryFeedForward, leftFeedForwardVolts / 12);
-        rightMasterDrive.set(ControlMode.Velocity, metersPerSecToStepsPerDecisec(rightVelocity),
-                DemandType.ArbitraryFeedForward, rightFeedForwardVolts / 12);
+        leftMasterDrive.set(ControlMode.Velocity, metersPerSecToStepsPerDecisec(leftVelocity)/*,
+                DemandType.ArbitraryFeedForward, leftFeedForwardVolts / 12*/);
+        rightMasterDrive.set(ControlMode.Velocity, metersPerSecToStepsPerDecisec(rightVelocity)/*,
+                DemandType.ArbitraryFeedForward, rightFeedForwardVolts / 12*/);
     }
 
     /**
