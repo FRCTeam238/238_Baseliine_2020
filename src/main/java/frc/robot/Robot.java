@@ -91,8 +91,14 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData("Zero Encoders", new ResetDriveEncoders());
 
 
-    InstantCommand command = new InstantCommand(() -> shooter.setSpeed(60));
-    SmartDashboard.putData("TestsparkMax", command);
+    InstantCommand command = new InstantCommand(() -> shooter.setSpeed(1500));
+    SmartDashboard.putData("StartMotor", command);
+    InstantCommand command2 = new InstantCommand(() -> shooter.neutral());
+    SmartDashboard.putData("StopMotor", command2);
+    InstantCommand command3 = new InstantCommand(() -> shooter.setPosition(2.25));
+    SmartDashboard.putData("GoToPosition", command3);
+    InstantCommand command4 = new InstantCommand(() -> shooter.neutral());
+    SmartDashboard.putData("StopGoToPosition", command4);
     List<String> params= new ArrayList<>();
     params.add("StraightOffLine");
     TrajectoryDriveCommand driveStraightTrajectory = new TrajectoryDriveCommand();
