@@ -7,8 +7,6 @@
 
 package frc.tests;
 
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -21,20 +19,21 @@ import frc.robot.subsystems.PanelManipulator;
 public class ColorTest {
     @Test
     public void ColorLess() {
-        Color startColor = Color.kRed;
-        Color endColor = Color.kGreen;
+        PanelManipulator.defineColors();
+        Color startColor = PanelManipulator.kRedTarget;
+        Color endColor = PanelManipulator.kGreenTarget;
 
-        double distanceToColor = PanelManipulator.colorSensing(startColor, endColor);
+        double distanceToColor = PanelManipulator.getDistanceToColor(startColor, endColor);
         
-        //Assert.assertEquals("Distance to Color: ", 3, distanceToColor, 0);
+        Assert.assertEquals("Distance to Color: ", 3, distanceToColor, 0);
     }
 
     @Test
     public void ColorMore() {
-        Color startColor = Color.kGreen;
-        Color endColor = Color.kBlue;
-
-        double distanceToColor = PanelManipulator.colorSensing(startColor, endColor);
+        PanelManipulator.defineColors();
+        Color startColor = PanelManipulator.kGreenTarget;
+        Color endColor = PanelManipulator.kBlueTarget;
+        double distanceToColor = PanelManipulator.getDistanceToColor(startColor, endColor);
         
         Assert.assertEquals("Distance to Color: ", 3, distanceToColor, 0);
     }
@@ -44,7 +43,7 @@ public class ColorTest {
         Color startColor = Color.kRed;
         Color endColor = Color.kRed;
 
-        double distanceToColor = PanelManipulator.colorSensing(startColor, endColor);
+        double distanceToColor = PanelManipulator.getDistanceToColor(startColor, endColor);
         
         Assert.assertEquals("Distance to Color: ", 0, distanceToColor, 0);
     }
