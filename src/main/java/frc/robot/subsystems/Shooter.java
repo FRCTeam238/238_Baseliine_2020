@@ -34,13 +34,16 @@ public class Shooter extends Subsystem {
     private CANPIDController shooterPID;
     private CANEncoder shooterEncoder;
 
-    private double kP = 0.06;
-    private double kI = 0.05;
-    private double kD = 0.0075;
+    private double kP = 0;
+    private double kI = 0;
+    private double kD = 0;
     private double kIZ = 0;
-    private double kFF = 0;
+    private double kFF = 1.95e-3;
     private double kMinOutput = 0;
     private double kMaxOutput = 12;
+
+    private double desiredSpeedPID = 0;
+    private double desiredPositionPID = 0;
 
     /*
      * private double integral = 0; private double derivative
@@ -96,7 +99,12 @@ public class Shooter extends Subsystem {
     }
 
     public void setSpeed(double speedValue) {
+        desiredSpeedPID = speedValue;
         shooterPID.setReference(speedValue, ControlType.kVelocity);
+    }
+
+    public void simpleSetSpeed(double speedValue){
+        shooterMasterDrive.set(speedValue);
     }
 
 
@@ -111,10 +119,30 @@ public class Shooter extends Subsystem {
         return speed;
     }
 
+    public double getDesiredSpeed(){
+        return desiredSpeedPID;
+    }
 
-    public void stop() {
+    public void setPosition(double desiredPosition){
+        shooterEncoder.setPosition(0);
+        shooterPID.setReference(desiredPosition, ControlType.kPosition);
+        desiredPositionPID = desiredPosition;
+    }
+
+    public double getPosition(){
+        double position = shooterEncoder.getPosition();
+        return position;
+    }
+
+    public double getDesiredPosition(){
+        return desiredPositionPID;
+    }
+
+
+    public void neutral() {
         //shooterMasterDrive.set(ControlMode.PercentOutput, 0);
-        shooterMasterDrive.stopMotor();
+        shooterPID.setReference(0, ControlType.kVoltage);
+        desiredSpeedPID = 0;
     }
 
     private void initLiveWindow() {
@@ -126,9 +154,24 @@ public class Shooter extends Subsystem {
             builder.addDoubleProperty("Speed", this::getSpeed, null);
         });
 
+        SendableWrapper desiredSpeed = new SendableWrapper(builder -> {
+            builder.addDoubleProperty("DesiredSpeed", this::getDesiredSpeed, null);
+        });
+
+        SendableWrapper position = new SendableWrapper(builder -> {
+            builder.addDoubleProperty("Position", this::getPosition, null);
+        });
+
+        SendableWrapper desiredPosition = new SendableWrapper(builder -> {
+            builder.addDoubleProperty("DesiredPosition", this::getDesiredPosition, null);
+        });
+
 
         addChild("Power", power);
         addChild("Speed", speed);
+        addChild("DesiredSpeed", desiredSpeed);
+        addChild("Position", position);
+        addChild("DesiredPosition", desiredPosition);
     }
 
     private List<SendableWrapper> _sendables = new ArrayList<>();
