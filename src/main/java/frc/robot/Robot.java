@@ -23,6 +23,7 @@ import frc.core238.autonomous.DataFileAutonomousModeDataSource;
 import frc.core238.autonomous.IAutonomousModeDataSource;
 import frc.robot.commands.DriveStraightNavBoard;
 import frc.robot.commands.DriveStraightPID;
+import frc.robot.commands.PrepareToShoot;
 import frc.robot.commands.ResetDriveEncoders;
 import frc.robot.commands.TrajectoryDriveCommand;
 import frc.robot.subsystems.DrivetrainTrajectoryWrapper;
@@ -89,16 +90,16 @@ public class Robot extends TimedRobot {
     panelManipulator.initSensor();
     populateAutomodes();
     SmartDashboard.putData("Zero Encoders", new ResetDriveEncoders());
-
-
-    InstantCommand command = new InstantCommand(() -> shooter.setSpeed(1500));
-    SmartDashboard.putData("StartMotor", command);
-    InstantCommand command2 = new InstantCommand(() -> shooter.neutral());
-    SmartDashboard.putData("StopMotor", command2);
-    InstantCommand command3 = new InstantCommand(() -> shooter.setPosition(2.25));
-    SmartDashboard.putData("GoToPosition", command3);
-    InstantCommand command4 = new InstantCommand(() -> shooter.neutral());
-    SmartDashboard.putData("StopGoToPosition", command4);
+    PrepareToShoot shoot150 = new PrepareToShoot(150);
+    SmartDashboard.putData("Shoot 150", shoot150);
+    PrepareToShoot shootShort = new PrepareToShoot(122);
+    SmartDashboard.putData("Shoot 122", shootShort);
+    PrepareToShoot shootLong = new PrepareToShoot(180);
+    SmartDashboard.putData("Shoot 180", shootLong);
+    PrepareToShoot shootVeryLong = new PrepareToShoot(1200);
+    SmartDashboard.putData("Shoot 1200", shootVeryLong);
+    InstantCommand command = new InstantCommand( () -> shooter.neutral());
+    SmartDashboard.putData("StopShooter", command);
     List<String> params= new ArrayList<>();
     params.add("StraightOffLine");
     TrajectoryDriveCommand driveStraightTrajectory = new TrajectoryDriveCommand();
