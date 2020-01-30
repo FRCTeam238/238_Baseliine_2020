@@ -34,11 +34,11 @@ public class Shooter extends Subsystem {
     private CANPIDController shooterPID;
     private CANEncoder shooterEncoder;
 
-    private double kP = 1e-3;
+    private double kP = 1e-5;
     private double kI = 0;
     private double kD = 0;
     private double kIZ = 0;
-    private double kFF = 1.85e-3;
+    private double kFF = 1.688e-4;
     private double kMinOutput = 0;
     private double kMaxOutput = 12;
 
