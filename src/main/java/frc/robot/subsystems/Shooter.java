@@ -65,6 +65,7 @@ public class Shooter extends Subsystem {
         //shooterFollowerDrive.follow(shooterMasterDrive);
         shooterPID = shooterMasterDrive.getPIDController();
         shooterEncoder = shooterMasterDrive.getEncoder();
+        resetEncoder();
         shooterPID.setP(kP);
         shooterPID.setI(kI);
         shooterPID.setD(kD);
@@ -85,17 +86,6 @@ public class Shooter extends Subsystem {
         //GIVES IN ROTATIONS
         double encoderTicks = shooterEncoder.getPosition();
         return encoderTicks;
-    }
-
-    private void pid_loop() {
-
-        /*
-         * previousEncoderTicks = encoderTicks; encoderTicks = getEncoderTicks(); speed
-         * = (encoderTicks - previousEncoderTicks)/; //assuming that this loops 50 times
-         * per second, 0.02 seconds for looop error = speed - desiredSpeed; integral +=
-         * error*0.02; //continually adds up derivative = (error - previousError)/0.02
-         */
-
     }
 
     public void setSpeed(double speedValue) {
@@ -140,7 +130,6 @@ public class Shooter extends Subsystem {
 
 
     public void neutral() {
-        //shooterMasterDrive.set(ControlMode.PercentOutput, 0);
         shooterPID.setReference(0, ControlType.kVoltage);
         desiredSpeedPID = 0;
     }
@@ -158,20 +147,9 @@ public class Shooter extends Subsystem {
             builder.addDoubleProperty("DesiredSpeed", this::getDesiredSpeed, null);
         });
 
-        SendableWrapper position = new SendableWrapper(builder -> {
-            builder.addDoubleProperty("Position", this::getPosition, null);
-        });
-
-        SendableWrapper desiredPosition = new SendableWrapper(builder -> {
-            builder.addDoubleProperty("DesiredPosition", this::getDesiredPosition, null);
-        });
-
-
         addChild("Power", power);
         addChild("Speed", speed);
         addChild("DesiredSpeed", desiredSpeed);
-        addChild("Position", position);
-        addChild("DesiredPosition", desiredPosition);
     }
 
     private List<SendableWrapper> _sendables = new ArrayList<>();
