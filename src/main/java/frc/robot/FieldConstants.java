@@ -3,11 +3,11 @@ package frc.robot;
 /** Class for mathematic functions */
 public class FieldConstants {
 
-    /** Heights of vision camera and targets, ien inches */
+    /** Heights of vision camera and targets, in inches */
     public static class VisionConstants {
-        static final double targetHeight = 21;
+        static final double targetHeight = 98.25;
         static final double cameraHeight = 46.5;
-        static final double mountingAngle = 15;
+        static final double mountingAngle = Math.PI/4;
 
         public static double getTargetheight() {
             return targetHeight;
