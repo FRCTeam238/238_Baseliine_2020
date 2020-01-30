@@ -7,30 +7,34 @@
 
 package frc.robot.commands;
 
+import org.hamcrest.core.IsNull;
+
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.FieldConstants;
 import frc.robot.Robot;
 import frc.robot.Trig238;
 import frc.robot.subsystems.Shooter;
-
+import frc.core238.Logger;
 
 public class PrepareToShoot extends Command {
 
   private Shooter theShooter = Robot.shooter;
 
   private final double gravityAcceleration = 386.22;
-  private double shootingAngle = 0.6;
-  private double velocityBall;
-  private double velocityWheel;
+  private double shootingAngle = Math.PI/4; // made-up, IN RADIANS
   private final double wheelRadius = 6;
-  private final double ticksPerRotation = 4096;
+  private double distance = -1;
 
-  public void Shoot(Shooter theShooter) {
-    this.theShooter = theShooter;
+  public PrepareToShoot(double distance) {
     requires(theShooter);
+    this.distance = distance;
 
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
+  }
+
+  public PrepareToShoot() {
+    requires(theShooter);
   }
 
   // Called just before this Command runs the first time
@@ -41,26 +45,59 @@ public class PrepareToShoot extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    double wantedSpeed = calculateSpeed(shootingAngle, gravityAcceleration, wheelRadius);
+    Logger.Debug("PrepareToShoot Command Executed");
+    double wantedSpeed = calculateSpeed(getDistanceToTarget(), shootingAngle, gravityAcceleration, wheelRadius);
     theShooter.setSpeed(wantedSpeed);
 
   }
-  //find speed to run at, in ticks per 100ms
-  //tell shooter to run at that speed
+  // find speed to run at, in ticks per 100ms
+  // tell shooter to run at that speed
 
-//In Velocity mode, output value is in position change / 100ms.
-  public double calculateSpeed(double shootingAngle, double gravityAcceleration, double wheelRadius){
-    velocityBall = Trig238.calculateBallVelocity(FieldConstants.VisionConstants.getTargetheight(), gravityAcceleration,
-    shootingAngle, Robot.vision.getDistanceToTarget());
-    velocityWheel = Trig238.calculateSingleWheelShooterVelocity(velocityBall, wheelRadius, FieldConstants.GamePieces.getBallradius());
-    double ticksPer100ms = (204.8 * velocityWheel) / (wheelRadius * Math.PI);
-    return ticksPer100ms;
-}
+  // In Velocity mode, output value is in position change / 100ms.
+  public static double calculateSpeed(double distance, double shootingAngle, double gravityAcceleration, double wheelRadius) {
+    double velocityBall;
+    double velocityWheel;
+    double rotationsPerMinute = 0;
   
+    velocityBall = Trig238.calculateBallVelocity(FieldConstants.VisionConstants.getTargetheight(), gravityAcceleration,
+        shootingAngle, distance);
+
+    Logger.Debug("Expected Ball Velocity = " + velocityBall);
+
+    velocityWheel = Trig238.calculateSingleWheelShooterVelocity(velocityBall, wheelRadius,
+        FieldConstants.GamePieces.getBallradius());
+
+    rotationsPerMinute = 30 * velocityWheel / (wheelRadius * Math.PI);
+
+    /*if(distance > 507.25){
+      rotationsPerMinute = 0;
+    }*/
+
+    if(rotationsPerMinute > 5000){
+      rotationsPerMinute = 5000;
+    }
+
+    Logger.Debug("shooter expected rpm = " + rotationsPerMinute);
+
+    return rotationsPerMinute;
+  }
+
+  private double getDistanceToTarget() {
+    return distance == -1 ? Robot.vision.getDistanceToTarget() : distance;
+  }
+
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
     return false;
+    /*
+    double tolerance = 1; // rpm tolerance
+    double shooterSpeed = theShooter.getSpeed();
+    if (shooterSpeed >= (rotationsPerMinute - tolerance) && shooterSpeed <= (rotationsPerMinute + tolerance)) {
+      return true;
+    } else {
+      return false;
+    } */
   }
 
   // Called once after isFinished returns true
@@ -72,5 +109,6 @@ public class PrepareToShoot extends Command {
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
+    theShooter.neutral();
   }
 }
