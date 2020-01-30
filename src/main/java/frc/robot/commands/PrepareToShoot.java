@@ -7,8 +7,6 @@
 
 package frc.robot.commands;
 
-import org.hamcrest.core.IsNull;
-
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.FieldConstants;
 import frc.robot.Robot;
@@ -69,9 +67,9 @@ public class PrepareToShoot extends Command {
 
     rotationsPerMinute = 30 * velocityWheel / (wheelRadius * Math.PI);
 
-    /*if(distance > 507.25){
+    if(distance > 507.25){
       rotationsPerMinute = 0;
-    }*/
+    }
 
     if(rotationsPerMinute > 5000){
       rotationsPerMinute = 5000;
