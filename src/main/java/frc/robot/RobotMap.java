@@ -101,4 +101,9 @@ public final class RobotMap {
     public static int HANGER_DEVICES = 103;
     public static TalonSRX hangerTalon = TalonSRX_238.create(HANGER_DEVICES, Robot.isSimulation()); 
   }
+
+  public static class PanelManipulatorDevices {
+    //TODO: Change to real number
+    public static double power = 0.5;
+  }
 }

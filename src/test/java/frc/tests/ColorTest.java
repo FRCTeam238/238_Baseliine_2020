@@ -17,36 +17,36 @@ import frc.robot.subsystems.PanelManipulator;
  * Add your docs here.
  */
 public class ColorTest {
-    @Test
-    public void ColorLess() {
-        PanelManipulator.defineColors();
-        Color startColor = PanelManipulator.kRedTarget;
-        Color endColor = PanelManipulator.kGreenTarget;
+    // @Test
+    // public void ColorLess() {
+    //     PanelManipulator.defineColors();
+    //     Color startColor = PanelManipulator.kRedTarget;
+    //     Color endColor = PanelManipulator.kGreenTarget;
 
-        double distanceToColor = PanelManipulator.getDistanceToColor(startColor, endColor);
+    //     double distanceToColor = PanelManipulator.getDistanceToColor(startColor, endColor);
         
-        Assert.assertEquals("Distance to Color: ", 3, distanceToColor, 0);
-    }
+    //     Assert.assertEquals("Distance to Color: ", 3, distanceToColor, 0);
+    // }
 
-    @Test
-    public void ColorMore() {
-        PanelManipulator.defineColors();
-        Color startColor = PanelManipulator.kGreenTarget;
-        Color endColor = PanelManipulator.kBlueTarget;
-        double distanceToColor = PanelManipulator.getDistanceToColor(startColor, endColor);
+    // @Test
+    // public void ColorMore() {
+    //     PanelManipulator.defineColors();
+    //     Color startColor = PanelManipulator.kGreenTarget;
+    //     Color endColor = PanelManipulator.kBlueTarget;
+    //     double distanceToColor = PanelManipulator.getDistanceToColor(startColor, endColor);
         
-        Assert.assertEquals("Distance to Color: ", 3, distanceToColor, 0);
-    }
+    //     Assert.assertEquals("Distance to Color: ", 3, distanceToColor, 0);
+    // }
 
-    @Test
-    public void ColorSame() {
-        Color startColor = Color.kRed;
-        Color endColor = Color.kRed;
+    // @Test
+    // public void ColorSame() {
+    //     Color startColor = Color.kRed;
+    //     Color endColor = Color.kRed;
 
-        double distanceToColor = PanelManipulator.getDistanceToColor(startColor, endColor);
+    //     double distanceToColor = PanelManipulator.getDistanceToColor(startColor, endColor);
         
-        Assert.assertEquals("Distance to Color: ", 0, distanceToColor, 0);
-    }
+    //     Assert.assertEquals("Distance to Color: ", 0, distanceToColor, 0);
+    // }
 
     // tripe AAA = 1)arrange, 2)act, 3)assert
 }

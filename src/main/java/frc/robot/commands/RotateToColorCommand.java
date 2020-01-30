@@ -20,12 +20,23 @@ import frc.robot.subsystems.PanelManipulator;
  */
 public class RotateToColorCommand extends Command {
 
-    private PanelManipulator panelManipulator;
+    private static PanelManipulator panelManipulator;
+    private boolean done = false;
 
-    public double getPositionForColor(Color desiredColor) {
+    @Override
+    protected void initialize() {
+        done = false;
+    }
+
+    public boolean getPositionForColor(Color desiredColor) {
         final Color currentColor = panelManipulator.getColor();
-        double distance = PanelManipulator.getDistanceToColor(currentColor, desiredColor);
-        return distance;
+        if (currentColor == desiredColor) {
+            panelManipulator.rotate();
+        }else{
+            panelManipulator.stop();
+            done = true;
+        }
+    return done;
     }
 
     public static Color getColorFromDriverStaion(String gameData) {
@@ -33,15 +44,18 @@ public class RotateToColorCommand extends Command {
         if (gameData != null && gameData.length() > 0) {
             switch (gameData.toLowerCase(Locale.ROOT).charAt(0)) {
             case 'b':
-                toReturn = Color.kBlue;
-            case 'g':
-                toReturn = Color.kGreen;
-            case 'r':
                 toReturn = Color.kRed;
-            case 'y':
+            case 'g':
                 toReturn = Color.kYellow;
+            case 'r':
+                toReturn = Color.kBlue;
+            case 'y':
+                toReturn = Color.kGreen;
             }
         }
+
+
+
         String toStringReturn = toReturn.toString();
         SmartDashboard.putString("Assigned Color", toStringReturn);
         return toReturn;
@@ -50,7 +64,7 @@ public class RotateToColorCommand extends Command {
 	@Override
 	protected boolean isFinished() {
 		// TODO Auto-generated method stub
-		return true;
+		return done;
     }
     
     
@@ -59,9 +73,8 @@ public class RotateToColorCommand extends Command {
         String gameData = DriverStation.getInstance().getGameSpecificMessage();
 
         Color colorFromStation = getColorFromDriverStaion(gameData); // get the desired color
-        double positionToGoTo =  getPositionForColor(colorFromStation); // get the color // get the distance
-        
-        //TODO: set output to proper number
-        panelManipulator.setPosition(positionToGoTo); // set position from subsystem
+        boolean positionToGoTo =  getPositionForColor(colorFromStation); // get the color // get the distance
+        SmartDashboard.putBoolean("Rotated to Color ??????", positionToGoTo);
+        //set position to subsysem
     }
 }

@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
+import frc.robot.RobotMap;
 
 /**
  * Add your docs here.
@@ -39,6 +40,7 @@ public class PanelManipulator extends Subsystem {
 
   @Override
   public void initDefaultCommand() {
+    SmartDashboard.putData("Panel man", this);
     // Set the default command for a subsystem here.
     // setDefaultCommand(new MySpecialCommand());
   }
@@ -71,8 +73,13 @@ public class PanelManipulator extends Subsystem {
     match.addColorMatch(Color.kBlack);
   }
 
-  public Color getColor() {
+  public Color getColor() {    
     return sensor.getColor();
+  }
+
+  public Color getMatchedColor() {
+    ColorMatchResult matchResult = match.matchClosestColor(getColor());
+    return matchResult.color;
   }
 
   public static Color toColor(String color) {
@@ -108,38 +115,17 @@ public class PanelManipulator extends Subsystem {
     SmartDashboard.putString("Detected Color", colorString);
   }
 
-  public static double getDistanceToColor(Color currentColor, Color desiredColor) {
-
-    if (currentColor == desiredColor) {
-      return 0;
-    }
-
-    int currentColorIndex = -1;
-    int desiredColorIndex = -1;
-    int distanceAway = 0;
-
-    for (int i = 0; i < colorList.length; i++) {
-      if (colorList[i] == currentColor) {
-        currentColorIndex = i;
-      }
-      if (colorList[i] == desiredColor) {
-        desiredColorIndex = i;
-      }
-    }
-    if (desiredColorIndex < currentColorIndex) {
-      distanceAway = desiredColorIndex - currentColorIndex + 4;
-      return distanceAway;
-    }
-    if (currentColorIndex < desiredColorIndex) {
-      distanceAway = desiredColorIndex - currentColorIndex;
-      return distanceAway;
-    }
-    return -1;
-  }
 
   public double setPosition(double position) {
     talon.set(ControlMode.Position, position);
     return position;
+  }
+
+  public void rotate() {
+    talon.set(ControlMode.PercentOutput, RobotMap.PanelManipulatorDevices.power);
+  }
+
+  public void stop() {
   }
 
 }
