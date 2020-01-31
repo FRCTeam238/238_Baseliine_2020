@@ -23,6 +23,7 @@ import frc.core238.autonomous.IAutonomousModeDataSource;
 import frc.robot.commands.DriveStraightNavBoard;
 import frc.robot.commands.DriveStraightPID;
 import frc.robot.commands.TrajectoryDriveCommand;
+import frc.robot.subsystems.DrivetrainTrajectoryExtensions;
 import frc.robot.subsystems.DrivetrainTrajectoryWrapper;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Hanger;
@@ -42,7 +43,7 @@ import frc.robot.subsystems.Vision;
  */
 public class Robot extends TimedRobot {
 
-  public static DrivetrainTrajectoryWrapper drivetrain;
+  public static DrivetrainTrajectoryExtensions drivetrain;
   public static NavigationBoard navigationBoard;
   public static Vision vision;
   public static OI oi;
@@ -66,7 +67,7 @@ public class Robot extends TimedRobot {
 
   public Robot() {
     navigationBoard = new NavigationBoard();
-    drivetrain = new DrivetrainTrajectoryWrapper();
+    drivetrain = new DrivetrainTrajectoryExtensions();
     vision = new Vision(FieldConstants.VisionConstants.targetHeight, FieldConstants.VisionConstants.cameraHeight);
     shooter = new Shooter();
     dashboard238 = new Dashboard238();

@@ -8,6 +8,9 @@
 package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -27,13 +30,13 @@ public final class RobotMap {
     public static final int DRIVE_TRAIN_LEFT_SLAVE1 = 14;
     public static final int DRIVE_TRAIN_LEFT_SLAVE2 = 13;
 
-    public static TalonSRX LeftMaster = TalonSRX_238.create(DRIVE_TRAIN_LEFT_MASTER, Robot.isSimulation());//new TalonSRX(DRIVE_TRAIN_LEFT_MASTER);
-    public static TalonSRX LeftFollower1 = new TalonSRX(DRIVE_TRAIN_LEFT_SLAVE1);
-    //public static VictorSPX LeftFollower2 = new VictorSPX(DRIVE_TRAIN_LEFT_SLAVE2);
+    public static WPI_TalonSRX LeftMaster = TalonSRX_238.create(DRIVE_TRAIN_LEFT_MASTER, Robot.isSimulation());//new TalonSRX(DRIVE_TRAIN_LEFT_MASTER);
+    public static WPI_VictorSPX LeftFollower1 = new WPI_VictorSPX(DRIVE_TRAIN_LEFT_SLAVE1);
+    public static WPI_VictorSPX LeftFollower2 = new WPI_VictorSPX(DRIVE_TRAIN_LEFT_SLAVE2);
   
-    public static TalonSRX RightMaster = TalonSRX_238.create(DRIVE_TRAIN_RIGHT_MASTER, Robot.isSimulation());
-    public static TalonSRX RightFollower1 = new TalonSRX(DRIVE_TRAIN_RIGHT_SLAVE1);
-    //public static VictorSPX RightFollower2 = new VictorSPX(DRIVE_TRAIN_RIGHT_SLAVE2);
+    public static WPI_TalonSRX RightMaster = TalonSRX_238.create(DRIVE_TRAIN_RIGHT_MASTER, Robot.isSimulation());
+    public static WPI_VictorSPX RightFollower1 = new WPI_VictorSPX(DRIVE_TRAIN_RIGHT_SLAVE1);
+    public static WPI_VictorSPX RightFollower2 = new WPI_VictorSPX(DRIVE_TRAIN_RIGHT_SLAVE2);
   }
 
   /** Integer settings for the vision subsystem - change camera mode, pipeline, and LED state using these */

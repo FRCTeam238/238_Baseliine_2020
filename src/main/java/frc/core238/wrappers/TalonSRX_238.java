@@ -13,6 +13,7 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.time.StopWatch;
 
 import edu.wpi.first.hal.SimBoolean;
@@ -23,7 +24,7 @@ import edu.wpi.first.hal.SimEnum;
 /**
  * Add your docs here.
  */
-public class TalonSRX_238 extends TalonSRX {
+public class TalonSRX_238 extends WPI_TalonSRX {
 
     private SimDevice _simDevice;
     private SimBoolean _simConnected;
@@ -127,8 +128,8 @@ public class TalonSRX_238 extends TalonSRX {
         return _simOutput.get();
     }
 
-    public static TalonSRX create(int deviceNumber, Boolean isSimulation) {
-        TalonSRX talon = isSimulation ? new TalonSRX_238(deviceNumber) : new TalonSRX(deviceNumber);
+    public static WPI_TalonSRX create(int deviceNumber, Boolean isSimulation) {
+        WPI_TalonSRX talon = isSimulation ? new TalonSRX_238(deviceNumber) : new WPI_TalonSRX(deviceNumber);
         talon.configFactoryDefault();
         talon.setNeutralMode(NeutralMode.Brake);    
         talon.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 1, 0);

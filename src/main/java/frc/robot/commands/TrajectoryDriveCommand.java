@@ -12,24 +12,17 @@ import java.nio.file.Paths;
 import java.util.List;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
-import edu.wpi.first.wpilibj.geometry.Pose2d;
-import edu.wpi.first.wpilibj.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
-import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
-import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryUtil;
-import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import frc.core238.autonomous.AutonomousModeAnnotation;
 import frc.robot.Robot;
-import frc.robot.subsystems.DrivetrainTrajectoryWrapper;
+import frc.robot.subsystems.DrivetrainTrajectoryExtensions;
 import frc.robot.subsystems.NavigationBoard;
 
 @AutonomousModeAnnotation(parameterNames = { "TrajectoryName" })
 public class TrajectoryDriveCommand extends CommandGroup implements IAutonomousCommand {
 
-  private DrivetrainTrajectoryWrapper drivetrain = Robot.drivetrain;
+  private DrivetrainTrajectoryExtensions drivetrain = Robot.drivetrain;
   NavigationBoard navBoard = Robot.navigationBoard;
   private boolean isAutonomousMode = false;
   private String trajectoryName;

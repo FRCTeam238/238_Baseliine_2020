@@ -14,6 +14,9 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 import edu.wpi.first.wpilibj.Sendable;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -38,11 +41,14 @@ public class Drivetrain extends Subsystem {
   private final double kA = 00.00434 * 0.15;
   private final double vSetpoint = 0.078;// 0.078
 
-  protected final static TalonSRX rightMasterDrive = RobotMap.DrivetrainControllers.RightMaster;
-  protected final static TalonSRX leftMasterDrive = RobotMap.DrivetrainControllers.LeftMaster;
+  protected final static WPI_TalonSRX rightMasterDrive = RobotMap.DrivetrainControllers.RightMaster;
+  protected final static WPI_TalonSRX leftMasterDrive = RobotMap.DrivetrainControllers.LeftMaster;
 
-  private final TalonSRX leftDriveFollower1 = RobotMap.DrivetrainControllers.LeftFollower1;
-  private final TalonSRX rightDriveFollower1 = RobotMap.DrivetrainControllers.RightFollower1;
+  protected final WPI_VictorSPX leftDriveFollower1 = RobotMap.DrivetrainControllers.LeftFollower1;
+  protected final WPI_VictorSPX rightDriveFollower1 = RobotMap.DrivetrainControllers.RightFollower1;
+
+  protected final WPI_VictorSPX leftDriveFollower2 = RobotMap.DrivetrainControllers.LeftFollower2;
+  protected final WPI_VictorSPX rightDriveFollower2 = RobotMap.DrivetrainControllers.RightFollower2;
 
   public static double kP = 1;
   public static double kI = 0;
@@ -145,16 +151,22 @@ public class Drivetrain extends Subsystem {
     //TalonSRX_238 factory method returns preconfigured talks with defaults, no need to reset to defaults
 
     leftDriveFollower1.follow(leftMasterDrive);
+    leftDriveFollower2.follow(leftMasterDrive);
+
     rightDriveFollower1.follow(rightMasterDrive);
+    rightDriveFollower2.follow(rightMasterDrive);
 
     leftMasterDrive.setNeutralMode(NeutralMode.Brake);
     leftDriveFollower1.setNeutralMode(NeutralMode.Brake);
+    leftDriveFollower2.setNeutralMode(NeutralMode.Brake);
 
     rightMasterDrive.setInverted(true);
     rightDriveFollower1.setInverted(true);
+    rightDriveFollower2.setInverted(true);
 
     rightMasterDrive.setNeutralMode(NeutralMode.Brake);
     rightDriveFollower1.setNeutralMode(NeutralMode.Brake);
+    rightDriveFollower2.setNeutralMode(NeutralMode.Brake);
 
     rightMasterDrive.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 1, 0);
     leftMasterDrive.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 1, 0);
