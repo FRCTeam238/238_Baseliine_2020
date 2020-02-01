@@ -7,17 +7,25 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 import frc.robot.subsystems.Turret;
-import frc.robot.subsystems.Vision;
+import frc.robot.OI;
 
-public class turnTurret extends Command {
+public class TurnTurretManually extends Command {
 
-  double wantedOrientation = 0; //In ticks
   Turret theTurret = Robot.turret;
-  public turnTurret() {
+  private Joystick operatorController;
+  double leftOperatorJsValue;
+  double turnVelocity = 0;
+  double tuningValue = 0.1;
+
+  public TurnTurretManually() {
     requires(theTurret);
+    operatorController = Robot.oi.controller;
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
   }
@@ -30,14 +38,15 @@ public class turnTurret extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    theTurret.setPosition(wantedOrientation);
+    turnVelocity = getWantedVelocity();
+    theTurret.setTurnVelocity(turnVelocity);
   }
 
-  protected void findWantedOrientation(){
-    wantedOrientation = Robot.vision.getYaw();
+  protected double getWantedVelocity(){
+    leftOperatorJsValue = operatorController.getX(Hand.kRight);
+    double power = leftOperatorJsValue * ((tuningValue * leftOperatorJsValue * leftOperatorJsValue) + (1-tuningValue));
+    return power;
   }
-
-
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
@@ -53,6 +62,6 @@ public class turnTurret extends Command {
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
-    theTurret.stop();
+    theTurret.neutral();
   }
 }
