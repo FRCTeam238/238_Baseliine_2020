@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.SolenoidBase;
+import edu.wpi.first.wpilibj.XboxController;
 import frc.core238.wrappers.TalonSRX_238;;
 
 /** Used to map hardware ports and define hardware objects - motor controllers, joysticks, cameras, etc */
@@ -80,6 +81,12 @@ public final class RobotMap {
     public static int intake;
   }
 
+  public static class XBoxController {    
+    //TODO: change to real number
+    public static int xboxControllerPort = 1000;
+    public static XboxController xboxController = new XboxController(xboxControllerPort);
+  }
+
   public static class ShooterDevices {
     //TODO: change to real number
     public static int SHOOTER_MASTER = 16;
@@ -91,6 +98,11 @@ public final class RobotMap {
     public static int INTAKE_MASTER = 4;
     public static TalonSRX rightIntake = TalonSRX_238.create(INTAKE_MASTER, Robot.isSimulation());
     public static DoubleSolenoid deployIntake = new DoubleSolenoid(1,6);
+    public static int INTAKE_MASTER_ID = 4; //101
+    public static TalonSRX INTAKE_MASTER_TALON = new TalonSRX(INTAKE_MASTER_ID);
+    public static int FORWARD_CHANNEL = 0;
+    public static int REVERSE_CHANNEL = 5;
+    //public static TalonSRX rightIntake = TalonSRX_238.create(INTAKE_MASTER, Robot.isSimulation());
   }
 
   public static class TurretDevices {

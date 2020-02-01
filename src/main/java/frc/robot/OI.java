@@ -7,15 +7,15 @@
 
 package frc.robot;
 
-
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import frc.robot.commands.DriveStraightPID;
 import frc.robot.commands.FeederCommand;
-import frc.robot.commands.IntakeBallCommand;
 import frc.robot.commands.PrepareToShoot;
 import frc.robot.commands.RotatePanelNTimesBySensorCommand;
 import frc.robot.commands.RotateToColorCommand;
+import frc.robot.commands.IntakeExtendRetractCommand;
 import frc.robot.commands.VisionDrive;
 import frc.robot.subsystems.Drivetrain;
 
@@ -30,6 +30,8 @@ public class OI {
   public Joystick controller = RobotMap.Joysticks.operatorController;
   public Drivetrain drivetrain;
 
+  public XboxController xboxController = RobotMap.XBoxController.xboxController;
+
   public OI(){
 
     VisionDrive visionDrive = new VisionDrive();
@@ -37,7 +39,6 @@ public class OI {
     PrepareToShoot prepareToShoot = new PrepareToShoot();
     RotateToColorCommand rotateToColor = new RotateToColorCommand();
     RotatePanelNTimesBySensorCommand positionControl = new RotatePanelNTimesBySensorCommand(6);
-    IntakeBallCommand intakeBall = new IntakeBallCommand();
     FeederCommand feedToShooter = new FeederCommand();
     
     JoystickButton visionTrackButton = new JoystickButton(leftStick, RobotMap.Buttons.visionTrack);
@@ -60,8 +61,21 @@ public class OI {
     spinUpShooterButton.whileHeld(prepareToShoot);
     rotationControlButton.whenPressed(rotateToColor);
     positionControlButton.whenPressed(positionControl);
-    intakeButton.whenPressed(intakeBall);
     shootButton.whileHeld(feedToShooter);
+
+    //up is negitive and down is positive
+
+    // JoystickButton intakeJoystickIn = new JoystickButton(xboxController, XboxController.Axis.kRightY.value * -1);
+    // intakeJoystickIn.whileHeld(new IntakeInOutCommand(true));
+
+    // JoystickButton intakeJoystickOut = new JoystickButton(xboxController, XboxController.Axis.kRightY.value * 1); 
+    // intakeJoystickOut.whileHeld(new IntakeInOutCommand(false));
+    
+    JoystickButton extendIntakeJoystick = new JoystickButton(xboxController, XboxController.Button.kBumperLeft.value);
+    extendIntakeJoystick.whenPressed(new IntakeExtendRetractCommand(true));
+
+    JoystickButton retractIntakeJoystick = new JoystickButton(xboxController, XboxController.Button.kBumperRight.value);
+    retractIntakeJoystick.whenPressed(new IntakeExtendRetractCommand(false));
   }
   //// CREATING BUTTONS
   // One type of button is a joystick button which is any button on a

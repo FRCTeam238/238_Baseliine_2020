@@ -11,21 +11,26 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.Solenoid;
-import edu.wpi.first.wpilibj.SolenoidBase;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.RobotMap;
+import frc.robot.commands.IntakeInOutCommand;
 
 /**
  * Add your docs here.
  */
 public class Intake extends Subsystem {
-    private final TalonSRX intakeMasterDrive = RobotMap.IntakeDevices.rightIntake;
-    private final DoubleSolenoid intakeDeployer = RobotMap.IntakeDevices.deployIntake;
+    private final TalonSRX intakeMasterDrive = RobotMap.IntakeDevices.INTAKE_MASTER_TALON;
+    private final int forwarChannel = RobotMap.IntakeDevices.FORWARD_CHANNEL;
+    private final int reverseChannel = RobotMap.IntakeDevices.REVERSE_CHANNEL;
+    private DoubleSolenoid solenoid;
+
+    private final double INTAKEPOWER = 0.5;
+
+    private IntakeInOutCommand intakeInCommand;
 
     public Intake() {
         initTalons();
+        solenoid = new DoubleSolenoid(forwarChannel, reverseChannel);
     }
 
     public void initTalons() {
@@ -34,6 +39,7 @@ public class Intake extends Subsystem {
 
     @Override
     public void initDefaultCommand() { 
+        intakeInCommand = new IntakeInOutCommand();
     }
 
     public void resetEncoder(){
@@ -44,19 +50,28 @@ public class Intake extends Subsystem {
         return encoderTicks;
     }
 
-    public void setPower(double speedValue){
+    private void setPower(double speedValue){
         intakeMasterDrive.set(ControlMode.PercentOutput, speedValue);
     }
 
-    public void deployRetractIntake(boolean direction){
-        if(direction == true){
-            intakeDeployer.set(Value.kForward);
-        }else{
-            intakeDeployer.set(Value.kReverse);
-        }
+    public void in() {
+        setPower(INTAKEPOWER);
+    }
+
+    public void out() {
+        setPower(-INTAKEPOWER);
     }
 
     public void stop(){
-        intakeMasterDrive.set(ControlMode.PercentOutput, 0);
+        setPower(0);
     }
+
+    public void extendIntake() {
+        solenoid.set(DoubleSolenoid.Value.kForward);
+    }
+
+    public void retractIntake() {
+        solenoid.set(DoubleSolenoid.Value.kReverse);
+    }
+
 }
