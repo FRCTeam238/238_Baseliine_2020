@@ -17,9 +17,17 @@ import frc.robot.RobotMap;
  * Add your docs here.
  */
 public class Turret extends Subsystem {
+
+
     private final TalonSRX turretMasterDrive = RobotMap.TurretDevices.turretTalon;
 
+    final double kF = 1e-4;
+    final double kP = 0;
+    final double kI = 0;
+    final double kD = 0;
+
     public Turret() {
+        initTalons();
     }
 
     @Override
@@ -30,6 +38,11 @@ public class Turret extends Subsystem {
     
     public void initTalons() {
         turretMasterDrive.configFactoryDefault();
+        turretMasterDrive.selectProfileSlot(0, 0);
+        turretMasterDrive.config_kF(0, kF);
+        turretMasterDrive.config_kP(0, kP);
+        turretMasterDrive.config_kI(0, kI);
+        turretMasterDrive.config_kD(0, kD);
     }
 
     private void resetEncoder() {
@@ -45,6 +58,10 @@ public class Turret extends Subsystem {
         //TODO: convert angle to position(ticks)
         double position = angle;
         turretMasterDrive.set(ControlMode.Position,  position);
+    }
+
+    public void setTurnVelocity(double magnitude){
+        turretMasterDrive.set(ControlMode.PercentOutput, magnitude);
     }
 
     public double getPosition() {
