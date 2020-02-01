@@ -52,4 +52,13 @@ public class Turret extends Subsystem {
         return position;
     }
 
+    public void stop(){
+        double currentPosition = getPosition();
+        setPosition(currentPosition);
+    }
+
+    public void neutral(){
+        turretMasterDrive.set(ControlMode.PercentOutput, 0);
+    }
+
 }
