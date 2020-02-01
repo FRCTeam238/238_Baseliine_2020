@@ -13,6 +13,8 @@
  */
 package frc.robot.commands;
 
+import static edu.wpi.first.wpilibj.util.ErrorMessages.requireNonNullParam;
+
 import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 
@@ -23,12 +25,12 @@ import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.RamseteController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.geometry.Transform2d;
 import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
-
-import static edu.wpi.first.wpilibj.util.ErrorMessages.requireNonNullParam;
 
 /**
  * A command that uses a RAMSETE controller ({@link RamseteController}) to
@@ -49,7 +51,7 @@ import static edu.wpi.first.wpilibj.util.ErrorMessages.requireNonNullParam;
 public class RamseteCommand extends Command {
   private final Timer m_timer = new Timer();
   private final boolean m_usePID;
-  private final Trajectory m_trajectory;
+  private Trajectory m_trajectory;
   private final Supplier<Pose2d> m_pose;
   private final RamseteController m_follower;
   private final SimpleMotorFeedforward m_feedforward;
@@ -169,6 +171,8 @@ public class RamseteCommand extends Command {
       m_leftController.reset();
       m_rightController.reset();
     }
+    Transform2d transform = new Pose2d(0, 0, Rotation2d.fromDegrees(0)).minus(m_trajectory.getInitialPose());
+    m_trajectory = m_trajectory.transformBy(transform);
   }
 
   @Override

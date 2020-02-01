@@ -95,9 +95,9 @@ public class Robot extends TimedRobot {
 
   private void populateAutomodes() {
 
-    if (!isReal()){
+    if (isReal()){
     // initialize the automodes list
-      IAutonomousModeDataSource autoModesDataSource = new DataFileAutonomousModeDataSource("/home/lvuser/amode238.txt");
+      IAutonomousModeDataSource autoModesDataSource = new DataFileAutonomousModeDataSource("/home/lvuser/deploy/amode238.txt");
       AutonomousModesReader reader = new AutonomousModesReader(autoModesDataSource);
       m_autoModes = reader.getAutonmousModes();
     } else {
