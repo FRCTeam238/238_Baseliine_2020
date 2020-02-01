@@ -12,6 +12,10 @@ import java.nio.file.Paths;
 import java.util.List;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.geometry.Transform2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryUtil;
 import frc.core238.autonomous.AutonomousModeAnnotation;
@@ -56,7 +60,10 @@ public class TrajectoryDriveCommand extends CommandGroup implements IAutonomousC
     try {
       trajectory = TrajectoryUtil
           .fromPathweaverJson(Paths.get("/home/lvuser/deploy/" + trajectoryName + ".wpilib.json"));
-      addSequential(drivetrain.createCommandForTrajectory(trajectory));
+      SmartDashboard.putString("Running Trajectory", trajectoryName);
+      Transform2d transform = new Pose2d(0, 0, Rotation2d.fromDegrees(0)).minus(trajectory.getInitialPose());
+      Trajectory newTrajectory = trajectory.transformBy(transform);
+      addSequential(drivetrain.createCommandForTrajectory(newTrajectory));
     } catch (IOException e) {
       e.printStackTrace();
     }

@@ -228,6 +228,7 @@ public class DrivetrainTrajectoryExtensions extends Drivetrain {
 
   public Command createCommandForTrajectory(Trajectory trajectory) {
 
+    InstantCommand initializeDifferentialDrive = new InstantCommand(this, () -> setUseDifferentialDrive(false));
     RamseteCommand rc = new RamseteCommand(
             trajectory,
             this::getCurrentPose,
@@ -246,6 +247,7 @@ public class DrivetrainTrajectoryExtensions extends Drivetrain {
         });
 
     CommandGroup cg = new CommandGroup("TrajectoryDrive");
+    cg.addSequential(initializeDifferentialDrive);
     cg.addSequential(rc);;
     cg.addSequential(endCommand);
 
@@ -309,18 +311,18 @@ public class DrivetrainTrajectoryExtensions extends Drivetrain {
     public static final double WHEEL_CIRCUMFERENCE_INCHES = WHEEL_DIAMETER_INCHES * Math.PI;
     public static final double WHEEL_CIRCUMFERENCE_METERS = Units.inchesToMeters(WHEEL_DIAMETER_INCHES) * Math.PI;
 
-    public static final double TRACK_WIDTH_METERS = 0.52072;
+    public static final double TRACK_WIDTH_METERS = 0.626;
     public static final DifferentialDriveKinematics DRIVE_KINEMATICS = new DifferentialDriveKinematics(
         TRACK_WIDTH_METERS);
 
     /** Voltage needed to overcome the motor’s static friction. kS */
-    public static final double STATIC_VOLTS = 2.94;
+    public static final double STATIC_VOLTS = 1.2;
 
     /** Voltage needed to hold (or "cruise") at a given constant velocity. kV */
-    public static final double VOLT_SECONDS_PER_METER = 2.88;
+    public static final double VOLT_SECONDS_PER_METER = 2.79;
 
     /** Voltage needed to induce a given acceleration in the motor shaft. kA */
-    public static final double VOLT_SECONDS_SQUARED_PER_METER = 0.00592;
+    public static final double VOLT_SECONDS_SQUARED_PER_METER = 0.439;
 
     public static final SimpleMotorFeedforward FEED_FORWARD = 
         new SimpleMotorFeedforward(STATIC_VOLTS, VOLT_SECONDS_PER_METER, VOLT_SECONDS_SQUARED_PER_METER);

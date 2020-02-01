@@ -24,7 +24,6 @@ import frc.robot.commands.DriveStraightNavBoard;
 import frc.robot.commands.DriveStraightPID;
 import frc.robot.commands.TrajectoryDriveCommand;
 import frc.robot.subsystems.DrivetrainTrajectoryExtensions;
-import frc.robot.subsystems.DrivetrainTrajectoryWrapper;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Hanger;
 import frc.robot.subsystems.Intake;
@@ -88,7 +87,7 @@ public class Robot extends TimedRobot {
     panelManipulator.initSensor();
     populateAutomodes();
     List<String> params= new ArrayList<>();
-    params.add("StraightOffLine");
+    params.add("SPath");
     TrajectoryDriveCommand driveStraightTrajectory = new TrajectoryDriveCommand();
     driveStraightTrajectory.setParameters(params);
     SmartDashboard.putData("Drive Straight - trajectory", driveStraightTrajectory);
