@@ -14,8 +14,10 @@ import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.SolenoidBase;
 import frc.core238.wrappers.TalonSRX_238;;
 
 /** Used to map hardware ports and define hardware objects - motor controllers, joysticks, cameras, etc */
@@ -86,9 +88,9 @@ public final class RobotMap {
 
   public static class IntakeDevices {
     //TODO: change to real number
-    public static int INTAKE_MASTER = 101;
+    public static int INTAKE_MASTER = 4;
     public static TalonSRX rightIntake = TalonSRX_238.create(INTAKE_MASTER, Robot.isSimulation());
-    public static Solenoid deployIntake = new Solenoid(255);
+    public static DoubleSolenoid deployIntake = new DoubleSolenoid(1,6);
   }
 
   public static class TurretDevices {
