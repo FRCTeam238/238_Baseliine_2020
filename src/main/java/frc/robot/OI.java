@@ -11,6 +11,11 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import frc.robot.commands.DriveStraightPID;
+import frc.robot.commands.FeederCommand;
+import frc.robot.commands.IntakeBallCommand;
+import frc.robot.commands.PrepareToShoot;
+import frc.robot.commands.RotatePanelNTimesBySensorCommand;
+import frc.robot.commands.RotateToColorCommand;
 import frc.robot.commands.VisionDrive;
 import frc.robot.subsystems.Drivetrain;
 
@@ -29,6 +34,11 @@ public class OI {
 
     VisionDrive visionDrive = new VisionDrive();
     DriveStraightPID driveTenFeetPID = new DriveStraightPID(-48);
+    PrepareToShoot prepareToShoot = new PrepareToShoot();
+    RotateToColorCommand rotateToColor = new RotateToColorCommand();
+    RotatePanelNTimesBySensorCommand positionControl = new RotatePanelNTimesBySensorCommand(6);
+    IntakeBallCommand intakeBall = new IntakeBallCommand();
+    FeederCommand feedToShooter = new FeederCommand();
     
     JoystickButton visionTrackButton = new JoystickButton(leftStick, RobotMap.Buttons.visionTrack);
 
@@ -43,9 +53,15 @@ public class OI {
     JoystickButton spinUpShooterButton = new JoystickButton(controller, RobotMap.Buttons.spinUpShooter);
     JoystickButton shootButton = new JoystickButton(controller, RobotMap.Buttons.shoot);
 
+    JoystickButton intakeButton = new JoystickButton(controller, RobotMap.Buttons.intake);
+
     driveTenFeetButton.whenPressed(driveTenFeetPID);
     visionTrackButton.whileHeld(visionDrive);
-    
+    spinUpShooterButton.whileHeld(prepareToShoot);
+    rotationControlButton.whenPressed(rotateToColor);
+    positionControlButton.whenPressed(positionControl);
+    intakeButton.whenPressed(intakeBall);
+    shootButton.whileHeld(feedToShooter);
   }
   //// CREATING BUTTONS
   // One type of button is a joystick button which is any button on a
