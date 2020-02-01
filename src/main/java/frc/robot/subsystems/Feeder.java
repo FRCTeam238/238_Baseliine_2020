@@ -15,6 +15,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.Sendable;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.DigitalOutput;
 import frc.core238.wrappers.SendableWrapper;
 import frc.robot.RobotMap;
 
@@ -23,6 +24,7 @@ import frc.robot.RobotMap;
  */
 public class Feeder extends Subsystem {
     public final TalonSRX feederMasterDrive = RobotMap.FeederDevices.feederTalon;
+    public final DigitalOutput firstDetector = new DigitalOutput(255);
     //TODO: change FEEDER_OUTPUT to reasonable value;
     private final double FEEDER_OUTPUT = 0.5;
     private final double STOP_FEEDER_OUTPUT = 0;
