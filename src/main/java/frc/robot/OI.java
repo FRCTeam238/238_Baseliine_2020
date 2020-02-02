@@ -9,6 +9,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import frc.robot.commands.DriveStraightPID;
 import frc.robot.commands.FeederCommand;
@@ -16,6 +17,7 @@ import frc.robot.commands.PrepareToShoot;
 import frc.robot.commands.RotatePanelNTimesBySensorCommand;
 import frc.robot.commands.RotateToColorCommand;
 import frc.robot.commands.IntakeExtendRetractCommand;
+import frc.robot.commands.IntakeInOutCommand;
 import frc.robot.commands.VisionDrive;
 import frc.robot.subsystems.Drivetrain;
 
@@ -64,12 +66,8 @@ public class OI {
     shootButton.whileHeld(feedToShooter);
 
     //up is negitive and down is positive
-
-    // JoystickButton intakeJoystickIn = new JoystickButton(xboxController, XboxController.Axis.kRightY.value * -1);
-    // intakeJoystickIn.whileHeld(new IntakeInOutCommand(true));
-
-    // JoystickButton intakeJoystickOut = new JoystickButton(xboxController, XboxController.Axis.kRightY.value * 1); 
-    // intakeJoystickOut.whileHeld(new IntakeInOutCommand(false));
+    IntakeInOutCommand intakeInOutCmd = new IntakeInOutCommand(() -> xboxController.getY(Hand.kRight));
+    Robot.intake.setDefaultCommand(intakeInOutCmd);
     
     JoystickButton extendIntakeJoystick = new JoystickButton(xboxController, XboxController.Button.kBumperLeft.value);
     extendIntakeJoystick.whenPressed(new IntakeExtendRetractCommand(true));

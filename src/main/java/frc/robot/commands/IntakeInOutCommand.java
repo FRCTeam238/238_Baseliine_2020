@@ -7,11 +7,9 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.GenericHID.Hand;
+import java.util.function.DoubleSupplier;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
-import frc.robot.RobotMap.XBoxController;
-import frc.robot.subsystems.Intake;
 
 /**
  * Add your docs here.
@@ -19,15 +17,18 @@ import frc.robot.subsystems.Intake;
 public class IntakeInOutCommand extends Command{
     //private boolean isIn = false;
     private double axisSenstiviy = 0.5;
+    private DoubleSupplier input;
 
-    public IntakeInOutCommand() {
+    public IntakeInOutCommand(DoubleSupplier input) {
         requires(Robot.intake);
+        this.input = input;
         //isIn = in;
     }
 
     @Override
     protected void execute() {
-        double value = XBoxController.xboxController.getY(Hand.kRight);
+        double value = input.getAsDouble();
+        //double value = XBoxController.xboxController.getY(Hand.kRight);
         if (value <= -axisSenstiviy) {
             Robot.intake.in();
         } else if (value >= axisSenstiviy) {

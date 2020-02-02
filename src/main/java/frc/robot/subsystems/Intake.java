@@ -13,7 +13,6 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.RobotMap;
-import frc.robot.commands.IntakeInOutCommand;
 
 /**
  * Add your docs here.
@@ -26,25 +25,23 @@ public class Intake extends Subsystem {
 
     private final double INTAKEPOWER = 0.5;
 
-    private IntakeInOutCommand intakeInCommand;
-
     public Intake() {
         initTalons();
         solenoid = new DoubleSolenoid(forwarChannel, reverseChannel);
+    }
+
+    @Override 
+    public void initDefaultCommand() {
     }
 
     public void initTalons() {
         intakeMasterDrive.configFactoryDefault();
     }
 
-    @Override
-    public void initDefaultCommand() { 
-        intakeInCommand = new IntakeInOutCommand();
-    }
-
     public void resetEncoder(){
         intakeMasterDrive.setSelectedSensorPosition(0,0,0);
     }
+
     public double getEncoderTicks(){
         double encoderTicks = intakeMasterDrive.getSelectedSensorPosition();
         return encoderTicks;
