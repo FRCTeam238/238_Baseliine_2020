@@ -13,10 +13,10 @@ import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import frc.robot.commands.DriveStraightPID;
 import frc.robot.commands.FeederCommand;
+import frc.robot.commands.IntakeExtendRetractCommand;
 import frc.robot.commands.PrepareToShoot;
 import frc.robot.commands.RotatePanelNTimesBySensorCommand;
 import frc.robot.commands.RotateToColorCommand;
-import frc.robot.commands.IntakeExtendRetractCommand;
 import frc.robot.commands.IntakeInOutCommand;
 import frc.robot.commands.VisionDrive;
 import frc.robot.subsystems.Drivetrain;
@@ -29,12 +29,13 @@ public class OI {
 
   public Joystick leftStick = RobotMap.Joysticks.driverStickLeft;
   public Joystick rightStick = RobotMap.Joysticks.driverStickRight;
-  public Joystick controller = RobotMap.Joysticks.operatorController;
+  public Joystick operatorController = RobotMap.Joysticks.operatorController;
   public Drivetrain drivetrain;
 
-  public XboxController xboxController = RobotMap.XBoxController.xboxController;
+  //public XboxController xboxController = RobotMap.XBoxController.xboxController;
 
   public OI(){
+
 
     VisionDrive visionDrive = new VisionDrive();
     DriveStraightPID driveTenFeetPID = new DriveStraightPID(-48);
@@ -47,16 +48,16 @@ public class OI {
 
     JoystickButton driveTenFeetButton = new JoystickButton(leftStick, RobotMap.Buttons.driveTenFeet);
 
-    JoystickButton climbButton = new JoystickButton(controller, RobotMap.Buttons.climb);
+    JoystickButton climbButton = new JoystickButton(operatorController, RobotMap.Buttons.climb);
 
-    JoystickButton deployManipulatorButton = new JoystickButton(controller, RobotMap.Buttons.deployManipulator);
-    JoystickButton rotationControlButton = new JoystickButton(controller, RobotMap.Buttons.rotationControl);
-    JoystickButton positionControlButton = new JoystickButton(controller, RobotMap.Buttons.positionControl);
+    JoystickButton deployManipulatorButton = new JoystickButton(operatorController, RobotMap.Buttons.deployManipulator);
+    JoystickButton rotationControlButton = new JoystickButton(operatorController, RobotMap.Buttons.rotationControl);
+    JoystickButton positionControlButton = new JoystickButton(operatorController, RobotMap.Buttons.positionControl);
 
-    JoystickButton spinUpShooterButton = new JoystickButton(controller, RobotMap.Buttons.spinUpShooter);
-    JoystickButton shootButton = new JoystickButton(controller, RobotMap.Buttons.shoot);
+    JoystickButton spinUpShooterButton = new JoystickButton(operatorController, RobotMap.Buttons.spinUpShooter);
+    JoystickButton shootButton = new JoystickButton(operatorController, RobotMap.Buttons.shoot);
 
-    JoystickButton intakeButton = new JoystickButton(controller, RobotMap.Buttons.intake);
+    JoystickButton intakeButton = new JoystickButton(operatorController, RobotMap.Buttons.intake);
 
     driveTenFeetButton.whenPressed(driveTenFeetPID);
     visionTrackButton.whileHeld(visionDrive);
@@ -66,13 +67,13 @@ public class OI {
     shootButton.whileHeld(feedToShooter);
 
     //up is negitive and down is positive
-    IntakeInOutCommand intakeInOutCmd = new IntakeInOutCommand(() -> xboxController.getY(Hand.kRight));
+    IntakeInOutCommand intakeInOutCmd = new IntakeInOutCommand(() -> operatorController.getY(Hand.kRight));
     Robot.intake.setDefaultCommand(intakeInOutCmd);
     
-    JoystickButton extendIntakeJoystick = new JoystickButton(xboxController, XboxController.Button.kBumperLeft.value);
+    JoystickButton extendIntakeJoystick = new JoystickButton(operatorController, XboxController.Button.kBumperLeft.value);
     extendIntakeJoystick.whenPressed(new IntakeExtendRetractCommand(true));
 
-    JoystickButton retractIntakeJoystick = new JoystickButton(xboxController, XboxController.Button.kBumperRight.value);
+    JoystickButton retractIntakeJoystick = new JoystickButton(operatorController, XboxController.Button.kBumperRight.value);
     retractIntakeJoystick.whenPressed(new IntakeExtendRetractCommand(false));
   }
   //// CREATING BUTTONS

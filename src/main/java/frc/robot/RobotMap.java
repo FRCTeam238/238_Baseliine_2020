@@ -60,7 +60,7 @@ public final class RobotMap {
 
     public static Joystick driverStickLeft = new Joystick(leftStickPort);
     public static Joystick driverStickRight = new Joystick(rightStickPort);
-    public static Joystick operatorController = new Joystick(controllerPort);
+    public static Joystick operatorController = new Joystick(1);
   }
 
   /** Button mapping, for joysticks and controllers */
@@ -79,12 +79,6 @@ public final class RobotMap {
     public static int climb;
 
     public static int intake;
-  }
-
-  public static class XBoxController {    
-    //TODO: change to real number
-    public static int xboxControllerPort = 1000;
-    public static XboxController xboxController = new XboxController(xboxControllerPort);
   }
 
   public static class ShooterDevices {

@@ -25,7 +25,7 @@ public class TurnTurretManually extends Command {
 
   public TurnTurretManually() {
     requires(theTurret);
-    operatorController = Robot.oi.controller;
+    operatorController = Robot.oi.operatorController;
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
   }
