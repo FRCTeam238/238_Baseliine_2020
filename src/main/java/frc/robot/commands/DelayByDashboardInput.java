@@ -20,6 +20,8 @@ public class DelayByDashboardInput extends Command implements IAutonomousCommand
   private boolean isAutonomousMode = false;
   private double timeToDelay = 0;
   private String dashboardID;
+  private double startTime = 0;
+  private boolean isDone = false;
   public DelayByDashboardInput() {
     
   }
@@ -28,18 +30,21 @@ public class DelayByDashboardInput extends Command implements IAutonomousCommand
   @Override
   protected void initialize() {
     timeToDelay = SmartDashboard.getNumber(dashboardID, 0);
+    startTime = Timer.getFPGATimestamp();
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Timer.delay(timeToDelay);
+    if(Timer.getFPGATimestamp() - startTime >= timeToDelay){
+      isDone = true;
+    }
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return true;
+    return isDone;
   }
 
   // Called once after isFinished returns true

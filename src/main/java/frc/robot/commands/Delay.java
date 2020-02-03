@@ -17,6 +17,8 @@ import frc.core238.autonomous.AutonomousModeAnnotation;
 public class Delay extends Command implements IAutonomousCommand {
   private double timeToWait = 0;
   private boolean isAutonomousMode = false;
+  private double startTime = 0;
+  private boolean isDone = false;
   public Delay() {
     
   }
@@ -24,18 +26,21 @@ public class Delay extends Command implements IAutonomousCommand {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
+    startTime = Timer.getFPGATimestamp();
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Timer.delay(timeToWait);
+    if(Timer.getFPGATimestamp() - startTime >= timeToWait){
+      isDone = true;
+    }
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return true;
+    return isDone;
   }
 
   // Called once after isFinished returns true
