@@ -42,7 +42,7 @@ public class JsonTests {
          * "DriveStraightVision", "parameters": [ "3", "4" ] } ] } ]
          */
 
-        String json = "{\n  \"AutonomousModes\": [\n    {\n      \"Commands\": [\n        {\n          \"Name\": \"LogMessage\",\n          \"Parameters\": [\n            \"works!!!!!!!!\",\n            \"warn\"\n          ]\n        }\n      ],\n      \"Name\": \"Automode1\"\n    }\n  ]\n}";//"[{\"name\":\"Some auto mode\",\"commands\":[{\"name\":\"LogMessage\",\"parameters\":[\"A message\",\"debug\"]},{\"name\":\"LogMessage\",\"parameters\":[\"Another message\",\"warn\"]}]}]";      
+        String json = "{\n  \"AutonomousModes\": [\n    {\n      \"Commands\": [\n        {\n          \"Name\": \"LogMessage\",\n          \"Parameters\": [\n\"true\",            \"works!!!!!!!!\",\n            \"warn\"\n          ]\n        }\n      ],\n      \"Name\": \"Automode1\"\n    }\n  ]\n}";//"[{\"name\":\"Some auto mode\",\"commands\":[{\"name\":\"LogMessage\",\"parameters\":[\"A message\",\"debug\"]},{\"name\":\"LogMessage\",\"parameters\":[\"Another message\",\"warn\"]}]}]";      
         IAutonomousModeDataSource dataSource = new JsonStringAutonomousModeDataSource(json);
         AutonomousModesReader reader = new AutonomousModesReader(dataSource);
         var modes = reader.getAutonmousModes();
@@ -77,6 +77,14 @@ public class JsonTests {
             var descriptor = new AutonomousCommandDescriptor();
             descriptor.CommandName = command.getSimpleName();
             descriptor.ParameterNames = annotation.parameterNames();
+            List<String> parameters = new ArrayList<>();
+            int arrayLength = descriptor.ParameterNames.length;
+            parameters.add("isParallel");
+            for(int i = 0; i < arrayLength; i++){
+                parameters.add(descriptor.ParameterNames[i]);
+            }
+            String[] newParams = new String[descriptor.ParameterNames.length + 1];
+            descriptor.ParameterNames = parameters.toArray(newParams);
             descriptors.add(descriptor);
         }
 

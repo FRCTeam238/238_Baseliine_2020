@@ -9,8 +9,10 @@ package frc.core238.autonomous;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -42,6 +44,10 @@ public class AutonomousModesReader {
         modeDescriptors.forEach(modeDescriptor -> {
             final String name = modeDescriptor.getName();
             final CommandGroup commands = new CommandGroup();
+            final List<CommandGroup> parallelCommandGroups = new ArrayList<>();
+            final List<Boolean> isParallelList = new ArrayList<>();
+            isParallelList.add(false);
+            parallelCommandGroups.add(new CommandGroup());
 
             modeDescriptor.getCommands().forEach(commandDescriptor -> {
 
@@ -59,14 +65,40 @@ public class AutonomousModesReader {
                             .Debug("AutonomousModesReader.getAutonmousModes unable to instantiate " + className);
                 }
 
-                // call set parameters
-                autoCommand.setParameters(commandDescriptor.getParameters());
-                autoCommand.setIsAutonomousMode(true);
+                List<String> strippedParams = commandDescriptor.getParameters().stream().skip(1).collect(Collectors.toList());
+                // Value of first boolean parameter
+                boolean isParallel = Boolean.parseBoolean(commandDescriptor.getParameters().get(0));
 
-                // add to list
-                commands.addSequential((Command) autoCommand);
+                // Pass in parameters (minus isParallel)
+                autoCommand.setParameters(strippedParams);
+                autoCommand.setIsAutonomousMode(true);
+                
+                if(isParallel){
+                    CommandGroup parallelGroup;
+                    if(isParallelList.get(0) == false){ // If there is no parallel command group currently being built
+                        parallelGroup = new CommandGroup(); // Create a new one
+                        parallelCommandGroups.add(parallelGroup); // Add the command
+                        isParallelList.set(0, true); // Communicate that there IS a parallel command group being built
+                    }else{
+                        // Set parallelGroup to the last command group in the list
+                        parallelGroup = parallelCommandGroups.get(parallelCommandGroups.size() - 1);
+                    }
+                    parallelGroup.addParallel((Command) autoCommand); // Add the command in parallel
+                }else{
+                    if(isParallelList.get(0)){ // If there is a parallel command group being built
+                        // Add that parallel command group to the sequential command list
+                        commands.addSequential((Command) parallelCommandGroups.get(parallelCommandGroups.size() - 1));
+                    }
+                    isParallelList.set(0, false); // Communicate that there is not a parallel command group being built
+                    commands.addSequential((Command) autoCommand); // Add the command sequentially 
+                }
             });
 
+            if(isParallelList.get(0)){ // If there is a parallel command group being built
+                // Add that parallel command group to the sequential command list
+                // This is done again here to ensure that if the final command is parallel, it's still added properly
+                commands.addSequential((Command) parallelCommandGroups.get(parallelCommandGroups.size() - 1));
+            }
             // add to dictionary
             autoModes.put(name, commands);
         });
