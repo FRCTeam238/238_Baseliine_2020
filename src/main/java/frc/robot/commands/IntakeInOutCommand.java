@@ -7,7 +7,6 @@
 
 package frc.robot.commands;
 
-import java.util.function.DoubleSupplier;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 
@@ -15,27 +14,30 @@ import frc.robot.Robot;
  * Add your docs here.
  */
 public class IntakeInOutCommand extends Command{
-    //private boolean isIn = false;
-    private double axisSenstiviy = 0.5;
-    private DoubleSupplier input;
+    private boolean isIn = false;
 
-    public IntakeInOutCommand(DoubleSupplier input) {
+    public IntakeInOutCommand(boolean isIn) {
         requires(Robot.intake);
-        this.input = input;
-        //isIn = in;
+        this.isIn = isIn;
     }
 
     @Override
     protected void execute() {
-        double value = input.getAsDouble();
-        //double value = XBoxController.xboxController.getY(Hand.kRight);
-        if (value <= -axisSenstiviy) {
+        if (isIn) {
             Robot.intake.in();
-        } else if (value >= axisSenstiviy) {
-            Robot.intake.out();
         } else {
-            Robot.intake.stop();
+            Robot.intake.out();
         }
+    }
+
+    @Override
+    protected void end(){
+        Robot.intake.stop();
+    }
+
+    @Override
+    protected void interrupted(){
+        end();
     }
 
     @Override
