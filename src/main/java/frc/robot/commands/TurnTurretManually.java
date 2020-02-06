@@ -7,18 +7,16 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 import frc.robot.subsystems.Turret;
-import frc.robot.OI;
 
 public class TurnTurretManually extends Command {
 
   Turret theTurret = Robot.turret;
-  private Joystick operatorController;
+  private XboxController operatorController;
   double leftOperatorJsValue;
   double turnVelocity = 0;
   double tuningValue = 0.1;

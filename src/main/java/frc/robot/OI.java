@@ -31,7 +31,7 @@ public class OI {
 
   public Joystick leftStick = RobotMap.Joysticks.driverStickLeft;
   public Joystick rightStick = RobotMap.Joysticks.driverStickRight;
-  public Joystick operatorController = RobotMap.Joysticks.operatorController;
+  public XboxController operatorController = RobotMap.Joysticks.operatorController;
   public Drivetrain drivetrain;
 
   //public XboxController xboxController = RobotMap.XBoxController.xboxController;

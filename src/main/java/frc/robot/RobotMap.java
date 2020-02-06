@@ -60,7 +60,7 @@ public final class RobotMap {
 
     public static Joystick driverStickLeft = new Joystick(leftStickPort);
     public static Joystick driverStickRight = new Joystick(rightStickPort);
-    public static Joystick operatorController = new Joystick(1);
+    public static XboxController operatorController = new XboxController(1);
   }
 
   /** Button mapping, for joysticks and controllers */
