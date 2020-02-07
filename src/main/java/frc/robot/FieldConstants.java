@@ -32,4 +32,6 @@ public class FieldConstants {
 
     public static double hangHeight = 5;
 
+    public static int numberOfTimesToRotatePanelManipulator = 6;
+
 }

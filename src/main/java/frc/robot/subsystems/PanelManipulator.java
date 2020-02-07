@@ -15,7 +15,9 @@ import com.revrobotics.ColorMatch;
 import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorSensorV3;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
@@ -36,7 +38,9 @@ public class PanelManipulator extends Subsystem {
   public static Color kYellowTarget;
   public static Color kGreenTarget;
 
-  private static Color[] colorList; //{"G","R","Y","B"} <-- order of colors;
+  private static Color[] colorList; // {"G","R","Y","B"} <-- order of colors;
+
+  public static DoubleSolenoid solenoid;
 
   @Override
   public void initDefaultCommand() {
@@ -46,25 +50,26 @@ public class PanelManipulator extends Subsystem {
   }
 
   public PanelManipulator() {
-    //SmartDashboard.putString("Current Color", "Yellow");
-    //SmartDashboard.putString("Assigned Color", "No!!!!");
+    solenoid = RobotMap.PanelManipulatorDevices.panelSolenoid;
+    // SmartDashboard.putString("Current Color", "Yellow");
+    // SmartDashboard.putString("Assigned Color", "No!!!!");
   }
 
   public void initSensor() {
     sensor = new ColorSensorV3(i2cPort);
-    
+
     defineColors();
   }
 
   public static void defineColors() {
     match = new ColorMatch();
-    
+
     kBlueTarget = ColorMatch.makeColor(0.143, 0.427, 0.429);
     kGreenTarget = ColorMatch.makeColor(0.197, 0.561, 0.240);
     kRedTarget = ColorMatch.makeColor(0.561, 0.232, 0.114);
     kYellowTarget = ColorMatch.makeColor(0.361, 0.524, 0.113);
 
-    colorList = new Color[] { kGreenTarget, kRedTarget, kYellowTarget, kBlueTarget};
+    colorList = new Color[] { kGreenTarget, kRedTarget, kYellowTarget, kBlueTarget };
 
     match.addColorMatch(kBlueTarget);
     match.addColorMatch(kGreenTarget);
@@ -73,7 +78,7 @@ public class PanelManipulator extends Subsystem {
     match.addColorMatch(Color.kBlack);
   }
 
-  public Color getColor() {    
+  public Color getColor() {
     return sensor.getColor();
   }
 
@@ -115,7 +120,6 @@ public class PanelManipulator extends Subsystem {
     SmartDashboard.putString("Detected Color", colorString);
   }
 
-
   public double setPosition(double position) {
     talon.set(ControlMode.Position, position);
     return position;
@@ -126,6 +130,15 @@ public class PanelManipulator extends Subsystem {
   }
 
   public void stop() {
+    talon.set(ControlMode.PercentOutput, 0);   
+  }
+
+  public void extend() {
+    solenoid.set(Value.kForward);
+  }
+
+  public void retract() {
+    solenoid.set(Value.kReverse);
   }
 
 }
