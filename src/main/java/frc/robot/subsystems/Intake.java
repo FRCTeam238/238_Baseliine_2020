@@ -7,10 +7,13 @@
 
 package frc.robot.subsystems;
 
+import java.util.function.BooleanSupplier;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.RobotMap;
 
@@ -28,35 +31,28 @@ public class Intake extends Subsystem {
     public Intake() {
         initTalons();
         solenoid = new DoubleSolenoid(forwarChannel, reverseChannel);
+        //solenoid = RobotMap.IntakeDevices.intakeSolenoid;
     }
 
     @Override 
     public void initDefaultCommand() {
+
     }
 
     public void initTalons() {
         intakeMasterDrive.configFactoryDefault();
     }
 
-    public void resetEncoder(){
-        intakeMasterDrive.setSelectedSensorPosition(0,0,0);
-    }
-
-    public double getEncoderTicks(){
-        double encoderTicks = intakeMasterDrive.getSelectedSensorPosition();
-        return encoderTicks;
-    }
-
     private void setPower(double speedValue){
         intakeMasterDrive.set(ControlMode.PercentOutput, speedValue);
     }
 
-    public void in() {
-        setPower(INTAKEPOWER);
+    public void in(double speed) {
+        setPower(speed);
     }
 
-    public void out() {
-        setPower(-INTAKEPOWER);
+    public void out(double speed) {
+        setPower(speed);
     }
 
     public void stop(){
@@ -69,6 +65,14 @@ public class Intake extends Subsystem {
 
     public void retractIntake() {
         solenoid.set(DoubleSolenoid.Value.kReverse);
+    }
+
+    public DoubleSolenoid.Value getDirection() {
+        return solenoid.get();
+    }
+
+    public BooleanSupplier isOutsideLimits(Joystick controller, int axis){
+        return () -> -0.2 >= controller.getRawAxis(axis) || controller.getRawAxis(axis) >= 0.2;
     }
 
 }
