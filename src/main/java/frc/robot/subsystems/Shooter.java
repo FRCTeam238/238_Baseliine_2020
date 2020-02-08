@@ -29,7 +29,7 @@ import frc.robot.RobotMap;
 public class Shooter extends Subsystem {
     private final TalonSRX shooterMasterDrive = RobotMap.ShooterDevices.shooterMaster;
     //private final CANSparkMax shooterMasterDrive = RobotMap.ShooterDevices.shooterMaster;
-    //private CANSparkMax shooterFollowerDrive;
+    private CANSparkMax shooterFollowerDrive;
     private final int followerID = 44;
     //NOT THE REAL ID
     private CANPIDController shooterPID;
@@ -92,6 +92,23 @@ public class Shooter extends Subsystem {
     public void setSpeed(double speedValue) {
         desiredSpeedPID = speedValue;
         shooterPID.setReference(speedValue, ControlType.kVelocity);
+    }
+
+    public boolean isAtSpeed() {
+
+        //get current speed
+        //eval against desiredSpeedPID
+        // allow for range
+        boolean inRange = false;
+        double tolerance = 10;
+        double currentSpeed = getSpeed();
+        double speedDifference = currentSpeed - desiredPositionPID;
+        if(Math.abs(speedDifference) < tolerance){
+            inRange = true;
+        }else{
+            inRange = false;
+        }
+        return inRange;
     }
 
     public void simpleSetSpeed(double speedValue){
