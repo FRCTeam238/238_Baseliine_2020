@@ -23,7 +23,7 @@ import frc.robot.commands.IntakeInOutCommand;
  * Add your docs here.
  */
 public class Intake extends Subsystem {
-    private final TalonSRX intakeMasterDrive = RobotMap.IntakeDevices.INTAKE_MASTER_TALON;
+    private final TalonSRX intakeMasterDrive = RobotMap.TurretDevices.turretTalon;//IntakeDevices.INTAKE_MASTER_TALON;
     private final int forwarChannel = RobotMap.IntakeDevices.FORWARD_CHANNEL;
     private final int reverseChannel = RobotMap.IntakeDevices.REVERSE_CHANNEL;
     private DoubleSolenoid solenoid;

@@ -7,16 +7,29 @@
 
 package frc.robot.commands;
 
+import java.util.function.BooleanSupplier;
+
+import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.util.Color;
+import frc.core238.Logger;
 import frc.robot.Robot;
 import frc.robot.subsystems.Feeder;
+import frc.robot.subsystems.LED;
 
 public class FeederCommand extends Command {
 
+  public int heldBallsNumber = 0;
+  boolean lastStateBroken = true;
+  boolean secondSensorBroken = true;
+  boolean firstSensorBroken = true;
+  
+
   Feeder theFeeder = Robot.feeder;
+  LED led = Robot.led;
 
   public FeederCommand() {
-    //requires(theFeeder);
+    requires(theFeeder);
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
   }
@@ -24,14 +37,40 @@ public class FeederCommand extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
+    led.setColor(1, 150, 0, 0, 0); 
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
-  protected void execute() {
-    theFeeder.start();
+  protected void execute() {   
+    feederLogicLoop();    
   }
 
+ public void feederLogicLoop(){
+    int beginningNumber = 10;
+    int endNumber = 80;
+    firstSensorBroken = theFeeder.firstDetector.get();
+    
+    secondSensorBroken = theFeeder.secondDetector.get();
+    
+    if(firstSensorBroken == false){
+      theFeeder.start();      
+    }
+    if(secondSensorBroken == true && lastStateBroken == false){
+      heldBallsNumber++;      
+      Logger.Debug("Held Balls Count = " + heldBallsNumber);
+      endNumber = beginningNumber + (14*heldBallsNumber);
+      Color toSet = new Color(238, 238, 0);
+      led.setColor(beginningNumber, endNumber, toSet);
+      theFeeder.stop();
+    }
+    //activate LEDs here
+    
+    lastStateBroken = secondSensorBroken;
+}
+
+
+ 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {

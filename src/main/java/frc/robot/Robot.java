@@ -27,6 +27,7 @@ import frc.robot.subsystems.DrivetrainTrajectoryExtensions;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Hanger;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.LED;
 import frc.robot.subsystems.NavigationBoard;
 import frc.robot.subsystems.PanelManipulator;
 import frc.robot.subsystems.Shooter;
@@ -53,6 +54,7 @@ public class Robot extends TimedRobot {
   public static Hanger hanger;
   public static Intake intake;
   public static PanelManipulator panelManipulator;
+  public static LED led;
 
   // Dictionary of auto mode names and commands to run
   HashMap<String, CommandGroup> m_autoModes;
@@ -70,10 +72,12 @@ public class Robot extends TimedRobot {
     vision = new Vision(FieldConstants.VisionConstants.targetHeight, FieldConstants.VisionConstants.cameraHeight);
     //shooter = new Shooter();
     dashboard238 = new Dashboard238();
-    //feeder = new Feeder();
+    feeder = new Feeder();
     //hanger = new Hanger();
     intake = new Intake();
     panelManipulator = new PanelManipulator();
+    turret = new Turret();
+    led = new LED(2, 150);
 
     //SmartDashboard.putData(TrajectoryDrive.getExampleCommand());
   }

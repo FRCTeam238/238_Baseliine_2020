@@ -67,6 +67,8 @@ public class LED extends Subsystem {
   /* sets the color of LED id starting at begin thru end */
   public void setColor(final int begin, final int end, Color color) {
     final int howMany = end - begin;
+    Logger.Debug("begin = " + begin);
+    Logger.Debug("end = " + end);
 
     if( howMany > m_numLeds || end > m_numLeds){
       Logger.Debug("Invalid LED Range for LightShow");

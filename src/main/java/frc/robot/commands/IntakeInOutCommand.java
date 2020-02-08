@@ -24,7 +24,6 @@ public class IntakeInOutCommand extends Command{
 
     public IntakeInOutCommand(GenericHID controller, int axis) {
         requires(Robot.intake);
-        Logger.Debug("____________________________________________________________");
         this.speed = speed;
         this.controller = controller;
         this.axis = axis;

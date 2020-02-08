@@ -7,23 +7,27 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.command.Command;
+import frc.core238.Logger;
 import frc.robot.Robot;
 import frc.robot.subsystems.Turret;
 
 public class TurnTurretManually extends Command {
 
   Turret theTurret = Robot.turret;
-  private XboxController operatorController;
   double leftOperatorJsValue;
   double turnVelocity = 0;
   double tuningValue = 0.1;
 
-  public TurnTurretManually() {
+  private GenericHID controller;
+  private int axis;
+
+  public TurnTurretManually(GenericHID controller, int axis) {
     requires(theTurret);
-    operatorController = Robot.oi.operatorController;
+    this.axis = axis;
+    this.controller = controller;
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
   }
@@ -33,15 +37,23 @@ public class TurnTurretManually extends Command {
   protected void initialize() {
   }
 
+
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    turnVelocity = getWantedVelocity();
-    theTurret.setTurnVelocity(turnVelocity);
+    double speed = controller.getRawAxis(axis);
+    if (Math.abs(speed) > 0.2){
+      turnVelocity = getWantedVelocity();
+      theTurret.setTurnVelocity(turnVelocity);
+    } else {
+      theTurret.stop();
+    }
+    // turnVelocity = getWantedVelocity();
+    // theTurret.setTurnVelocity(turnVelocity);
   }
 
   protected double getWantedVelocity(){
-    leftOperatorJsValue = operatorController.getX(Hand.kRight);
+    leftOperatorJsValue = controller.getX(Hand.kRight);
     double power = leftOperatorJsValue * ((tuningValue * leftOperatorJsValue * leftOperatorJsValue) + (1-tuningValue));
     return power;
   }

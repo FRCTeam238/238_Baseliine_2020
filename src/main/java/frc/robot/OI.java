@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import edu.wpi.first.wpilibj.buttons.Trigger;
 import frc.core238.wrappers.AxisButton;
 import frc.core238.wrappers.AxisButton.Axis;
 import frc.core238.wrappers.InstantTrigger;
@@ -19,8 +20,10 @@ import frc.robot.commands.FeederCommand;
 import frc.robot.commands.HangCommand;
 import frc.robot.commands.IntakeExtendRetractCommand;
 import frc.robot.commands.IntakeInOutCommand;
+import frc.robot.commands.PrepareToShoot;
 import frc.robot.commands.RotatePanelNTimesBySensorCommand;
 import frc.robot.commands.RotateToColorCommand;
+import frc.robot.commands.TurnTurretManually;
 import frc.robot.subsystems.Drivetrain;
 
 //TODO: do we need the vision???????????? 
@@ -51,44 +54,34 @@ public class OI {
     JoystickButton climbButton = new JoystickButton(operatorController, XboxController.Button.kY.value);
     climbButton.whenPressed(new HangCommand());
 
-    JoystickButton deployPanelManipulatorButton = new JoystickButton(operatorController, XboxController.Button.kBumperLeft.value);
+    JoystickButton deployPanelManipulatorButton = new JoystickButton(operatorController, XboxController.Button.kBack.value);
     deployPanelManipulatorButton.whenPressed(new DeployPanelManipulatorCommand());
 
     //TODO: Make a proper button mapping
-    JoystickButton spinToProperColor = new JoystickButton(operatorController, XboxController.Button.kBumperLeft.value);
+    JoystickButton spinToProperColor = new JoystickButton(operatorController, XboxController.Button.kStart.value);
     spinToProperColor.whenPressed(new RotateToColorCommand());
 
     JoystickButton rotatePanelNTimesBySensor = new JoystickButton(operatorController, XboxController.Button.kA.value);
     rotatePanelNTimesBySensor.whenPressed(new RotatePanelNTimesBySensorCommand(FieldConstants.numberOfTimesToRotatePanelManipulator));
 
     JoystickButton spinUpShooterButton = new JoystickButton(operatorController, XboxController.Axis.kLeftTrigger.value);
+    //TODO: uncomment if there is a CANSPARKMAX 
     //spinUpShooterButton.whileHeld(new PrepareToShoot());
 
     JoystickButton shootButton = new JoystickButton(operatorController, XboxController.Axis.kRightTrigger.value);
     shootButton.whileHeld(new FeederCommand());
 
-    //InstantTrigger spinIntakeOut = new InstantTrigger(Robot.intake.isOutsideLimits(operatorController, 1));
-    //spinIntakeOut.whenActive(new IntakeInOutCommand(operatorController, XboxController.Axis.kLeftY.value));
-
-    //up is negitive and down is positive
-    //IntakeInOutCommand intakeInOutCommand = new IntakeInOutCommand(false); //()-> operatorController.getY(Hand.kRight));
-    //Robot.intake.setDefaultCommand(intakeInOutCommand);
-    // AxisButton intakeIn = new AxisButton(operatorController, Hand.kRight, Axis.Y, 0.2);
-    // intakeIn.whenPressed(new IntakeInOutCommand(operatorController.getRawAxis(XboxController.Axis.kLeftY.value)));
-
-    // AxisButton intakeOut = new AxisButton(operatorController, Hand.kRight, Axis.Y, -0.2);
-    // intakeOut.whenPressed(new IntakeInOutCommand(operatorController.getRawAxis(XboxController.Axis.kLeftY.`value)));
-
-    //JoystickButton extendIntakeJoystick = new JoystickButton(operatorController, XboxController.Button.kBumperLeft.value);
-    ///extendIntakeJoystick.whenPressed(new IntakeExtendRetractCommand(true));
-
     JoystickButton retractIntakeJoystick = new JoystickButton(operatorController, XboxController.Button.kBumperRight.value);
     retractIntakeJoystick.whenPressed(new IntakeExtendRetractCommand());
 
+    Robot.turret.setDefaultCommand(new TurnTurretManually(operatorController, XboxController.Axis.kRightX.value));
+
     Robot.intake.setDefaultCommand(new IntakeInOutCommand(RobotMap.Joysticks.operatorController, XboxController.Axis.kLeftY.value));
 
-  //  InstantTrigger t = new InstantTrigger(() -> Robot.feeder.getSensor1Triggered());
-  
+    Robot.feeder.setDefaultCommand(new FeederCommand());
+
+    //Trigger feedMe = new Trigger( () -> Robot.feeder.getSensor1Triggered());
+    //feedMe.whenActive(new FeederCommand;
   }
 
   //// CREATING BUTTONS
