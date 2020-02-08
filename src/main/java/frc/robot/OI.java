@@ -24,6 +24,7 @@ import frc.robot.commands.PrepareToShoot;
 import frc.robot.commands.RotatePanelNTimesBySensorCommand;
 import frc.robot.commands.RotateToColorCommand;
 import frc.robot.commands.TurnTurretManually;
+import frc.robot.commands.ShooterCommand;
 import frc.robot.subsystems.Drivetrain;
 
 //TODO: do we need the vision???????????? 
@@ -65,6 +66,7 @@ public class OI {
     rotatePanelNTimesBySensor.whenPressed(new RotatePanelNTimesBySensorCommand(FieldConstants.numberOfTimesToRotatePanelManipulator));
 
     JoystickButton spinUpShooterButton = new JoystickButton(operatorController, XboxController.Axis.kLeftTrigger.value);
+    //functionality taken over by PrepareToShoot automatically, left here for bench testing purposes
     //TODO: uncomment if there is a CANSPARKMAX 
     //spinUpShooterButton.whileHeld(new PrepareToShoot());
 
@@ -73,6 +75,9 @@ public class OI {
 
     JoystickButton retractIntakeJoystick = new JoystickButton(operatorController, XboxController.Button.kBumperRight.value);
     retractIntakeJoystick.whenPressed(new IntakeExtendRetractCommand());
+
+    JoystickButton automatedShoot = new JoystickButton(operatorController, XboxController.Button.kBumperLeft.value);
+    automatedShoot.whileHeld(new ShooterCommand());
 
     Robot.turret.setDefaultCommand(new TurnTurretManually(operatorController, XboxController.Axis.kRightX.value));
 
