@@ -18,8 +18,8 @@ import frc.robot.RobotMap;
  */
 public class Turret extends Subsystem {
 
-
-    private final TalonSRX turretMasterDrive = RobotMap.TurretDevices.turretTalon;
+    //TODO: temporary TalonSRX number for bench testing; CHANGE IT
+    private final TalonSRX turretMasterDrive = RobotMap.FeederDevices.feederTalon;//TurretDevices.turretTalon;
 
     final double kF = 1e-4;
     final double kP = 0;
