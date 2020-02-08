@@ -13,9 +13,11 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.RobotMap;
+import frc.robot.commands.IntakeInOutCommand;
 
 /**
  * Add your docs here.
@@ -71,7 +73,7 @@ public class Intake extends Subsystem {
         return solenoid.get();
     }
 
-    public BooleanSupplier isOutsideLimits(Joystick controller, int axis){
+    public BooleanSupplier isOutsideLimits(GenericHID controller, int axis){
         return () -> -0.2 >= controller.getRawAxis(axis) || controller.getRawAxis(axis) >= 0.2;
     }
 

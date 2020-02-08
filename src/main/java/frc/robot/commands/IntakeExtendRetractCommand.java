@@ -7,6 +7,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 
@@ -14,26 +15,24 @@ import frc.robot.Robot;
  * Add your docs here.
  */
 public class IntakeExtendRetractCommand extends Command {
-    private boolean extendIsTrue = false;
 
-    public IntakeExtendRetractCommand(boolean extend) {
+    public IntakeExtendRetractCommand() {
         requires(Robot.intake);
-        extendIsTrue = extend;
     }
 
     @Override
     protected void execute() {
-        if (extendIsTrue) {
-            Robot.intake.extendIntake();
+        if (Robot.intake.getDirection() == Value.kForward) {
+            Robot.intake.retractIntake();
         } 
         else {
-            Robot.intake.retractIntake();            
+            Robot.intake.extendIntake();            
         }
     }
 
     @Override
     protected boolean isFinished() {
         // TODO Auto-generated method stub
-        return false;
+        return true;
     }
 }

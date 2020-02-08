@@ -27,7 +27,8 @@ import frc.robot.RobotMap;
  * Add your docs here.
  */
 public class Shooter extends Subsystem {
-    private final CANSparkMax shooterMasterDrive = RobotMap.ShooterDevices.shooterMaster;
+    private final TalonSRX shooterMasterDrive = RobotMap.ShooterDevices.shooterMaster;
+    //private final CANSparkMax shooterMasterDrive = RobotMap.ShooterDevices.shooterMaster;
     //private CANSparkMax shooterFollowerDrive;
     private final int followerID = 44;
     //NOT THE REAL ID
@@ -59,12 +60,12 @@ public class Shooter extends Subsystem {
     }
 
     public void initSparkMax() {
-        shooterMasterDrive.restoreFactoryDefaults();
+        //shooterMasterDrive.restoreFactoryDefaults();
         //shooterFollowerDrive = new CANSparkMax(followerID, MotorType.kBrushless);
         //shooterFollowerDrive.restoreFactoryDefaults();
         //shooterFollowerDrive.follow(shooterMasterDrive);
-        shooterPID = shooterMasterDrive.getPIDController();
-        shooterEncoder = shooterMasterDrive.getEncoder();
+        //shooterPID = shooterMasterDrive.getPIDController();
+        //shooterEncoder = shooterMasterDrive.getEncoder();
         resetEncoder();
         shooterPID.setP(kP);
         shooterPID.setI(kI);
@@ -94,7 +95,7 @@ public class Shooter extends Subsystem {
     }
 
     public void simpleSetSpeed(double speedValue){
-        shooterMasterDrive.set(speedValue);
+        //shooterMasterDrive.set(speedValue);
     }
 
 

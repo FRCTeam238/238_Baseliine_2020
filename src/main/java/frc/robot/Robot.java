@@ -68,10 +68,10 @@ public class Robot extends TimedRobot {
     navigationBoard = new NavigationBoard();
     drivetrain = new DrivetrainTrajectoryExtensions();
     vision = new Vision(FieldConstants.VisionConstants.targetHeight, FieldConstants.VisionConstants.cameraHeight);
-    shooter = new Shooter();
+    //shooter = new Shooter();
     dashboard238 = new Dashboard238();
-    feeder = new Feeder();
-    hanger = new Hanger();
+    //feeder = new Feeder();
+    //hanger = new Hanger();
     intake = new Intake();
     panelManipulator = new PanelManipulator();
 

@@ -21,7 +21,7 @@ import frc.robot.RobotMap;
  */
 public class Hanger extends Subsystem {
 
-    private final TalonSRX hangerMasterDrive = RobotMap.HangerDevices.hangerTalon;
+    //private final TalonSRX hangerMasterDrive = RobotMap.HangerDevices.hangerTalon;
     double hangHeight = FieldConstants.hangHeight;
     double ticksPerInch;
 	public Object resetEncoder;
@@ -36,16 +36,17 @@ public class Hanger extends Subsystem {
     }
 
     public void resetEncoder() {
-        hangerMasterDrive.setSelectedSensorPosition(0, 0, 0);
+        //hangerMasterDrive.setSelectedSensorPosition(0, 0, 0);
     }
 
     private double getPosition() {
-        double encoderTicks = hangerMasterDrive.getSelectedSensorPosition();
+        double encoderTicks = 111;
+        //double encoderTicks = hangerMasterDrive.getSelectedSensorPosition();
         return encoderTicks;
     }
 
     public void hang(){
-        hangerMasterDrive.set(ControlMode.Position, inchesToTicks(hangHeight));
+        //hangerMasterDrive.set(ControlMode.Position, inchesToTicks(hangHeight));
     }
 
     private double inchesToTicks(double inches){

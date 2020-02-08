@@ -24,11 +24,12 @@ import frc.robot.RobotMap;
  */
 public class Feeder extends Subsystem {
     public final TalonSRX feederMasterDrive = RobotMap.FeederDevices.feederTalon;
-    public final DigitalOutput firstDetector = new DigitalOutput(255);
+    public final DigitalOutput firstDetector = new DigitalOutput(0);
+    public final DigitalOutput secondDetector = new DigitalOutput(1);
     //TODO: change FEEDER_OUTPUT to reasonable value;
     private final double FEEDER_OUTPUT = 0.5;
     private final double STOP_FEEDER_OUTPUT = 0;
-    
+    private int heldBallsNumber = 0;
     public Feeder() {
         initLiveWindow();
     }
@@ -42,8 +43,44 @@ public class Feeder extends Subsystem {
         feederMasterDrive.set(ControlMode.PercentOutput, FEEDER_OUTPUT);
     }
 
+    /*if(firstDetector == broken){
+     turn on
+    }
+
+    if(secondDetector == broken){
+        secondbroken = true
+    } else {
+        if(secondBroken == true){
+            turn off
+            secondBroken = false
+        }
+    }
+    
+
+
+    */
+
     public void stop(){
         feederMasterDrive.set(ControlMode.PercentOutput, STOP_FEEDER_OUTPUT);
+    }
+
+    public void feederLogicLoop(){
+        boolean lastStateBroken = false;
+        boolean secondSensorBroken = false;
+        boolean firstSensorBroken = false;
+        firstSensorBroken = firstDetector.get();
+        secondSensorBroken = secondDetector.get();
+        if(firstSensorBroken == true){
+            start();
+        }
+        if(secondSensorBroken == false && lastStateBroken == true){
+            heldBallsNumber++;
+            stop();
+        }
+        //activate LEDs here
+        if(secondSensorBroken == true){
+            lastStateBroken = true;
+        }
     }
 
     private double getMotorOutput(){

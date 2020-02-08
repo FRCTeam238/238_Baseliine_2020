@@ -7,26 +7,36 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
+import frc.core238.Logger;
 import frc.robot.Robot;
 
 /**
  * Add your docs here.
  */
 public class IntakeInOutCommand extends Command{
-    private boolean isIn = false;
+    private double speed = 0;
+    private boolean isDone = false;
+    private GenericHID controller;
+    private int axis;
 
-    public IntakeInOutCommand(boolean isIn) {
+    public IntakeInOutCommand(GenericHID controller, int axis) {
         requires(Robot.intake);
-        this.isIn = isIn;
+        Logger.Debug("____________________________________________________________");
+        this.speed = speed;
+        this.controller = controller;
+        this.axis = axis;
     }
 
     @Override
     protected void execute() {
-        if (isIn) {
-            Robot.intake.in();
+        speed = controller.getRawAxis(axis);
+        if (Math.abs(speed) < 0.2){
+            Robot.intake.stop();
         } else {
-            Robot.intake.out();
+            Robot.intake.in(speed);
         }
     }
 
@@ -43,7 +53,7 @@ public class IntakeInOutCommand extends Command{
     @Override
     protected boolean isFinished() {
         // TODO Auto-generated method stub
-        return false;
+        return isDone;
     }
 
 

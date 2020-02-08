@@ -5,36 +5,12 @@
         {
           "Name": "DelayByDashboardInput",
           "Parameters": [
-            "Shoot Delay"
+            "false",
+            "Shooter Delay"
           ]
         }
       ],
-      "Name": "VariableShootDelay"
-    },
-    {
-      "Commands": [
-        {
-          "Name": "DriveStraightWithoutSensors",
-          "Parameters": [
-            "0.5",
-            "2"
-          ]
-        },
-        {
-          "Name": "DelayByDashboardInput",
-          "Parameters": [
-            "Drive Delay"
-          ]
-        },
-        {
-          "Name": "DriveStraightWithoutSensors",
-          "Parameters": [
-            "0.5",
-            "2"
-          ]
-        }
-      ],
-      "Name": "VariableDelayTest"
+      "Name": "DelayShooterByDash"
     }
   ]
 }
