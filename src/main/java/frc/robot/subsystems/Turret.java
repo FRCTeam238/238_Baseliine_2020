@@ -7,10 +7,19 @@
 
 package frc.robot.subsystems;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
+import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
+import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
+import edu.wpi.first.wpilibj.Sendable;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import frc.core238.wrappers.SendableWrapper;
 import frc.robot.RobotMap;
 
 /**
@@ -21,13 +30,17 @@ public class Turret extends Subsystem {
     //TODO: temporary TalonSRX number for bench testing; CHANGE IT
     private final TalonSRX turretMasterDrive = RobotMap.FeederDevices.feederTalon;//TurretDevices.turretTalon;
 
-    final double kF = 1e-4;
+    final double timeFromNeutralToFull = 0.2; //seconds
+
+    final double kF = 1e-7;
     final double kP = 0;
     final double kI = 0;
     final double kD = 0;
 
     public Turret() {
         initTalons();
+        resetEncoder();
+        initLiveWindow();
     }
 
     @Override
@@ -39,10 +52,15 @@ public class Turret extends Subsystem {
     public void initTalons() {
         turretMasterDrive.configFactoryDefault();
         turretMasterDrive.selectProfileSlot(0, 0);
+        turretMasterDrive.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen);
+        turretMasterDrive.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen);
+        turretMasterDrive.configClosedloopRamp(timeFromNeutralToFull);
         turretMasterDrive.config_kF(0, kF);
         turretMasterDrive.config_kP(0, kP);
         turretMasterDrive.config_kI(0, kI);
         turretMasterDrive.config_kD(0, kD);
+        turretMasterDrive.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
+        turretMasterDrive.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 1, 0);
     }
 
     private void resetEncoder() {
@@ -77,5 +95,20 @@ public class Turret extends Subsystem {
     public void neutral(){
         turretMasterDrive.set(ControlMode.PercentOutput, 0);
     }
+
+    private void initLiveWindow() {
+        SendableWrapper power = new SendableWrapper(builder -> {
+            builder.addDoubleProperty("Encoder", this::getEncoderTicks, null);
+        });
+
+        addChild("Encoder", power);
+    }
+
+    private List<SendableWrapper> _sendables = new ArrayList<>();
+    private void addChild(String name, SendableWrapper wrapper){
+      _sendables.add(wrapper);
+      addChild(name, (Sendable)wrapper); 
+    }
+
 
 }

@@ -12,6 +12,9 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.buttons.Trigger;
+import edu.wpi.first.wpilibj.command.InstantCommand;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.core238.Logger;
 import frc.core238.wrappers.AxisButton;
 import frc.core238.wrappers.AxisButton.Axis;
 import frc.core238.wrappers.InstantTrigger;
@@ -23,6 +26,7 @@ import frc.robot.commands.IntakeInOutCommand;
 import frc.robot.commands.PrepareToShoot;
 import frc.robot.commands.RotatePanelNTimesBySensorCommand;
 import frc.robot.commands.RotateToColorCommand;
+import frc.robot.commands.SetShooterSpeedCommand;
 import frc.robot.commands.TurnTurretManually;
 import frc.robot.commands.ShooterCommand;
 import frc.robot.subsystems.Drivetrain;
@@ -66,6 +70,15 @@ public class OI {
     rotatePanelNTimesBySensor.whenPressed(new RotatePanelNTimesBySensorCommand(FieldConstants.numberOfTimesToRotatePanelManipulator));
 
     JoystickButton spinUpShooterButton = new JoystickButton(operatorController, XboxController.Axis.kLeftTrigger.value);
+    //SetShooterSpeedCommand manualShoot = ;
+    spinUpShooterButton.whileHeld(new SetShooterSpeedCommand(4000));
+    //InstantCommand manualShoot = new InstantCommand("startshooter", () -> Robot.shooter.setSpeed(4000));
+    SmartDashboard.putData(new SetShooterSpeedCommand(4000));
+    //spinUpShooterButton.whileHeld(new InstantCommand("startshooter", () -> Robot.shooter.setSpeed(4000)));
+    InstantCommand manualStop = new InstantCommand("StopShooter", Robot.shooter, () -> Robot.shooter.neutral());
+    SmartDashboard.putData(manualStop);
+    
+    //spinUpShooterButton.whenReleased(manualStop);
     //functionality taken over by PrepareToShoot automatically, left here for bench testing purposes
     //TODO: uncomment if there is a CANSPARKMAX 
     //spinUpShooterButton.whileHeld(new PrepareToShoot());

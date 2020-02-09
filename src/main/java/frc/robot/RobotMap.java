@@ -64,8 +64,8 @@ public final class RobotMap {
   public static class ShooterDevices {
     //TODO: change to real number
     public static int SHOOTER_MASTER = 16;
-    //public static CANSparkMax shooterMaster = new CANSparkMax(SHOOTER_MASTER, MotorType.kBrushless);
-    public static TalonSRX shooterMaster = TalonSRX_238.create(SHOOTER_MASTER, Robot.isSimulation());
+    public static CANSparkMax shooterMaster = new CANSparkMax(SHOOTER_MASTER, MotorType.kBrushless);
+    //public static TalonSRX shooterMaster = TalonSRX_238.create(SHOOTER_MASTER, Robot.isSimulation());
   }
 
   public static class IntakeDevices {

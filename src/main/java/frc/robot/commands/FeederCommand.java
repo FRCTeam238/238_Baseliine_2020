@@ -80,6 +80,9 @@ public class FeederCommand extends Command {
   // Called once after isFinished returns true
   @Override
   protected void end() {
+    heldBallsNumber = 0;
+    //TODO change hard coded values
+    led.setColor(1, 60, 0, 0, 0);
     theFeeder.stop();
   }
 

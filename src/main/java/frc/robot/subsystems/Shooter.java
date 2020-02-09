@@ -27,10 +27,10 @@ import frc.robot.RobotMap;
  * Add your docs here.
  */
 public class Shooter extends Subsystem {
-    private final TalonSRX shooterMasterDrive = RobotMap.ShooterDevices.shooterMaster;
+    private final CANSparkMax shooterMasterDrive = RobotMap.ShooterDevices.shooterMaster;
     //private final CANSparkMax shooterMasterDrive = RobotMap.ShooterDevices.shooterMaster;
     private CANSparkMax shooterFollowerDrive;
-    private final int followerID = 44;
+    private final int followerID = 17;
     //NOT THE REAL ID
     private CANPIDController shooterPID;
     private CANEncoder shooterEncoder;
@@ -39,7 +39,7 @@ public class Shooter extends Subsystem {
     private double kI = 0;
     private double kD = 0;
     private double kIZ = 0;
-    private double kFF = 1.688e-4;
+    private double kFF = 2.2e-4;
     private double kMinOutput = 0;
     private double kMaxOutput = 12;
 
@@ -60,13 +60,16 @@ public class Shooter extends Subsystem {
     }
 
     public void initSparkMax() {
-        //shooterMasterDrive.restoreFactoryDefaults();
-        //shooterFollowerDrive = new CANSparkMax(followerID, MotorType.kBrushless);
-        //shooterFollowerDrive.restoreFactoryDefaults();
-        //shooterFollowerDrive.follow(shooterMasterDrive);
-        //shooterPID = shooterMasterDrive.getPIDController();
-        //shooterEncoder = shooterMasterDrive.getEncoder();
+        shooterMasterDrive.restoreFactoryDefaults();
+        shooterMasterDrive.setInverted(true);
+        shooterFollowerDrive = new CANSparkMax(followerID, MotorType.kBrushless);
+        shooterFollowerDrive.restoreFactoryDefaults();
+        shooterFollowerDrive.follow(shooterMasterDrive, true);
+        shooterPID = shooterMasterDrive.getPIDController();
+        shooterEncoder = shooterMasterDrive.getEncoder();
         resetEncoder();
+        shooterMasterDrive.setSmartCurrentLimit(40);
+        shooterFollowerDrive.setSmartCurrentLimit(40);
         shooterPID.setP(kP);
         shooterPID.setI(kI);
         shooterPID.setD(kD);
@@ -94,6 +97,14 @@ public class Shooter extends Subsystem {
         shooterPID.setReference(speedValue, ControlType.kVelocity);
     }
 
+    public void setPower(double power){
+        if(Math.abs(power) > 0.15){
+            double sign = ( power / (Math.abs(power)));
+            power = sign*0.15;
+        }
+        shooterMasterDrive.set(power);
+    }
+
     public boolean isAtSpeed() {
 
         //get current speed
@@ -117,8 +128,13 @@ public class Shooter extends Subsystem {
 
 
     //Changed from percent to raw
-    public double getPower() {
+    public double getCurrent() {
         double power = shooterMasterDrive.getOutputCurrent();
+        return power;
+    }
+
+    public double getPower(){
+        double power = shooterMasterDrive.get();
         return power;
     }
 
@@ -154,7 +170,7 @@ public class Shooter extends Subsystem {
 
     private void initLiveWindow() {
         SendableWrapper power = new SendableWrapper(builder -> {
-            builder.addDoubleProperty("Power", this::getPower, null);
+            builder.addDoubleProperty("Power", this::getCurrent, null);
         });
 
         SendableWrapper speed = new SendableWrapper(builder -> {
@@ -165,9 +181,14 @@ public class Shooter extends Subsystem {
             builder.addDoubleProperty("DesiredSpeed", this::getDesiredSpeed, null);
         });
 
+        SendableWrapper actualPower = new SendableWrapper(builder -> {
+            builder.addDoubleProperty("actualPower", this::getPower, null);
+        });
+
         addChild("Power", power);
         addChild("Speed", speed);
         addChild("DesiredSpeed", desiredSpeed);
+        addChild("Actual power", actualPower);
     }
 
     private List<SendableWrapper> _sendables = new ArrayList<>();
