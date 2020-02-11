@@ -19,9 +19,9 @@ public class PrepareToShoot extends Command {
   private Shooter theShooter = Robot.shooter;
 
   private final double gravityAcceleration = 386.22;
-  private double shootingAngle = Math.PI/4; // made-up, IN RADIANS
+  private double shootingAngle = Math.PI / 4; // made-up, IN RADIANS
   private final double wheelRadius = 6;
-  private double distance = -1;
+  private double distance = 150; // -1
 
   public PrepareToShoot(double distance) {
     requires(theShooter);
@@ -44,7 +44,14 @@ public class PrepareToShoot extends Command {
   @Override
   protected void execute() {
     Logger.Debug("PrepareToShoot Command Executed");
-    double wantedSpeed = calculateSpeed(getDistanceToTarget(), shootingAngle, gravityAcceleration, wheelRadius);
+    double wantedSpeed = 4000;
+    boolean shooterHasVision = hasVision();
+    if(shooterHasVision){
+      distance = getDistanceToTarget();
+      wantedSpeed = calculateSpeed(getDistanceToTarget(), shootingAngle, gravityAcceleration, wheelRadius);
+    } else {
+      wantedSpeed = 4000;
+    }
     theShooter.setSpeed(wantedSpeed);
 
   }
@@ -52,11 +59,12 @@ public class PrepareToShoot extends Command {
   // tell shooter to run at that speed
 
   // In Velocity mode, output value is in position change / 100ms.
-  public static double calculateSpeed(double distance, double shootingAngle, double gravityAcceleration, double wheelRadius) {
+  public static double calculateSpeed(double distance, double shootingAngle, double gravityAcceleration,
+      double wheelRadius) {
     double velocityBall;
     double velocityWheel;
     double rotationsPerMinute = 0;
-  
+
     velocityBall = Trig238.calculateBallVelocity(FieldConstants.VisionConstants.getTargetheight(), gravityAcceleration,
         shootingAngle, distance);
 
@@ -67,11 +75,11 @@ public class PrepareToShoot extends Command {
 
     rotationsPerMinute = 30 * velocityWheel / (wheelRadius * Math.PI);
 
-    if(distance > 507.25){
+    if (distance > 507.25) {
       rotationsPerMinute = 0;
     }
 
-    if(rotationsPerMinute > 5000){
+    if (rotationsPerMinute > 5000) {
       rotationsPerMinute = 5000;
     }
 
@@ -81,21 +89,34 @@ public class PrepareToShoot extends Command {
   }
 
   private double getDistanceToTarget() {
-    return distance == -1 ? Robot.vision.getDistanceToTarget() : distance;
+
+    boolean hasVision = hasVision();
+    if (hasVision) {
+      distance = Robot.vision.getDistanceToTarget();
+    } else {
+      distance = 1;
+    }
+    return distance;
   }
+
+  private boolean hasVision(){
+    boolean hasVision = Robot.vision.hasTarget();
+    return hasVision;
+  }
+
+  // return distance == -1 ? Robot.vision.getDistanceToTarget() : distance;
+
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
     return false;
     /*
-    double tolerance = 1; // rpm tolerance
-    double shooterSpeed = theShooter.getSpeed();
-    if (shooterSpeed >= (rotationsPerMinute - tolerance) && shooterSpeed <= (rotationsPerMinute + tolerance)) {
-      return true;
-    } else {
-      return false;
-    } */
+     * double tolerance = 1; // rpm tolerance double shooterSpeed =
+     * theShooter.getSpeed(); if (shooterSpeed >= (rotationsPerMinute - tolerance)
+     * && shooterSpeed <= (rotationsPerMinute + tolerance)) { return true; } else {
+     * return false; }
+     */
   }
 
   // Called once after isFinished returns true
