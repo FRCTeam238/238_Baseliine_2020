@@ -22,7 +22,7 @@ public class PrepareToShoot extends Command {
   private double shootingAngle = Math.PI / 4; // made-up, IN RADIANS
   private final double wheelRadius = 6;
   private final double defaultSpeed = 4000;
-  private double slipValue = 1;
+  private static double slipValue = 1;
   private double distance = 150; // -1
 
   public PrepareToShoot(double distance) {
@@ -45,14 +45,12 @@ public class PrepareToShoot extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Logger.Debug("PrepareToShoot Command Executed");
+    //Logger.Debug("PrepareToShoot Command Executed");
     double wantedSpeed = defaultSpeed;
     boolean shooterHasVision = hasVision();
     if(shooterHasVision){
       distance = getDistanceToTarget();
       wantedSpeed = calculateSpeed(getDistanceToTarget(), shootingAngle, gravityAcceleration, wheelRadius);
-    } else {
-      wantedSpeed = defaultSpeed;
     }
     theShooter.setSpeed(wantedSpeed);
 
@@ -75,11 +73,13 @@ public class PrepareToShoot extends Command {
     velocityWheel = Trig238.calculateSingleWheelShooterVelocity(velocityBall, wheelRadius,
         FieldConstants.GamePieces.getBallradius());
 
+    calculateSlipValue();
+
     velocityWheel = slipValue * velocityWheel;
 
     rotationsPerMinute = 30 * velocityWheel / (wheelRadius * Math.PI);
 
-    if (distance > 507.25) {
+    if (distance > 507.25 || distance <= 0) {
       rotationsPerMinute = 0;
     }
 
@@ -87,7 +87,7 @@ public class PrepareToShoot extends Command {
       rotationsPerMinute = 5000;
     }
 
-    Logger.Debug("shooter expected rpm = " + rotationsPerMinute);
+    //Logger.Debug("shooter expected rpm = " + rotationsPerMinute);
 
     return rotationsPerMinute;
   }
@@ -101,6 +101,10 @@ public class PrepareToShoot extends Command {
       distance = 1;
     }
     return distance;
+  }
+
+  private static void calculateSlipValue(){
+    slipValue = 3;
   }
 
   private boolean hasVision(){
