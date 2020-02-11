@@ -29,8 +29,8 @@ import frc.robot.RobotMap;
 public class Shooter extends Subsystem {
     private final CANSparkMax shooterMasterDrive = RobotMap.ShooterDevices.shooterMaster;
     //private final CANSparkMax shooterMasterDrive = RobotMap.ShooterDevices.shooterMaster;
-    private CANSparkMax shooterFollowerDrive;
-    private final int followerID = 17;
+    private CANSparkMax shooterFollowerDrive = RobotMap.ShooterDevices.shooterFollower;
+    //private final int followerID = 17;
     //NOT THE REAL ID
     private CANPIDController shooterPID;
     private CANEncoder shooterEncoder;
@@ -62,7 +62,6 @@ public class Shooter extends Subsystem {
     public void initSparkMax() {
         shooterMasterDrive.restoreFactoryDefaults();
         shooterMasterDrive.setInverted(true);
-        shooterFollowerDrive = new CANSparkMax(followerID, MotorType.kBrushless);
         shooterFollowerDrive.restoreFactoryDefaults();
         shooterFollowerDrive.follow(shooterMasterDrive, true);
         shooterPID = shooterMasterDrive.getPIDController();
