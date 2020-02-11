@@ -11,10 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
 import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
-import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.Sendable;
@@ -28,7 +26,8 @@ import frc.robot.RobotMap;
 public class Turret extends Subsystem {
 
     //TODO: temporary TalonSRX number for bench testing; CHANGE IT
-    private final TalonSRX turretMasterDrive = RobotMap.FeederDevices.feederTalon;//TurretDevices.turretTalon;
+    private final TalonSRX turretMasterDrive = RobotMap.TurretDevices.turretTalon;
+    private final double totalTurretTicks = 44404.0;
 
     final double timeFromNeutralToFull = 0.2; //seconds
 
@@ -59,8 +58,8 @@ public class Turret extends Subsystem {
         turretMasterDrive.config_kP(0, kP);
         turretMasterDrive.config_kI(0, kI);
         turretMasterDrive.config_kD(0, kD);
-        turretMasterDrive.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
-        turretMasterDrive.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 1, 0);
+        ///turretMasterDrive.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
+        //turretMasterDrive.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 1, 0);
     }
 
     private void resetEncoder() {
@@ -88,8 +87,9 @@ public class Turret extends Subsystem {
     }
 
     public void stop(){
-        double currentPosition = getPosition();
-        setPosition(currentPosition);
+        //double currentPosition = getPosition();
+        //setPosition(currentPosition);
+        turretMasterDrive.set(ControlMode.PercentOutput, 0);
     }
 
     public void neutral(){

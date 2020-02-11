@@ -8,18 +8,17 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.command.Command;
-import frc.core238.Logger;
 import frc.robot.Robot;
 import frc.robot.subsystems.Turret;
 
 public class TurnTurretManually extends Command {
 
-  Turret theTurret = Robot.turret;
-  double leftOperatorJsValue;
-  double turnVelocity = 0;
-  double tuningValue = 0.1;
+  private Turret theTurret = Robot.turret;
+  public double leftOperatorJsValue;
+  private double turnVelocity = 0;
+  private double tuningValue = 0.1;
+  private final double turretSpeedScale = 0.35;
 
   private GenericHID controller;
   private int axis;
@@ -43,7 +42,7 @@ public class TurnTurretManually extends Command {
   protected void execute() {
     double speed = controller.getRawAxis(axis);
     if (Math.abs(speed) > 0.2){
-      turnVelocity = getWantedVelocity();
+      turnVelocity = getWantedVelocity(speed);
       theTurret.setTurnVelocity(turnVelocity);
     } else {
       theTurret.stop();
@@ -52,10 +51,9 @@ public class TurnTurretManually extends Command {
     // theTurret.setTurnVelocity(turnVelocity);
   }
 
-  protected double getWantedVelocity(){
-    leftOperatorJsValue = controller.getX(Hand.kRight);
-    double power = leftOperatorJsValue * ((tuningValue * leftOperatorJsValue * leftOperatorJsValue) + (1-tuningValue));
-    return power;
+  protected double getWantedVelocity(double rawSpeed){
+    double power = rawSpeed * ((tuningValue * rawSpeed * rawSpeed) + (1-tuningValue));
+    return power * turretSpeedScale;
   }
   // Make this return true when this Command no longer needs to run execute()
   @Override
