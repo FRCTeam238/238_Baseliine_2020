@@ -67,8 +67,10 @@ public class Vision extends Subsystem {
   }
   public void initLimelight(){
     table = NetworkTableInstance.getDefault().getTable("limelight");
-    cameraMode();
-    ledsOff();
+    //cameraMode();
+    //ledsOff();
+    trackingMode();
+    ledsOn();
   }
 
   /** @return pitch (vertical angle) read by limelight */

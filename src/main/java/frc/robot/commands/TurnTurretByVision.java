@@ -8,6 +8,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
+import frc.core238.Logger;
 import frc.robot.Robot;
 import frc.robot.subsystems.Turret;
 
@@ -30,7 +31,9 @@ public class TurnTurretByVision extends Command {
   @Override
   protected void execute() {
     findWantedOrientation();
-    theTurret.setPosition(wantedOrientation);
+    double desiredOutput = theTurret.limelightAngleConversion * wantedOrientation;
+    Logger.Debug("Turret vision desired output: " + desiredOutput);
+    theTurret.setVelocity(desiredOutput);
   }
 
   protected void findWantedOrientation(){

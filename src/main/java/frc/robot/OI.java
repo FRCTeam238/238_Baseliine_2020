@@ -7,11 +7,9 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
-import edu.wpi.first.wpilibj.buttons.Trigger;
 import edu.wpi.first.wpilibj.command.InstantCommand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.core238.Logger;
@@ -20,12 +18,12 @@ import frc.robot.commands.FeederCommand;
 import frc.robot.commands.HangCommand;
 import frc.robot.commands.IntakeExtendRetractCommand;
 import frc.robot.commands.IntakeInOutCommand;
-import frc.robot.commands.PrepareToShoot;
 import frc.robot.commands.RotatePanelNTimesBySensorCommand;
 import frc.robot.commands.RotateToColorCommand;
 import frc.robot.commands.SetShooterSpeedCommand;
-import frc.robot.commands.TurnTurretManually;
 import frc.robot.commands.ShooterCommand;
+import frc.robot.commands.TurnTurretByVision;
+import frc.robot.commands.TurnTurretManually;
 import frc.robot.subsystems.Drivetrain;
 
 //TODO: do we need the vision???????????? 
@@ -63,8 +61,8 @@ public class OI {
     JoystickButton spinToProperColor = new JoystickButton(operatorController, XboxController.Button.kStart.value);
     spinToProperColor.whenPressed(new RotateToColorCommand());
 
-    JoystickButton rotatePanelNTimesBySensor = new JoystickButton(operatorController, XboxController.Button.kA.value);
-    rotatePanelNTimesBySensor.whenPressed(new RotatePanelNTimesBySensorCommand(FieldConstants.numberOfTimesToRotatePanelManipulator));
+    //JoystickButton rotatePanelNTimesBySensor = new JoystickButton(operatorController, XboxController.Button.kA.value);
+    //rotatePanelNTimesBySensor.whenPressed(new RotatePanelNTimesBySensorCommand(FieldConstants.numberOfTimesToRotatePanelManipulator));
 
     JoystickButton spinUpShooterButton = new JoystickButton(operatorController, XboxController.Axis.kLeftTrigger.value);
     //SetShooterSpeedCommand manualShoot = ;
@@ -88,6 +86,9 @@ public class OI {
 
     JoystickButton automatedShoot = new JoystickButton(operatorController, XboxController.Button.kBumperLeft.value);
     automatedShoot.whileHeld(new ShooterCommand());
+
+    JoystickButton turnTurretByVision = new JoystickButton(operatorController, XboxController.Button.kA.value);
+    turnTurretByVision.whileHeld(new TurnTurretByVision());
 
     Robot.turret.setDefaultCommand(new TurnTurretManually(operatorController, XboxController.Axis.kRightX.value));
 

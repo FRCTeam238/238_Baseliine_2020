@@ -28,12 +28,14 @@ public class Turret extends Subsystem {
     //TODO: temporary TalonSRX number for bench testing; CHANGE IT
     private final TalonSRX turretMasterDrive = RobotMap.TurretDevices.turretTalon;
     private final double totalTurretTicks = 44404.0;
+    
+    public final double limelightAngleConversion = -160;
 
     final double timeFromNeutralToFull = 0.2; //seconds
 
-    final double kF = 1e-7;
-    final double kP = 0;
-    final double kI = 0;
+    final double kF = 0;
+    final double kP = 0.3;
+    final double kI = 0.;
     final double kD = 0;
 
     public Turret() {
@@ -110,5 +112,8 @@ public class Turret extends Subsystem {
       addChild(name, (Sendable)wrapper); 
     }
 
+    public void setVelocity(double velocity){
+        turretMasterDrive.set(ControlMode.Velocity, velocity);
+    }
 
 }
