@@ -21,6 +21,7 @@ public class PrepareToShoot extends Command {
   private final double gravityAcceleration = 386.22;
   private double shootingAngle = Math.PI / 4; // made-up, IN RADIANS
   private final double wheelRadius = 6;
+  private final double defaultSpeed = 4000;
   private double distance = 150; // -1
 
   public PrepareToShoot(double distance) {
@@ -44,13 +45,13 @@ public class PrepareToShoot extends Command {
   @Override
   protected void execute() {
     Logger.Debug("PrepareToShoot Command Executed");
-    double wantedSpeed = 4000;
+    double wantedSpeed = defaultSpeed;
     boolean shooterHasVision = hasVision();
     if(shooterHasVision){
       distance = getDistanceToTarget();
       wantedSpeed = calculateSpeed(getDistanceToTarget(), shootingAngle, gravityAcceleration, wheelRadius);
     } else {
-      wantedSpeed = 4000;
+      wantedSpeed = defaultSpeed;
     }
     theShooter.setSpeed(wantedSpeed);
 
