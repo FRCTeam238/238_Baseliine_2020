@@ -22,6 +22,7 @@ public class PrepareToShoot extends Command {
   private double shootingAngle = Math.PI / 4; // made-up, IN RADIANS
   private final double wheelRadius = 6;
   private final double defaultSpeed = 4000;
+  private double slipValue = 1;
   private double distance = 150; // -1
 
   public PrepareToShoot(double distance) {
@@ -73,6 +74,8 @@ public class PrepareToShoot extends Command {
 
     velocityWheel = Trig238.calculateSingleWheelShooterVelocity(velocityBall, wheelRadius,
         FieldConstants.GamePieces.getBallradius());
+
+    velocityWheel = slipValue * velocityWheel;
 
     rotationsPerMinute = 30 * velocityWheel / (wheelRadius * Math.PI);
 
