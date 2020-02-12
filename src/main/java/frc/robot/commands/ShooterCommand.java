@@ -32,7 +32,7 @@ public class ShooterCommand extends CommandGroup {
 
     CommandGroup TargetingDistance = new CommandGroup();
     TargetingDistance.addParallel(new TurnTurretByVision());
-    TargetingDistance.addParallel(new PrepareToShoot(150));
+    TargetingDistance.addParallel(new PrepareToShoot());
 
     CommandGroup FireBalls = new CommandGroup();
     FireBalls.addSequential(new IsAtSpeedCommand());

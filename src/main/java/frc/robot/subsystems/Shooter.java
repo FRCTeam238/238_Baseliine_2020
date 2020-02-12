@@ -16,6 +16,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANPIDController;
 import com.revrobotics.ControlType;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.Sendable;
@@ -35,11 +36,11 @@ public class Shooter extends Subsystem {
     private CANPIDController shooterPID;
     private CANEncoder shooterEncoder;
 
-    private double kP = 1e-5;
+    private double kP = 0.0008;//0.00005;
     private double kI = 0;
-    private double kD = 0;
+    private double kD = 0.01;
     private double kIZ = 0;
-    private double kFF = 2.2e-4;
+    private double kFF = 1.95e-4;
     private double kMinOutput = 0;
     private double kMaxOutput = 12;
 
@@ -64,6 +65,8 @@ public class Shooter extends Subsystem {
         shooterMasterDrive.setInverted(true);
         shooterFollowerDrive.restoreFactoryDefaults();
         shooterFollowerDrive.follow(shooterMasterDrive, true);
+        shooterMasterDrive.setIdleMode(IdleMode.kCoast);
+        shooterFollowerDrive.setIdleMode(IdleMode.kCoast);
         shooterPID = shooterMasterDrive.getPIDController();
         shooterEncoder = shooterMasterDrive.getEncoder();
         resetEncoder();
