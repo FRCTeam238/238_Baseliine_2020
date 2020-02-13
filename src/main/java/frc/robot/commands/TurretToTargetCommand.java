@@ -35,14 +35,13 @@ public class TurretToTargetCommand extends Command{
         if(currentDrivetrainAngle > currentTurretPos && currentDrivetrainAngle > offsetDrivetrain) {
             newTurretPosition = Robot.turret.setPosition(currentTurretPos - currentDrivetrainAngle);
             currentTurretPos = newTurretPosition;
-            Robot.turret.resetEncoder();
         } else if(currentDrivetrainAngle < currentTurretPos && currentDrivetrainAngle < offsetDrivetrain) {
             newTurretPosition = Robot.turret.setPosition(currentTurretPos - currentDrivetrainAngle);
             currentTurretPos = newTurretPosition; 
-            Robot.turret.resetEncoder();
         }
         // TODO Auto-generated method stub
     }
+
     @Override
     protected boolean isFinished() {
         // TODO Auto-generated method stub

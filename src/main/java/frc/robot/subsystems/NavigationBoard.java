@@ -22,7 +22,6 @@ public class NavigationBoard extends Subsystem {
   public final static double NAVIGATION_TURNING_DEADZONE = 1.5;
 
 	AHRS ahrs;
-	double currentYaw;
 	double currentRoll;
 	double targetYaw;
 	double ultrasonicDistance;
@@ -39,6 +38,9 @@ public class NavigationBoard extends Subsystem {
 	double current = 0;
 	double elapsed = 0;
 
+	private double previousYaw = 0;
+	private double newYaw = 0;
+
 	public NavigationBoard(){
 		init();
 	}
@@ -50,7 +52,6 @@ public class NavigationBoard extends Subsystem {
 
 		ahrs = new AHRS(SPI.Port.kMXP);
 		zeroYaw();
-		currentYaw = ahrs.getYaw();
 		currentRoll = ahrs.getRoll();
 		//		myUltrasonic = new Ultrasonic(CrusaderCommon.SONIC_OUTPUT_PORT,CrusaderCommon.SONIC_INPUT_PORT);
 		//		myUltrasonic.setEnabled(true);
@@ -81,6 +82,12 @@ public class NavigationBoard extends Subsystem {
 	}
 
 	public void zeroYaw() {
+		double currentYaw = getYaw();
+		if (previousYaw == 0) {
+			previousYaw = currentYaw;
+		} else {
+			previousYaw = previousYaw - currentYaw;
+		}
 		ahrs.zeroYaw();
 	}
 
@@ -94,8 +101,20 @@ public class NavigationBoard extends Subsystem {
 
 	public double getYaw() {
 		//TODO: add comments on what this is actually doing 
-		currentYaw = ((ahrs.getYaw() % 360) + 360) % 360;
+		double currentYaw = ((ahrs.getYaw() % 360) + 360) % 360;
 		return currentYaw;
+	}
+
+	public double getAbsoluteYaw() {
+		double currentYaw = getYaw();
+		if (previousYaw < currentYaw) {
+			newYaw = previousYaw - currentYaw;
+			return newYaw;
+		} else if (previousYaw > currentYaw) {
+			newYaw = previousYaw - currentYaw;
+			return newYaw;
+		}
+		return newYaw;
 	}
 
 	public double getAngle() {
@@ -147,7 +166,7 @@ public class NavigationBoard extends Subsystem {
 	//Tells us if we are at our target yaw
 	public boolean isAtTargetYaw()
 	{
-		currentYaw = ahrs.getYaw();
+		double currentYaw = ahrs.getYaw();
 		currentYaw = Math.abs(currentYaw);
 
 		Logger.Debug("Navigation(): isAtTargetYaw(): Current Yaw is : "+ currentYaw);
