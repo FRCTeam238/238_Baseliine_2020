@@ -64,7 +64,7 @@ public class Turret extends Subsystem {
         //turretMasterDrive.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 1, 0);
     }
 
-    private void resetEncoder() {
+    public void resetEncoder() {
         turretMasterDrive.setSelectedSensorPosition(0, 0, 0);
     }
 
@@ -73,10 +73,11 @@ public class Turret extends Subsystem {
         return encoderTicks;
     }
 
-    public void setPosition(double angle) {
+    public double setPosition(double angle) {
         //TODO: convert angle to position(ticks)
         double position = angle;
         turretMasterDrive.set(ControlMode.Position,  position);
+        return angle;
     }
 
     public void setTurnVelocity(double magnitude){
