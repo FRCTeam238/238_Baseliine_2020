@@ -54,7 +54,7 @@ public class FeederCommand extends Command {
     secondSensorBroken = theFeeder.secondDetector.get();
     
     if(firstSensorBroken == false){
-      theFeeder.start();      
+      theFeeder.start();       
     }
     if(secondSensorBroken == true && lastStateBroken == false){
       heldBallsNumber++;      

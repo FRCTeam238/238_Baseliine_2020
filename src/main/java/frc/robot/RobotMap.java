@@ -72,10 +72,8 @@ public final class RobotMap {
 
   public static class IntakeDevices {
     //TODO: change to real number
-    public static int INTAKE_MASTER = 4;
-    public static TalonSRX rightIntake = TalonSRX_238.create(INTAKE_MASTER, Robot.isSimulation());
     public static DoubleSolenoid intakeSolenoid;
-    public static int INTAKE_MASTER_ID = 4; //101
+    public static int INTAKE_MASTER_ID = 9;
     public static TalonSRX INTAKE_MASTER_TALON = new TalonSRX(INTAKE_MASTER_ID);
     public static int FORWARD_CHANNEL = 0;
     public static int REVERSE_CHANNEL = 5;
@@ -84,13 +82,13 @@ public final class RobotMap {
 
   public static class TurretDevices {
     //TODO: change to real number 
-    public static int TURRET_MASTER = 7;
+    public static int TURRET_MASTER = 11;
     public static TalonSRX turretTalon = TalonSRX_238.create(TURRET_MASTER, Robot.isSimulation());
   }
 
    public static class FeederDevices {
   //   //TODO: change to real number
-     public static int FEEDER_MASTER = 11;
+     public static int FEEDER_MASTER = 10;
      public static TalonSRX feederTalon = TalonSRX_238.create(FEEDER_MASTER, Robot.isSimulation()); 
    }
 
@@ -106,5 +104,10 @@ public final class RobotMap {
 
     //TODO: change the number to real numbers
     public static DoubleSolenoid panelSolenoid = new DoubleSolenoid(1,6);
+  }
+
+  public static class ClimberDevices {
+    public static int CLIMBER_MASTER = 4;
+    public static int CLIMBER_SLAVE = 5;
   }
 }

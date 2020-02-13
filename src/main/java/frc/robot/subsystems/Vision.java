@@ -41,7 +41,8 @@ public class Vision extends Subsystem {
   }
 
   public boolean hasTarget(){
-    return true;
+    boolean hasTarget = table.getEntry("tv").getDouble(0) == 1;
+    return hasTarget;
   }
 
   /** @return yaw (horizontal angle) read by limelight */
