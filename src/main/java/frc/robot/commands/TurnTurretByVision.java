@@ -55,6 +55,8 @@ public class TurnTurretByVision extends Command {
   @Override
   protected void end() {
     theTurret.stop();
+    vision.cameraMode();
+    vision.ledsOff();
   }
 
   // Called when another command which requires one or more of the same

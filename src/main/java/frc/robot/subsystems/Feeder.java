@@ -9,14 +9,13 @@ package frc.robot.subsystems;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.BooleanSupplier;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Sendable;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.DigitalInput;
 import frc.core238.wrappers.SendableWrapper;
 import frc.robot.RobotMap;
 
@@ -24,7 +23,7 @@ import frc.robot.RobotMap;
  * Add your docs here.
  */
 public class Feeder extends Subsystem {
-    public final TalonSRX feederMasterDrive = RobotMap.IntakeDevices.INTAKE_MASTER_TALON;//FeederDevices.feederTalon;
+    public final VictorSPX feederMasterDrive = RobotMap.FeederDevices.feederVictor;//FeederDevices.feederTalon;
     public final DigitalInput firstDetector = new DigitalInput(0);
     public final DigitalInput secondDetector = new DigitalInput(1);
     //TODO: change FEEDER_OUTPUT to reasonable value;

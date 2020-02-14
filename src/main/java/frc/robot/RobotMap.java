@@ -8,6 +8,7 @@
 package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.revrobotics.CANSparkMax;
@@ -89,7 +90,7 @@ public final class RobotMap {
    public static class FeederDevices {
   //   //TODO: change to real number
      public static int FEEDER_MASTER = 10;
-     public static TalonSRX feederTalon = TalonSRX_238.create(FEEDER_MASTER, Robot.isSimulation()); 
+     public static VictorSPX feederVictor = new VictorSPX(FEEDER_MASTER);
    }
 
   // public static class HangerDevices {
