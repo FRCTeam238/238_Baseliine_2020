@@ -68,10 +68,8 @@ public class Vision extends Subsystem {
   }
   public void initLimelight(){
     table = NetworkTableInstance.getDefault().getTable("limelight");
-    //cameraMode();
-    //ledsOff();
-    trackingMode();
-    ledsOn();
+    cameraMode();
+    ledsOff();
   }
 
   /** @return pitch (vertical angle) read by limelight */
@@ -92,5 +90,18 @@ public class Vision extends Subsystem {
     SmartDashboard.putNumber("Limelight Yaw", getYaw());
     SmartDashboard.putNumber("Limelight Pitch", getPitch());
     SmartDashboard.putNumber("Limelight Distance to Target", getDistanceToTarget());
+  }
+
+  public boolean isWithinRange(){
+    boolean inRange = false;
+    double tolerance = 0.5;
+    double currentYaw = getYaw();
+    inRange = Math.abs(currentYaw) <= tolerance;
+    if(hasTarget()){
+      return inRange;
+    }else{
+      return true; // Bypass this check if limelight can't see a target for whatever reason
+    }
+    
   }
 }

@@ -7,23 +7,27 @@
 
 package frc.robot.commands;
 
+import java.util.List;
+
 import edu.wpi.first.wpilibj.command.CommandGroup;
+import frc.core238.autonomous.AutonomousModeAnnotation;
 import frc.robot.Robot;
 import frc.robot.subsystems.Feeder;
-import frc.robot.subsystems.Turret;
 import frc.robot.subsystems.Shooter;
-import frc.robot.commands.TurnTurretByVision;
-import frc.robot.commands.PrepareToShoot;
-import frc.robot.commands.IsAtSpeedCommand;
-import frc.robot.commands.FeederCommand;
+import frc.robot.subsystems.Turret;
+import frc.robot.commands.IsAlignedCommand;
 
-public class ShooterCommand extends CommandGroup {
+@AutonomousModeAnnotation(parameterNames = { "NumberOfBalls"})
+public class ShooterCommand extends CommandGroup implements IAutonomousCommand {
   /**
    * Add your docs here.
    */
   Shooter theShooter = Robot.shooter;
   Feeder theFeeder = Robot.feeder;
   Turret theTurret = Robot.turret;
+  boolean isAuto = false;
+  double ballsToShoot = 0;
+  FeederCommand feedCommand;
 
   public ShooterCommand() {
     requires(theFeeder);
@@ -35,11 +39,12 @@ public class ShooterCommand extends CommandGroup {
     TargetingDistance.addParallel(new PrepareToShoot());
 
     CommandGroup FireBalls = new CommandGroup();
-    FireBalls.addSequential(new IsAtSpeedCommand());
-    FireBalls.addSequential(new FeederCommand());
+    FireBalls.addSequential(new IsAlignedCommand());
+    feedCommand = new FeederCommand();
+    FireBalls.addSequential(feedCommand);
 
-    addSequential(TargetingDistance);
-    addSequential(FireBalls);
+    addParallel(TargetingDistance);
+    addParallel(FireBalls);
     // Add Commands here:
     // e.g. addSequential(new Command1());
     // addSequential(new Command2());
@@ -56,5 +61,30 @@ public class ShooterCommand extends CommandGroup {
     // e.g. if Command1 requires chassis, and Command2 requires arm,
     // a CommandGroup containing them would require both the chassis and the
     // arm.
+  }
+
+  @Override
+  public boolean getIsAutonomousMode() {
+    // TODO Auto-generated method stub
+    return false;
+  }
+
+  @Override
+  public void setIsAutonomousMode(boolean isAutonomousMode) {
+    this.isAuto = isAutonomousMode;
+
+  }
+
+  @Override
+  public void setParameters(List<String> parameters) {
+    this.ballsToShoot = Double.parseDouble(parameters.get(0));
+
+  }
+
+  @Override
+  public boolean isFinished(){
+    double timeToShoot = theShooter.shootTimePerBall * this.ballsToShoot;
+    boolean isDone = feedCommand.timeSinceInitialized() >= timeToShoot;
+    return isDone;
   }
 }

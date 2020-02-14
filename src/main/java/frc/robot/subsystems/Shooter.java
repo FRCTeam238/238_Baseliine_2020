@@ -47,6 +47,8 @@ public class Shooter extends Subsystem {
     private double desiredSpeedPID = 0;
     private double desiredPositionPID = 0;
 
+    public double shootTimePerBall = 2;
+
     /*
      * private double integral = 0; private double derivative
      *  = 0; private double
@@ -113,7 +115,7 @@ public class Shooter extends Subsystem {
         //eval against desiredSpeedPID
         // allow for range
         boolean inRange = false;
-        double tolerance = 10;
+        double tolerance = 200;
         double currentSpeed = getSpeed();
         double speedDifference = currentSpeed - desiredPositionPID;
         if(Math.abs(speedDifference) < tolerance){

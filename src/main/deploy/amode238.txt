@@ -3,14 +3,22 @@
     {
       "Commands": [
         {
-          "Name": "DelayByDashboardInput",
+          "Name": "ShooterCommand",
           "Parameters": [
             "false",
-            "Shooter Delay"
+            "3"
+          ]
+        },
+        {
+          "Name": "DriveStraightWithoutSensors",
+          "Parameters": [
+            "false",
+            "0.5",
+            "3"
           ]
         }
       ],
-      "Name": "DelayShooterByDash"
+      "Name": "WeekZero-DriveNShoot"
     }
   ]
 }

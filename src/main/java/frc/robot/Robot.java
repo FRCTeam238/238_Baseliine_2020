@@ -268,7 +268,8 @@ public class Robot extends TimedRobot {
     // vision.trackingMode();
     // vision.ledsOn();
     // navigationBoard.navxValues();
-    vision.postValues();
-    
+    // vision.postValues();
+    vision.ledsOn();
+    vision.trackingMode();
   }
 }

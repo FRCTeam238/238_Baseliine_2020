@@ -8,10 +8,9 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
-import frc.robot.Robot;
 
-public class IsAtSpeedCommand extends Command {
-  public IsAtSpeedCommand() {
+public class CountBallsAndStop extends Command {
+  public CountBallsAndStop() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
   }
@@ -29,7 +28,7 @@ public class IsAtSpeedCommand extends Command {
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return Robot.shooter.isAtSpeed();
+    return false;
   }
 
   // Called once after isFinished returns true
