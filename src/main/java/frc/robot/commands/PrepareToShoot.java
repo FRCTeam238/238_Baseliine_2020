@@ -19,7 +19,7 @@ public class PrepareToShoot extends Command {
   private Shooter theShooter = Robot.shooter;
 
   private final double gravityAcceleration = 386.22;
-  private double shootingAngle = Math.PI / 4; // made-up, IN RADIANS
+  private double shootingAngle = Math.PI / 6; // made-up, IN RADIANS
   private final double wheelRadius = 6;
   private final double defaultSpeed = 4000;
   private static double slipValue = 1;
@@ -52,7 +52,7 @@ public class PrepareToShoot extends Command {
       distance = getDistanceToTarget();
       wantedSpeed = calculateSpeed(getDistanceToTarget(), shootingAngle, gravityAcceleration, wheelRadius);
     }
-    theShooter.setSpeed(4000); // TODO: FIX THIs
+    theShooter.setSpeed(wantedSpeed); // TODO: FIX THIs
 
   }
   // find speed to run at, in ticks per 100ms
