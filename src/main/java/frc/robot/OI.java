@@ -18,6 +18,7 @@ import frc.robot.commands.IntakeExtendRetractCommand;
 import frc.robot.commands.IntakeInOutCommand;
 import frc.robot.commands.ManualFeed;
 import frc.robot.commands.ManualReverse;
+import frc.robot.commands.PrepareToShoot;
 import frc.robot.commands.SetShooterSpeedCommand;
 import frc.robot.commands.ShooterCommand;
 import frc.robot.commands.TurnTurretByVision;
@@ -64,6 +65,8 @@ public class OI {
 
     TriggerButton spinUpShooterButton = new TriggerButton(operatorController, XboxController.Axis.kLeftTrigger.value);
     spinUpShooterButton.whenPressed(new SetShooterSpeedCommand(4000));
+
+    
     //InstantCommand manualShoot = new InstantCommand("startshooter", () -> Robot.shooter.setSpeed(4000));
     SmartDashboard.putData(new SetShooterSpeedCommand(4000));
     //spinUpShooterButton.whileHeld(new InstantCommand("startshooter", () -> Robot.shooter.setSpeed(4000)));
@@ -96,6 +99,9 @@ public class OI {
 
     JoystickButton turnTurretByVision = new JoystickButton(operatorController, XboxController.Button.kA.value);
     turnTurretByVision.whileHeld(new TurnTurretByVision());
+
+    JoystickButton prepareToRunShooter = new JoystickButton(operatorController, XboxController.Button.kB.value);
+    prepareToRunShooter.whileHeld(new PrepareToShoot());
 
     Robot.turret.setDefaultCommand(new TurnTurretManually(operatorController, XboxController.Axis.kLeftX.value));
 
