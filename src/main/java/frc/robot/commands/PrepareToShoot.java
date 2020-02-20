@@ -52,7 +52,7 @@ public class PrepareToShoot extends Command {
       distance = getDistanceToTarget();
       wantedSpeed = calculateSpeed(getDistanceToTarget(), shootingAngle, gravityAcceleration, wheelRadius);
     }
-    theShooter.setSpeed(wantedSpeed);
+    theShooter.setSpeed(4000); // TODO: FIX THIs
 
   }
   // find speed to run at, in ticks per 100ms

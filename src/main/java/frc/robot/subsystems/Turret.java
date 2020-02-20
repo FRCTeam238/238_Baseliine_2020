@@ -29,7 +29,7 @@ public class Turret extends Subsystem {
     private final TalonSRX turretMasterDrive = RobotMap.TurretDevices.turretTalon;
     private final double totalTurretTicks = 44404.0;
     
-    public final double limelightAngleConversion = -160;
+    public final double limelightAngleConversion = 160;
 
     final double timeFromNeutralToFull = 0.2; //seconds
 
@@ -41,7 +41,7 @@ public class Turret extends Subsystem {
     public Turret() {
         initTalons();
         resetEncoder();
-        initLiveWindow();
+        // initLiveWindow();
     }
 
     @Override
@@ -52,6 +52,7 @@ public class Turret extends Subsystem {
     
     public void initTalons() {
         turretMasterDrive.configFactoryDefault();
+        turretMasterDrive.setInverted(true);
         turretMasterDrive.selectProfileSlot(0, 0);
         turretMasterDrive.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen);
         turretMasterDrive.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen);

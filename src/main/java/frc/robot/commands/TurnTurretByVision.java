@@ -36,7 +36,6 @@ public class TurnTurretByVision extends Command {
   protected void execute() {
     findWantedOrientation();
     double desiredOutput = theTurret.limelightAngleConversion * wantedOrientation;
-    Logger.Debug("Turret vision desired output: " + desiredOutput);
     theTurret.setVelocity(desiredOutput);
   }
 

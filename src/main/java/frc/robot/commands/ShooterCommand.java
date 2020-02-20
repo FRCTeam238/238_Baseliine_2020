@@ -15,7 +15,6 @@ import frc.robot.Robot;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Turret;
-import frc.robot.commands.IsAlignedCommand;
 
 @AutonomousModeAnnotation(parameterNames = { "NumberOfBalls"})
 public class ShooterCommand extends CommandGroup implements IAutonomousCommand {
@@ -27,7 +26,7 @@ public class ShooterCommand extends CommandGroup implements IAutonomousCommand {
   Turret theTurret = Robot.turret;
   boolean isAuto = false;
   double ballsToShoot = 0;
-  FeederCommand feedCommand;
+  ManualFeed feedCommand;
 
   public ShooterCommand() {
     requires(theFeeder);
@@ -36,11 +35,11 @@ public class ShooterCommand extends CommandGroup implements IAutonomousCommand {
 
     CommandGroup TargetingDistance = new CommandGroup();
     TargetingDistance.addParallel(new TurnTurretByVision());
-    TargetingDistance.addParallel(new PrepareToShoot());
+    TargetingDistance.addParallel(new SetShooterSpeedCommand(4000));
 
     CommandGroup FireBalls = new CommandGroup();
     FireBalls.addSequential(new IsAlignedCommand());
-    feedCommand = new FeederCommand();
+    feedCommand = new ManualFeed();
     FireBalls.addSequential(feedCommand);
 
     addParallel(TargetingDistance);
@@ -85,6 +84,9 @@ public class ShooterCommand extends CommandGroup implements IAutonomousCommand {
   public boolean isFinished(){
     double timeToShoot = theShooter.shootTimePerBall * this.ballsToShoot;
     boolean isDone = feedCommand.timeSinceInitialized() >= timeToShoot;
+    if(isDone){
+      theShooter.neutral();
+    }
     return isDone;
   }
 }

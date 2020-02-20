@@ -75,7 +75,7 @@ public final class RobotMap {
     //TODO: change to real number
     public static DoubleSolenoid intakeSolenoid;
     public static int INTAKE_MASTER_ID = 9;
-    public static TalonSRX INTAKE_MASTER_TALON = new TalonSRX(INTAKE_MASTER_ID);
+    public static VictorSPX IntakeVictor = new VictorSPX(INTAKE_MASTER_ID);
     public static int FORWARD_CHANNEL = 3;
     public static int REVERSE_CHANNEL = 4;
     //public static TalonSRX rightIntake = TalonSRX_238.create(INTAKE_MASTER, Robot.isSimulation());

@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.core238.autonomous.AutonomousModesReader;
@@ -23,6 +24,7 @@ import frc.core238.autonomous.IAutonomousModeDataSource;
 import frc.robot.commands.DriveStraightNavBoard;
 import frc.robot.commands.DriveStraightPID;
 import frc.robot.commands.TrajectoryDriveCommand;
+import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.DrivetrainTrajectoryExtensions;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Hanger;
@@ -43,7 +45,7 @@ import frc.robot.subsystems.Vision;
  */
 public class Robot extends TimedRobot {
 
-  public static DrivetrainTrajectoryExtensions drivetrain;
+  public static Drivetrain drivetrain;
   public static NavigationBoard navigationBoard;
   public static Vision vision;
   public static OI oi;
@@ -68,7 +70,7 @@ public class Robot extends TimedRobot {
 
   public Robot() {
     navigationBoard = new NavigationBoard();
-    drivetrain = new DrivetrainTrajectoryExtensions();
+    drivetrain = new Drivetrain();
     vision = new Vision(FieldConstants.VisionConstants.targetHeight, FieldConstants.VisionConstants.cameraHeight);
     shooter = new Shooter();
     dashboard238 = new Dashboard238();
@@ -88,13 +90,14 @@ public class Robot extends TimedRobot {
     //navigationBoard.init();
     dashboard238.init();
     vision.initLimelight();
-    panelManipulator.initSensor();
+    // panelManipulator.initSensor();
     populateAutomodes();
     List<String> params= new ArrayList<>();
     params.add("SPath");
-    TrajectoryDriveCommand driveStraightTrajectory = new TrajectoryDriveCommand();
-    driveStraightTrajectory.setParameters(params);
-    SmartDashboard.putData("Drive Straight - trajectory", driveStraightTrajectory);
+    // TrajectoryDriveCommand driveStraightTrajectory = new TrajectoryDriveCommand();
+    // driveStraightTrajectory.setParameters(params);
+    // SmartDashboard.putData("Drive Straight - trajectory", driveStraightTrajectory);
+    LiveWindow.disableAllTelemetry();
   }
 
   private void populateAutomodes() {
@@ -107,18 +110,18 @@ public class Robot extends TimedRobot {
     } else {
       m_autoModes = new HashMap<>();
 
-      CommandGroup cg = new CommandGroup();
-      // DriveStraightNavBoard cmd = new DriveStraightNavBoard();
-      DriveStraightPID drivefrwrd = new DriveStraightPID(48);
-      DriveStraightPID drivebckwrd = new DriveStraightPID(-72);
-      //List<String> parameters = new ArrayList<>();
-      //parameters.add("5");
-      //parameters.add("10");
-      //cmd.setParameters(parameters);
-      cg.addSequential(drivefrwrd);
-      cg.addSequential(drivebckwrd);
+      // CommandGroup cg = new CommandGroup();
+      // // DriveStraightNavBoard cmd = new DriveStraightNavBoard();
+      // DriveStraightPID drivefrwrd = new DriveStraightPID(48);
+      // DriveStraightPID drivebckwrd = new DriveStraightPID(-72);
+      // //List<String> parameters = new ArrayList<>();
+      // //parameters.add("5");
+      // //parameters.add("10");
+      // //cmd.setParameters(parameters);
+      // cg.addSequential(drivefrwrd);
+      // cg.addSequential(drivebckwrd);
 
-      m_autoModes.put("Drive forward, then backward", cg);
+      // m_autoModes.put("Drive forward, then backward", cg);
 
       CommandGroup cg2 = new CommandGroup();
       DriveStraightNavBoard cmd2 = new DriveStraightNavBoard();
@@ -180,6 +183,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
+    SmartDashboard.putBoolean("Can Run Auto", m_allowAuto);
   }
 
   /**

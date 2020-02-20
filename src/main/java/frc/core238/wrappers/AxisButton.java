@@ -9,6 +9,7 @@ package frc.core238.wrappers;
 
 import java.util.function.BooleanSupplier;
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.buttons.Button;
 
@@ -16,7 +17,7 @@ public class AxisButton extends Button {
 
     private final BooleanSupplier isPressed;
 
-    public AxisButton(final GenericHID joystick, final Hand hand, final Axis axis, final double threshhold) {
+    public AxisButton(final XboxController joystick, final Hand hand, final Axis axis, final double threshhold) {
         isPressed = getIsPressedFunction(joystick, hand, axis, threshhold);
     }
 

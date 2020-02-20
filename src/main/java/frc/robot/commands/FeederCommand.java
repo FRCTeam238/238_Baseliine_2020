@@ -11,6 +11,7 @@ import java.util.function.BooleanSupplier;
 
 import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import frc.core238.Logger;
 import frc.robot.Robot;
@@ -53,10 +54,10 @@ public class FeederCommand extends Command {
     
     secondSensorBroken = theFeeder.secondDetector.get();
     
-    if(firstSensorBroken == false){
+    if(firstSensorBroken == false){ // First sensor IS tripped
       theFeeder.start();       
     }
-    if(secondSensorBroken == true && lastStateBroken == false){
+    if(secondSensorBroken == true && lastStateBroken == false){ // Second sensor is NOT tripped, but just WAS
       heldBallsNumber++;      
       Logger.Debug("Held Balls Count = " + heldBallsNumber);
       endNumber = beginningNumber + (14*heldBallsNumber);
@@ -67,6 +68,9 @@ public class FeederCommand extends Command {
     //activate LEDs here
     
     lastStateBroken = secondSensorBroken;
+
+    SmartDashboard.putBoolean("First Sensor", firstSensorBroken);
+    SmartDashboard.putBoolean("Second Sensor", secondSensorBroken);
 }
 
 

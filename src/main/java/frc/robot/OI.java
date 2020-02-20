@@ -12,14 +12,12 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.command.InstantCommand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.core238.Logger;
-import frc.robot.commands.DeployPanelManipulatorCommand;
+import frc.core238.wrappers.TriggerButton;
 import frc.robot.commands.FeederCommand;
-import frc.robot.commands.HangCommand;
 import frc.robot.commands.IntakeExtendRetractCommand;
 import frc.robot.commands.IntakeInOutCommand;
-import frc.robot.commands.RotatePanelNTimesBySensorCommand;
-import frc.robot.commands.RotateToColorCommand;
+import frc.robot.commands.ManualFeed;
+import frc.robot.commands.ManualReverse;
 import frc.robot.commands.SetShooterSpeedCommand;
 import frc.robot.commands.ShooterCommand;
 import frc.robot.commands.TurnTurretByVision;
@@ -41,58 +39,67 @@ public class OI {
   public XboxController operatorController = RobotMap.Joysticks.operatorController;
   public Drivetrain drivetrain;
 
-  public OI(){
+  public OI() {
 
-    //TODO: do we need the vision????????????
-    //VisionDrive visionDrive = new VisionDrive();
-    //DriveStraightPID driveTenFeetPID = new DriveStraightPID(-48);
-    //JoystickButton visionTrackButton = new JoystickButton(leftStick, RobotMap.Buttons.visionTrack); button:1
-    //JoystickButton driveTenFeetButton = new JoystickButton(leftStick, RobotMap.Buttons.driveTenFeet); button: 6
-    //driveTenFeetButton.whenPressed(driveTenFeetPID);
-    //visionTrackButton.whileHeld(visionDrive);
+    // TODO: do we need the vision????????????
+    // VisionDrive visionDrive = new VisionDrive();
+    // DriveStraightPID driveTenFeetPID = new DriveStraightPID(-48);
+    // JoystickButton visionTrackButton = new JoystickButton(leftStick, RobotMap.Buttons.visionTrack); button:1
+    // JoystickButton driveTenFeetButton = new JoystickButton(leftStick, RobotMap.Buttons.driveTenFeet); button: 6
+    // driveTenFeetButton.whenPressed(driveTenFeetPID);
+    // visionTrackButton.whileHeld(visionDrive);
 
-    JoystickButton climbButton = new JoystickButton(operatorController, XboxController.Button.kY.value);
-    climbButton.whenPressed(new HangCommand());
+    // JoystickButton climbButton = new JoystickButton(operatorController, XboxController.Button.kY.value);
+    // climbButton.whenPressed(new HangCommand());
 
-    JoystickButton deployPanelManipulatorButton = new JoystickButton(operatorController, XboxController.Button.kBack.value);
-    deployPanelManipulatorButton.whenPressed(new DeployPanelManipulatorCommand());
+    // JoystickButton deployPanelManipulatorButton = new JoystickButton(operatorController, XboxController.Button.kBack.value);
+    // deployPanelManipulatorButton.whenPressed(new DeployPanelManipulatorCommand());
 
-    //TODO: Make a proper button mapping
-    JoystickButton spinToProperColor = new JoystickButton(operatorController, XboxController.Button.kStart.value);
-    spinToProperColor.whenPressed(new RotateToColorCommand());
+    // TODO: Make a proper button mapping
+    // JoystickButton spinToProperColor = new JoystickButton(operatorController, XboxController.Button.kStart.value);
+    // spinToProperColor.whenPressed(new RotateToColorCommand());
 
-    //JoystickButton rotatePanelNTimesBySensor = new JoystickButton(operatorController, XboxController.Button.kA.value);
-    //rotatePanelNTimesBySensor.whenPressed(new RotatePanelNTimesBySensorCommand(FieldConstants.numberOfTimesToRotatePanelManipulator));
+    // JoystickButton rotatePanelNTimesBySensor = new JoystickButton(operatorController, XboxController.Button.kA.value);
+    // rotatePanelNTimesBySensor.whenPressed(new RotatePanelNTimesBySensorCommand(FieldConstants.numberOfTimesToRotatePanelManipulator));
 
-    JoystickButton spinUpShooterButton = new JoystickButton(operatorController, XboxController.Axis.kLeftTrigger.value);
-    //SetShooterSpeedCommand manualShoot = ;
-    spinUpShooterButton.whileHeld(new SetShooterSpeedCommand(4000));
+    TriggerButton spinUpShooterButton = new TriggerButton(operatorController, XboxController.Axis.kLeftTrigger.value);
+    spinUpShooterButton.whenPressed(new SetShooterSpeedCommand(4000));
     //InstantCommand manualShoot = new InstantCommand("startshooter", () -> Robot.shooter.setSpeed(4000));
     SmartDashboard.putData(new SetShooterSpeedCommand(4000));
     //spinUpShooterButton.whileHeld(new InstantCommand("startshooter", () -> Robot.shooter.setSpeed(4000)));
     InstantCommand manualStop = new InstantCommand("StopShooter", Robot.shooter, () -> Robot.shooter.neutral());
     SmartDashboard.putData(manualStop);
+
+    JoystickButton trackWhileFeedingButton = new JoystickButton(operatorController, XboxController.Button.kY.value);
+    trackWhileFeedingButton.whileHeld(new TurnTurretByVision());
+    trackWhileFeedingButton.whileHeld(new ManualFeed());
+
+    JoystickButton manualFeedButton = new JoystickButton(operatorController, XboxController.Button.kBumperLeft.value);
+    manualFeedButton.whileHeld(new ManualFeed());
+
+    JoystickButton manualReverseFeeder = new JoystickButton(operatorController, XboxController.Button.kBumperRight.value);
+    manualReverseFeeder.whileHeld(new ManualReverse());
     
     //spinUpShooterButton.whenReleased(manualStop);
     //functionality taken over by PrepareToShoot automatically, left here for bench testing purposes
     //TODO: uncomment if there is a CANSPARKMAX 
     //spinUpShooterButton.whileHeld(new PrepareToShoot());
 
-    JoystickButton shootButton = new JoystickButton(operatorController, XboxController.Axis.kRightTrigger.value);
-    shootButton.whileHeld(new FeederCommand());
+    //TriggerButton shootButton = new TriggerButton(operatorController, XboxController.Axis.kRightTrigger.value);
+    //shootButton.whileHeld(new FeederCommand());
 
-    JoystickButton retractIntakeJoystick = new JoystickButton(operatorController, XboxController.Button.kBumperRight.value);
+    JoystickButton retractIntakeJoystick = new JoystickButton(operatorController, XboxController.Button.kStickRight.value);
     retractIntakeJoystick.whenPressed(new IntakeExtendRetractCommand());
 
-    JoystickButton automatedShoot = new JoystickButton(operatorController, XboxController.Button.kBumperLeft.value);
+    TriggerButton automatedShoot = new TriggerButton(operatorController, XboxController.Axis.kRightTrigger.value);
     automatedShoot.whileHeld(new ShooterCommand());
 
     JoystickButton turnTurretByVision = new JoystickButton(operatorController, XboxController.Button.kA.value);
     turnTurretByVision.whileHeld(new TurnTurretByVision());
 
-    Robot.turret.setDefaultCommand(new TurnTurretManually(operatorController, XboxController.Axis.kRightX.value));
+    Robot.turret.setDefaultCommand(new TurnTurretManually(operatorController, XboxController.Axis.kLeftX.value));
 
-    Robot.intake.setDefaultCommand(new IntakeInOutCommand(RobotMap.Joysticks.operatorController, XboxController.Axis.kLeftY.value));
+    Robot.intake.setDefaultCommand(new IntakeInOutCommand(operatorController, XboxController.Axis.kRightY.value));
 
     Robot.feeder.setDefaultCommand(new FeederCommand());
 

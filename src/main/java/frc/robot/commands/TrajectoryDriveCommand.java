@@ -26,7 +26,7 @@ import frc.robot.subsystems.NavigationBoard;
 @AutonomousModeAnnotation(parameterNames = { "TrajectoryName" })
 public class TrajectoryDriveCommand extends CommandGroup implements IAutonomousCommand {
 
-  private DrivetrainTrajectoryExtensions drivetrain = Robot.drivetrain;
+  private DrivetrainTrajectoryExtensions drivetrain ; //= Robot.drivetrain;
   NavigationBoard navBoard = Robot.navigationBoard;
   private boolean isAutonomousMode = false;
   private String trajectoryName;

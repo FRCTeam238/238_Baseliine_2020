@@ -10,20 +10,18 @@ package frc.robot.subsystems;
 import java.util.function.BooleanSupplier;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.RobotMap;
-import frc.robot.commands.IntakeInOutCommand;
 
 /**
  * Add your docs here.
  */
 public class Intake extends Subsystem {
-    private final TalonSRX intakeMasterDrive = RobotMap.TurretDevices.turretTalon;//IntakeDevices.INTAKE_MASTER_TALON;
+    private final VictorSPX intakeMasterDrive = RobotMap.IntakeDevices.IntakeVictor;//IntakeDevices.INTAKE_MASTER_TALON;
     private final int forwarChannel = RobotMap.IntakeDevices.FORWARD_CHANNEL;
     private final int reverseChannel = RobotMap.IntakeDevices.REVERSE_CHANNEL;
     private DoubleSolenoid solenoid;
@@ -43,6 +41,7 @@ public class Intake extends Subsystem {
 
     public void initTalons() {
         intakeMasterDrive.configFactoryDefault();
+        intakeMasterDrive.setInverted(true);
     }
 
     private void setPower(double speedValue){

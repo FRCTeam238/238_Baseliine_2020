@@ -16,6 +16,7 @@ import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Sendable;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.core238.wrappers.SendableWrapper;
 import frc.robot.RobotMap;
 
@@ -27,12 +28,13 @@ public class Feeder extends Subsystem {
     public final DigitalInput firstDetector = new DigitalInput(0);
     public final DigitalInput secondDetector = new DigitalInput(1);
     //TODO: change FEEDER_OUTPUT to reasonable value;
-    private final double FEEDER_OUTPUT = 0.5;
+    private final double FEEDER_OUTPUT = 0.7;
     private final double STOP_FEEDER_OUTPUT = 0;
     private int heldBallsNumber = 0;
 
     public Feeder() {
-        initLiveWindow();
+        //initLiveWindow();
+        SmartDashboard.putData(this);
     }
 
     @Override
@@ -42,6 +44,10 @@ public class Feeder extends Subsystem {
 
     public void start() {
         feederMasterDrive.set(ControlMode.PercentOutput, FEEDER_OUTPUT);
+    }
+
+    public void reverse() {
+        feederMasterDrive.set(ControlMode.PercentOutput, -1 * FEEDER_OUTPUT);
     }
 
     /*if(firstDetector == broken){
@@ -98,18 +104,18 @@ public class Feeder extends Subsystem {
     // }
     //for testing moved to feedercommand
 
-    private double getMotorOutput(){
-        double motorOutput = feederMasterDrive.getSelectedSensorPosition();
-        return motorOutput;
-    }
+    // private double getMotorOutput(){
+    //     double motorOutput = feederMasterDrive.getSelectedSensorPosition();
+    //     return motorOutput;
+    // }
 
-    private void initLiveWindow() {
-        SendableWrapper motor = new SendableWrapper(builder -> {
-            builder.addDoubleProperty("Motor", this::getMotorOutput, null);
-        });
+    // private void initLiveWindow() {
+    //     SendableWrapper motor = new SendableWrapper(builder -> {
+    //         builder.addDoubleProperty("Motor", this::getMotorOutput, null);
+    //     });
         
-        addChild("Motor", motor);
-    }
+    //     addChild("Motor", motor);
+    // }
 
     private List<SendableWrapper> _sendables = new ArrayList<>();
     private void addChild(String name, SendableWrapper wrapper){

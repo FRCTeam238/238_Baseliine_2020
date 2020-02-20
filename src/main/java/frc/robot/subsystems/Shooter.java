@@ -47,7 +47,7 @@ public class Shooter extends Subsystem {
     private double desiredSpeedPID = 0;
     private double desiredPositionPID = 0;
 
-    public double shootTimePerBall = 2;
+    public double shootTimePerBall = 3;
 
     /*
      * private double integral = 0; private double derivative
@@ -59,7 +59,7 @@ public class Shooter extends Subsystem {
 
     public Shooter() {
         initSparkMax();
-        initLiveWindow();
+        // initLiveWindow();
     }
 
     public void initSparkMax() {
@@ -98,7 +98,7 @@ public class Shooter extends Subsystem {
 
     public void setSpeed(double speedValue) {
         desiredSpeedPID = speedValue;
-        shooterPID.setReference(speedValue, ControlType.kVelocity);
+        shooterMasterDrive.getPIDController().setReference(desiredSpeedPID, ControlType.kVelocity);
     }
 
     public void setPower(double power){
@@ -200,5 +200,4 @@ public class Shooter extends Subsystem {
       _sendables.add(wrapper);
       addChild(name, (Sendable)wrapper); 
     }
-
 }
