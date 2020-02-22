@@ -8,6 +8,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
+import frc.core238.Logger;
 import frc.robot.Robot;
 
 public class IsAlignedCommand extends Command {
@@ -36,6 +37,7 @@ public class IsAlignedCommand extends Command {
   // Called once after isFinished returns true
   @Override
   protected void end() {
+    Logger.Debug("SHOOTER ALIGNED");
   }
 
   // Called when another command which requires one or more of the same

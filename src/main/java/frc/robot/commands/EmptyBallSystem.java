@@ -18,7 +18,7 @@ import frc.robot.commands.PrepareToShoot;
 public class EmptyBallSystem extends Command {
   Shooter theShooter = Robot.shooter;
   Feeder theFeeder = Robot.feeder;
-  PrepareToShoot prepareToShoot = new PrepareToShoot(150);
+  PrepareToShoot prepareToShoot = new PrepareToShoot();
 
   public EmptyBallSystem() {
     requires(theFeeder);

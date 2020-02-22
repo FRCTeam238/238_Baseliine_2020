@@ -119,12 +119,13 @@ public class Shooter extends Subsystem {
         boolean inRange = false;
         double tolerance = 200;
         double currentSpeed = getSpeed();
-        double speedDifference = currentSpeed - desiredPositionPID;
+        double speedDifference = currentSpeed - desiredSpeedPID;
         if(Math.abs(speedDifference) < tolerance){
             inRange = true;
         }else{
             inRange = false;
         }
+        Logger.Debug("Shooter wheel in range: " + inRange);
         return inRange;
     }
 

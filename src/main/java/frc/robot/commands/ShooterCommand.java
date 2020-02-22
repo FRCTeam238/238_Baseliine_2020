@@ -33,17 +33,19 @@ public class ShooterCommand extends CommandGroup implements IAutonomousCommand {
     requires(theTurret);
     requires(theShooter);
 
-    CommandGroup TargetingDistance = new CommandGroup();
-    TargetingDistance.addParallel(new TurnTurretByVision());
-    TargetingDistance.addParallel(new SetShooterSpeedCommand(4000));
+    addParallel(new TurnTurretByVision());
+    addParallel(new PrepareToShoot());
 
-    CommandGroup FireBalls = new CommandGroup();
+    addSequential(new IsAlignedCommand());
+    addSequential(new ManualFeed());
+
     //FireBalls.addSequential(new IsAlignedCommand());
-    feedCommand = new ManualFeed();
+    //feedCommand = new ManualFeed();
     //FireBalls.addSequential(feedCommand);
 
-    addParallel(TargetingDistance);
+    //addParallel(TargetingDistance);
     //addParallel(FireBalls);
+
     // Add Commands here:
     // e.g. addSequential(new Command1());
     // addSequential(new Command2());
@@ -88,5 +90,5 @@ public class ShooterCommand extends CommandGroup implements IAutonomousCommand {
       theShooter.neutral();
     }
     return isDone;
-  } */
+  }*/
 }

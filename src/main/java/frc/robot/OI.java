@@ -21,6 +21,7 @@ import frc.robot.commands.ManualFeed;
 import frc.robot.commands.ManualReverse;
 import frc.robot.commands.PrepareToShoot;
 import frc.robot.commands.SetShooterSpeedCommand;
+import frc.robot.commands.ShooterCommand;
 import frc.robot.commands.TurnTurretByVision;
 import frc.robot.commands.TurnTurretManually;
 import frc.robot.subsystems.Drivetrain;
@@ -93,7 +94,7 @@ public class OI {
     retractIntakeJoystick.whenPressed(new IntakeExtendRetractCommand());
 
     TriggerButton automatedShoot = new TriggerButton(operatorController, XboxController.Axis.kRightTrigger.value);
-    //automatedShoot.whileHeld(new ShooterCommand());
+    automatedShoot.whileHeld(new ShooterCommand());
     //automatedShoot.whileHeld(new ParallelCommandGroup(new TurnTurretByVision(), new SetShooterSpeedCommand(4000)));
 
     JoystickButton turnTurretByVision = new JoystickButton(operatorController, XboxController.Button.kA.value);

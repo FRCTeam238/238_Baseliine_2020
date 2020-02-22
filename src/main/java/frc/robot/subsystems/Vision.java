@@ -12,6 +12,7 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.core238.Logger;
 import frc.robot.RobotMap;
 import frc.robot.Trig238;
 
@@ -96,12 +97,12 @@ public class Vision extends Subsystem {
     boolean inRange = false;
     double tolerance = 0.5;
     double currentYaw = getYaw();
-    inRange = Math.abs(currentYaw) <= tolerance;
     if(hasTarget()){
+      inRange = Math.abs(currentYaw) <= tolerance;
+      Logger.Debug("Limelight in range: " + inRange);
       return inRange;
     }else{
-      return true; // Bypass this check if limelight can't see a target for whatever reason
+      return false;
     }
-    
   }
 }

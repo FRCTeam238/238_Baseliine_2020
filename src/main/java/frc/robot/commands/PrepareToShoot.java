@@ -25,14 +25,6 @@ public class PrepareToShoot extends Command {
   private static double slipValue = 1;
   private double distance = 150; // -1
 
-  public PrepareToShoot(double distance) {
-    requires(theShooter);
-    this.distance = distance;
-
-    // Use requires() here to declare subsystem dependencies
-    // eg. requires(chassis);
-  }
-
   public PrepareToShoot() {
     requires(theShooter);
   }
@@ -50,10 +42,9 @@ public class PrepareToShoot extends Command {
     boolean shooterHasVision = hasVision();
     if(shooterHasVision){
       distance = getDistanceToTarget();
-      wantedSpeed = calculateSpeed(getDistanceToTarget(), shootingAngle, gravityAcceleration, wheelRadius);
+      wantedSpeed = (double)theShooter.readSpeedMap((int)distance);
     }
-    theShooter.setSpeed(wantedSpeed); // TODO: FIX THIs
-
+    theShooter.setSpeed(wantedSpeed);
   }
   // find speed to run at, in ticks per 100ms
   // tell shooter to run at that speed
