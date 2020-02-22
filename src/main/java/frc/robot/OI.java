@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.command.InstantCommand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.core238.wrappers.TriggerButton;
 import frc.robot.commands.FeederCommand;
 import frc.robot.commands.IntakeExtendRetractCommand;
@@ -20,7 +21,6 @@ import frc.robot.commands.ManualFeed;
 import frc.robot.commands.ManualReverse;
 import frc.robot.commands.PrepareToShoot;
 import frc.robot.commands.SetShooterSpeedCommand;
-import frc.robot.commands.ShooterCommand;
 import frc.robot.commands.TurnTurretByVision;
 import frc.robot.commands.TurnTurretManually;
 import frc.robot.subsystems.Drivetrain;
@@ -64,9 +64,7 @@ public class OI {
     // rotatePanelNTimesBySensor.whenPressed(new RotatePanelNTimesBySensorCommand(FieldConstants.numberOfTimesToRotatePanelManipulator));
 
     TriggerButton spinUpShooterButton = new TriggerButton(operatorController, XboxController.Axis.kLeftTrigger.value);
-    spinUpShooterButton.whenPressed(new SetShooterSpeedCommand(4000));
-
-    
+    spinUpShooterButton.whenPressed(new SetShooterSpeedCommand(3750));
     //InstantCommand manualShoot = new InstantCommand("startshooter", () -> Robot.shooter.setSpeed(4000));
     SmartDashboard.putData(new SetShooterSpeedCommand(4000));
     //spinUpShooterButton.whileHeld(new InstantCommand("startshooter", () -> Robot.shooter.setSpeed(4000)));
@@ -95,7 +93,8 @@ public class OI {
     retractIntakeJoystick.whenPressed(new IntakeExtendRetractCommand());
 
     TriggerButton automatedShoot = new TriggerButton(operatorController, XboxController.Axis.kRightTrigger.value);
-    automatedShoot.whileHeld(new ShooterCommand());
+    //automatedShoot.whileHeld(new ShooterCommand());
+    //automatedShoot.whileHeld(new ParallelCommandGroup(new TurnTurretByVision(), new SetShooterSpeedCommand(4000)));
 
     JoystickButton turnTurretByVision = new JoystickButton(operatorController, XboxController.Button.kA.value);
     turnTurretByVision.whileHeld(new TurnTurretByVision());

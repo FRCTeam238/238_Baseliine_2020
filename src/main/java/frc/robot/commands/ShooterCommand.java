@@ -38,12 +38,12 @@ public class ShooterCommand extends CommandGroup implements IAutonomousCommand {
     TargetingDistance.addParallel(new SetShooterSpeedCommand(4000));
 
     CommandGroup FireBalls = new CommandGroup();
-    FireBalls.addSequential(new IsAlignedCommand());
+    //FireBalls.addSequential(new IsAlignedCommand());
     feedCommand = new ManualFeed();
-    FireBalls.addSequential(feedCommand);
+    //FireBalls.addSequential(feedCommand);
 
     addParallel(TargetingDistance);
-    addParallel(FireBalls);
+    //addParallel(FireBalls);
     // Add Commands here:
     // e.g. addSequential(new Command1());
     // addSequential(new Command2());
@@ -80,7 +80,7 @@ public class ShooterCommand extends CommandGroup implements IAutonomousCommand {
 
   }
 
-  @Override
+  /*@Override
   public boolean isFinished(){
     double timeToShoot = theShooter.shootTimePerBall * this.ballsToShoot;
     boolean isDone = feedCommand.timeSinceInitialized() >= timeToShoot;
@@ -88,5 +88,5 @@ public class ShooterCommand extends CommandGroup implements IAutonomousCommand {
       theShooter.neutral();
     }
     return isDone;
-  }
+  } */
 }

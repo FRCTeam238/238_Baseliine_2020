@@ -8,19 +8,18 @@
 package frc.robot.subsystems;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANPIDController;
-import com.revrobotics.ControlType;
+import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.ControlType;
 
 import edu.wpi.first.wpilibj.Sendable;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import frc.core238.Logger;
 import frc.core238.wrappers.SendableWrapper;
 import frc.robot.RobotMap;
 
@@ -49,6 +48,8 @@ public class Shooter extends Subsystem {
 
     public double shootTimePerBall = 3;
 
+    public HashMap<Integer, Integer> distanceToShootMap = new HashMap<Integer, Integer>();
+
     /*
      * private double integral = 0; private double derivative
      *  = 0; private double
@@ -60,6 +61,7 @@ public class Shooter extends Subsystem {
     public Shooter() {
         initSparkMax();
         // initLiveWindow();
+        populateSpeedMap(distanceToShootMap);
     }
 
     public void initSparkMax() {
@@ -199,5 +201,53 @@ public class Shooter extends Subsystem {
     private void addChild(String name, SendableWrapper wrapper){
       _sendables.add(wrapper);
       addChild(name, (Sendable)wrapper); 
+    }
+
+    private void populateSpeedMap(HashMap map){
+        // Format: (distance, speed)
+        // Distance is in inches, speed is in controller-side RPM
+        map.put(80, 5000);
+        map.put(96, 3600);
+        map.put(112, 3600);
+        map.put(128, 3620);
+        map.put(144, 3665);
+        map.put(160, 3750);
+        map.put(176, 3840);
+        map.put(192, 3950);
+        map.put(208, 4000);
+        map.put(224, 4075);
+        map.put(240, 4100);
+        map.put(256, 4150);
+        map.put(272, 4230);
+        map.put(288, 4300);
+        map.put(304, 4415);
+    }
+
+    public int readSpeedMap(int distance){
+        int neededRPMS = 0;
+        int distanceRemainder = distance % 16;
+        if(distanceRemainder == 0){
+            if(distanceToShootMap.containsKey(distance)){
+                neededRPMS = distanceToShootMap.get(distance);
+            }else{
+                Logger.Debug("Shooter.java line 231 - key not found");
+            }
+            
+        }else{
+            if(distanceRemainder <= 8){
+                if(distanceToShootMap.containsKey(distance - distanceRemainder)){
+                    neededRPMS = distanceToShootMap.get(distance - distanceRemainder);
+                }else{
+                    Logger.Debug("Shooter.java line 239 - key not found");
+                }
+            }else{
+                if(distanceToShootMap.containsKey(distance + (16 - distanceRemainder))){
+                    neededRPMS = distanceToShootMap.get(distance + (16 - distanceRemainder));
+                }else{
+                    Logger.Debug("Shooter.java line 245 - key not found");
+                }
+            }
+        }
+        return neededRPMS;
     }
 }

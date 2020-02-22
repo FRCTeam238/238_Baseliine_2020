@@ -8,7 +8,7 @@ public class Trig238 {
     * @param angle (degrees) formed between camera and center of target
     */
     public static double calculateDistance(double height, double angle){
-        double theta = FieldConstants.VisionConstants.getMountingAngle() - angle;
+        double theta = FieldConstants.VisionConstants.getMountingAngle() + angle;
         double radians = Math.toRadians(theta);
         double tanRadians = Math.tan(radians);
         double distance = height / tanRadians;

@@ -23,6 +23,7 @@ import frc.core238.autonomous.DataFileAutonomousModeDataSource;
 import frc.core238.autonomous.IAutonomousModeDataSource;
 import frc.robot.commands.DriveStraightNavBoard;
 import frc.robot.commands.DriveStraightPID;
+import frc.robot.commands.SetShooterSpeedCommand;
 import frc.robot.commands.TrajectoryDriveCommand;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.DrivetrainTrajectoryExtensions;
@@ -98,6 +99,9 @@ public class Robot extends TimedRobot {
     // driveStraightTrajectory.setParameters(params);
     // SmartDashboard.putData("Drive Straight - trajectory", driveStraightTrajectory);
     LiveWindow.disableAllTelemetry();
+
+
+    SmartDashboard.putNumber("Shooter Distance", 80); //TEST
   }
 
   private void populateAutomodes() {
@@ -258,6 +262,7 @@ public class Robot extends TimedRobot {
 
     String getDataFromDriverStation = DriverStation.getInstance().getGameSpecificMessage();
     SmartDashboard.putString("Assigned Color", getDataFromDriverStation);
+    vision.postValues();
   }
 
   /**
@@ -266,14 +271,14 @@ public class Robot extends TimedRobot {
 
   @Override
   public void testPeriodic() {
-    String getDataFromDriverStation = DriverStation.getInstance().getGameSpecificMessage();
-    SmartDashboard.putString("Assigned Color", getDataFromDriverStation);
 
     // vision.trackingMode();
     // vision.ledsOn();
     // navigationBoard.navxValues();
-    // vision.postValues();
     vision.ledsOn();
     vision.trackingMode();
+    vision.postValues();
+
+    SmartDashboard.putNumber("Calculated Shooter RPM", shooter.readSpeedMap((int)SmartDashboard.getNumber("Shooter Distance", 80)));
   }
 }

@@ -5,9 +5,9 @@ public class FieldConstants {
 
     /** Heights of vision camera and targets, in inches */
     public static class VisionConstants {
-        static final double targetHeight = 98.25;
-        static final double cameraHeight = 46.5;
-        static final double mountingAngle = Math.PI/4;
+        static final double targetHeight = 90.875;
+        static final double cameraHeight = 38;
+        static final double mountingAngle = 26.4;
 
         public static double getTargetheight() {
             return targetHeight;
