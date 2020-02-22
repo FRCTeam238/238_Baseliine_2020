@@ -41,7 +41,7 @@ public class DrivetrainTrajectoryExtensions extends Drivetrain {
   //private final WPI_VictorSPX rightDriveFollower2 = new WPI_VictorSPX(DEVICE_ID_RIGHT_SLAVE_TWO);
 
   private final DifferentialDrive differentialDrive = new DifferentialDrive(
-      new SpeedControllerGroup(leftMasterDrive, leftDriveFollower1, leftDriveFollower2), new SpeedControllerGroup(rightMasterDrive, rightDriveFollower1, rightDriveFollower2));
+      new SpeedControllerGroup(leftMasterDrive/*, leftDriveFollower1, leftDriveFollower2*/), new SpeedControllerGroup(rightMasterDrive/*, rightDriveFollower1, rightDriveFollower2*/));
 
   private final NavigationBoard gyro = Robot.navigationBoard;
   private final DifferentialDriveOdometry differentialDriveOdometry;
@@ -89,6 +89,7 @@ public class DrivetrainTrajectoryExtensions extends Drivetrain {
    
 
     resetOdometry();
+    setUseDifferentialDrive(false);
   }
 
   public void resetOdometry() {
@@ -154,8 +155,10 @@ public class DrivetrainTrajectoryExtensions extends Drivetrain {
   public void setUseDifferentialDrive(boolean useDifferentialDrive) {
     differentialDrive.setSafetyEnabled(useDifferentialDrive);
     if (!useDifferentialDrive) {
-      leftDriveFollower1.follow(leftMasterDrive);
-      rightDriveFollower1.follow(rightMasterDrive);
+      // leftDriveFollower1.follow(leftMasterDrive);
+      // leftDriveFollower2.follow(leftMasterDrive);
+      // rightDriveFollower1.follow(rightMasterDrive);
+      // rightDriveFollower2.follow(rightMasterDrive);
     }
   }
 
@@ -242,8 +245,9 @@ public class DrivetrainTrajectoryExtensions extends Drivetrain {
             this);
 
     InstantCommand endCommand = new InstantCommand(this, () -> {
-            setUseDifferentialDrive(true);
-            arcadeDrive(0, 0);
+            //setUseDifferentialDrive(true);
+            //arcadeDrive(0, 0);
+            tankDrive(0, 0);
         });
 
     CommandGroup cg = new CommandGroup("TrajectoryDrive");

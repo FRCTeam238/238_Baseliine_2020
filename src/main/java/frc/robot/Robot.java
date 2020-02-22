@@ -46,7 +46,7 @@ import frc.robot.subsystems.Vision;
  */
 public class Robot extends TimedRobot {
 
-  public static Drivetrain drivetrain;
+  public static DrivetrainTrajectoryExtensions drivetrain;
   public static NavigationBoard navigationBoard;
   public static Vision vision;
   public static OI oi;
@@ -71,7 +71,7 @@ public class Robot extends TimedRobot {
 
   public Robot() {
     navigationBoard = new NavigationBoard();
-    drivetrain = new Drivetrain();
+    drivetrain = new DrivetrainTrajectoryExtensions();
     vision = new Vision(FieldConstants.VisionConstants.targetHeight, FieldConstants.VisionConstants.cameraHeight);
     shooter = new Shooter();
     dashboard238 = new Dashboard238();
@@ -94,14 +94,14 @@ public class Robot extends TimedRobot {
     // panelManipulator.initSensor();
     populateAutomodes();
     List<String> params= new ArrayList<>();
-    params.add("SPath");
-    // TrajectoryDriveCommand driveStraightTrajectory = new TrajectoryDriveCommand();
-    // driveStraightTrajectory.setParameters(params);
-    // SmartDashboard.putData("Drive Straight - trajectory", driveStraightTrajectory);
+    params.add("DRIVESTRAIGHT");
+    TrajectoryDriveCommand driveStraightTrajectory = new TrajectoryDriveCommand();
+    driveStraightTrajectory.setParameters(params);
+    SmartDashboard.putData("Drive Straight - trajectory", driveStraightTrajectory);
     LiveWindow.disableAllTelemetry();
 
 
-    SmartDashboard.putNumber("Shooter RPM", 0); //TEST
+    //SmartDashboard.putNumber("Shooter RPM", 0); //TEST
   }
 
   private void populateAutomodes() {
@@ -264,7 +264,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putString("Assigned Color", getDataFromDriverStation);
     vision.postValues();
 
-    SmartDashboard.putData("RUN SHOOTER TEST", new SetShooterSpeedCommand(SmartDashboard.getNumber("Shooter RPM", 0)));
+    //SmartDashboard.putData("RUN SHOOTER TEST", new SetShooterSpeedCommand(SmartDashboard.getNumber("Shooter RPM", 0)));
   }
 
   /**

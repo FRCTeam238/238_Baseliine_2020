@@ -171,7 +171,7 @@ public class Drivetrain extends Subsystem {
     rightMasterDrive.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 1, 0);
     leftMasterDrive.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 1, 0);
 
-    // initPID();
+    initPID();
 
     Logger.Debug("initTalons Is Sucessful!");
   }
