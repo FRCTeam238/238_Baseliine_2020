@@ -101,7 +101,7 @@ public class Robot extends TimedRobot {
     LiveWindow.disableAllTelemetry();
 
 
-    SmartDashboard.putNumber("Shooter Distance", 80); //TEST
+    SmartDashboard.putNumber("Shooter RPM", 0); //TEST
   }
 
   private void populateAutomodes() {
@@ -263,6 +263,8 @@ public class Robot extends TimedRobot {
     String getDataFromDriverStation = DriverStation.getInstance().getGameSpecificMessage();
     SmartDashboard.putString("Assigned Color", getDataFromDriverStation);
     vision.postValues();
+
+    SmartDashboard.putData("RUN SHOOTER TEST", new SetShooterSpeedCommand(SmartDashboard.getNumber("Shooter RPM", 0)));
   }
 
   /**
@@ -279,6 +281,5 @@ public class Robot extends TimedRobot {
     vision.trackingMode();
     vision.postValues();
 
-    SmartDashboard.putNumber("Calculated Shooter RPM", shooter.readSpeedMap((int)SmartDashboard.getNumber("Shooter Distance", 80)));
   }
 }

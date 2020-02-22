@@ -222,6 +222,12 @@ public class Shooter extends Subsystem {
         map.put(272, 4230);
         map.put(288, 4300);
         map.put(304, 4415);
+        map.put(320, 4575);
+        map.put(336, 4700);
+        map.put(352, 4900);
+        map.put(368, 5000);
+        map.put(384, 5100);
+        map.put(400, 5270);
     }
 
     public int readSpeedMap(int distance){

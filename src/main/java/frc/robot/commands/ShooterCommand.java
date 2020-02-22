@@ -39,13 +39,6 @@ public class ShooterCommand extends CommandGroup implements IAutonomousCommand {
     addSequential(new IsAlignedCommand());
     addSequential(new ManualFeed());
 
-    //FireBalls.addSequential(new IsAlignedCommand());
-    //feedCommand = new ManualFeed();
-    //FireBalls.addSequential(feedCommand);
-
-    //addParallel(TargetingDistance);
-    //addParallel(FireBalls);
-
     // Add Commands here:
     // e.g. addSequential(new Command1());
     // addSequential(new Command2());
