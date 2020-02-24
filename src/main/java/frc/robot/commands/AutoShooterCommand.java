@@ -7,21 +7,28 @@
 
 package frc.robot.commands;
 
+import java.util.List;
+
 import edu.wpi.first.wpilibj.command.CommandGroup;
+import frc.core238.autonomous.AutonomousModeAnnotation;
 import frc.robot.Robot;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Turret;
 
-public class ShooterCommand extends CommandGroup {
+@AutonomousModeAnnotation(parameterNames = { "NumberOfBalls"})
+public class AutoShooterCommand extends CommandGroup implements IAutonomousCommand {
   /**
    * Add your docs here.
    */
   Shooter theShooter = Robot.shooter;
   Feeder theFeeder = Robot.feeder;
   Turret theTurret = Robot.turret;
+  boolean isAuto = false;
+  double ballsToShoot = 0;
+  ManualFeed feedCommand;
 
-  public ShooterCommand() {
+  public AutoShooterCommand() {
     requires(theFeeder);
     requires(theTurret);
     requires(theShooter);
@@ -48,5 +55,33 @@ public class ShooterCommand extends CommandGroup {
     // e.g. if Command1 requires chassis, and Command2 requires arm,
     // a CommandGroup containing them would require both the chassis and the
     // arm.
+  }
+
+  @Override
+  public boolean getIsAutonomousMode() {
+    // TODO Auto-generated method stub
+    return false;
+  }
+
+  @Override
+  public void setIsAutonomousMode(boolean isAutonomousMode) {
+    this.isAuto = isAutonomousMode;
+
+  }
+
+  @Override
+  public void setParameters(List<String> parameters) {
+    this.ballsToShoot = Double.parseDouble(parameters.get(0));
+
+  }
+
+  @Override
+  public boolean isFinished(){
+    double timeToShoot = theShooter.shootTimePerBall * this.ballsToShoot;
+    boolean isDone = feedCommand.timeSinceInitialized() >= timeToShoot;
+    if(isDone){
+      theShooter.neutral();
+    }
+    return isDone;
   }
 }
