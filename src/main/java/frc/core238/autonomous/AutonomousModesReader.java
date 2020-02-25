@@ -64,12 +64,12 @@ public class AutonomousModesReader {
                             .Debug("AutonomousModesReader.getAutonmousModes unable to instantiate " + className);
                 }
 
-                List<String> strippedParams = commandDescriptor.getParameters().stream().skip(1).collect(Collectors.toList());
+                //List<String> strippedParams = commandDescriptor.getParameters().stream().skip(1).collect(Collectors.toList());
                 // Value of first boolean parameter
-                boolean isParallel = Boolean.parseBoolean(commandDescriptor.getParameters().get(0));
+                boolean isParallel = commandDescriptor.getIsParallel();//Boolean.parseBoolean(commandDescriptor.getParameters().get(0));
 
                 // Pass in parameters (minus isParallel)
-                autoCommand.setParameters(strippedParams);
+                autoCommand.setParameters(commandDescriptor.getParameters());
                 autoCommand.setIsAutonomousMode(true);
                 
                 if(isParallel){

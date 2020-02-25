@@ -77,14 +77,14 @@ public class JsonTests {
             var descriptor = new AutonomousCommandDescriptor();
             descriptor.CommandName = command.getSimpleName();
             descriptor.ParameterNames = annotation.parameterNames();
-            List<String> parameters = new ArrayList<>();
-            int arrayLength = descriptor.ParameterNames.length;
-            parameters.add("isParallel");
-            for(int i = 0; i < arrayLength; i++){
-                parameters.add(descriptor.ParameterNames[i]);
-            }
-            String[] newParams = new String[descriptor.ParameterNames.length + 1];
-            descriptor.ParameterNames = parameters.toArray(newParams);
+            // List<String> parameters = new ArrayList<>();
+            // int arrayLength = descriptor.ParameterNames.length;
+            //parameters.add("isParallel");
+            // for(int i = 0; i < arrayLength; i++){
+            //     parameters.add(descriptor.ParameterNames[i]);
+            // }
+            // String[] newParams = new String[descriptor.ParameterNames.length + 1];
+            //descriptor.ParameterNames = parameters.toArray(newParams);
             descriptors.add(descriptor);
         }
 

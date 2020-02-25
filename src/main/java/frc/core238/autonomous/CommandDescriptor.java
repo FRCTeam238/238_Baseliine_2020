@@ -29,4 +29,12 @@ public class CommandDescriptor {
     public void seteParameters(ArrayList<String> val){
         this.parameters = val;
     }
+
+    private boolean isParallel;
+    public boolean getIsParallel(){
+        return isParallel;
+    }
+    public void setIsParallel(Boolean val){
+        this.isParallel = val;
+    }
 }
