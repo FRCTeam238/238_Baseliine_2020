@@ -46,7 +46,7 @@ public class Shooter extends Subsystem {
     private double desiredSpeedPID = 0;
     private double desiredPositionPID = 0;
 
-    public double shootTimePerBall = 3;
+    public double shootTimePerBall = 1;
 
     public HashMap<Integer, Integer> distanceToShootMap = new HashMap<Integer, Integer>();
 

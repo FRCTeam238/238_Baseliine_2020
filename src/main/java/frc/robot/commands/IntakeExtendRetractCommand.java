@@ -7,14 +7,20 @@
 
 package frc.robot.commands;
 
+import java.util.List;
+
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.command.Command;
+import frc.core238.autonomous.AutonomousModeAnnotation;
 import frc.robot.Robot;
 
 /**
  * Add your docs here.
  */
-public class IntakeExtendRetractCommand extends Command {
+@AutonomousModeAnnotation(parameterNames = {})
+public class IntakeExtendRetractCommand extends Command implements IAutonomousCommand {
+
+    boolean isAuto = false;
 
     public IntakeExtendRetractCommand() {
         requires(Robot.intake);
@@ -22,11 +28,10 @@ public class IntakeExtendRetractCommand extends Command {
 
     @Override
     protected void execute() {
-        if (Robot.intake.getDirection() == Value.kForward) {
+        if (Robot.intake.getDirection() == Value.kReverse) {
+            Robot.intake.extendIntake();
+        } else {
             Robot.intake.retractIntake();
-        } 
-        else {
-            Robot.intake.extendIntake();            
         }
     }
 
@@ -34,5 +39,23 @@ public class IntakeExtendRetractCommand extends Command {
     protected boolean isFinished() {
         // TODO Auto-generated method stub
         return true;
+    }
+
+    @Override
+    public boolean getIsAutonomousMode() {
+        // TODO Auto-generated method stub
+        return isAuto;
+    }
+
+    @Override
+    public void setIsAutonomousMode(boolean isAutonomousMode) {
+        // TODO Auto-generated method stub
+        isAuto = isAutonomousMode;
+    }
+
+    @Override
+    public void setParameters(List<String> parameters) {
+        // TODO Auto-generated method stub
+
     }
 }

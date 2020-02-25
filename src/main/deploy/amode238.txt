@@ -3,22 +3,31 @@
     {
       "Commands": [
         {
-          "Name": "ShooterCommand",
+          "Name": "AutoShooterCommand",
+          "IsParallel": false,
           "Parameters": [
-            "false",
             "3"
           ]
         },
         {
-          "Name": "DriveStraightWithoutSensors",
+          "Name": "IntakeExtendRetractCommand",
+          "IsParallel": false,
+          "Parameters": []
+        },
+        {
+          "Name": "IntakeInOutCommand",
+          "IsParallel": true,
+          "Parameters": []
+        },
+        {
+          "Name": "TrajectoryDriveCommand",
+          "IsParallel": true,
           "Parameters": [
-            "false",
-            "0.5",
-            "1"
+            "Straight"
           ]
         }
       ],
-      "Name": "WeekZero-DriveNShoot"
+      "Name": "ShootThreeBalls"
     }
   ]
 }

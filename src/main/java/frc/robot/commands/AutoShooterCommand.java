@@ -26,7 +26,7 @@ public class AutoShooterCommand extends CommandGroup implements IAutonomousComma
   Turret theTurret = Robot.turret;
   boolean isAuto = false;
   double ballsToShoot = 0;
-  ManualFeed feedCommand;
+  ManualFeed feedCommand = new ManualFeed();
 
   public AutoShooterCommand() {
     requires(theFeeder);
@@ -37,7 +37,7 @@ public class AutoShooterCommand extends CommandGroup implements IAutonomousComma
     addParallel(new PrepareToShoot());
 
     addSequential(new IsAlignedCommand());
-    addSequential(new ManualFeed());
+    addSequential(feedCommand);
 
     // Add Commands here:
     // e.g. addSequential(new Command1());

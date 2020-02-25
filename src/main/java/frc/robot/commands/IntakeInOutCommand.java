@@ -7,32 +7,41 @@
 
 package frc.robot.commands;
 
+import java.util.List;
+
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
-import frc.core238.Logger;
+import frc.core238.autonomous.AutonomousModeAnnotation;
 import frc.robot.Robot;
 
 /**
  * Add your docs here.
  */
-public class IntakeInOutCommand extends Command{
+@AutonomousModeAnnotation(parameterNames = {})
+public class IntakeInOutCommand extends Command implements IAutonomousCommand {
     private double speed = 0;
     private boolean isDone = false;
     private GenericHID controller;
     private int axis;
+    private boolean isAuto = false;
 
     public IntakeInOutCommand(GenericHID controller, int axis) {
         requires(Robot.intake);
-        this.speed = speed;
         this.controller = controller;
         this.axis = axis;
     }
 
+    public IntakeInOutCommand(){
+    }
+
     @Override
     protected void execute() {
-        speed = controller.getRawAxis(axis);
-        if (Math.abs(speed) < 0.2){
+        if(getIsAutonomousMode()){
+            speed = 0.5;
+        }else{
+            speed = controller.getRawAxis(axis);
+        }
+        if (Math.abs(speed) < 0.2) {
             Robot.intake.stop();
         } else {
             Robot.intake.in(speed);
@@ -40,12 +49,12 @@ public class IntakeInOutCommand extends Command{
     }
 
     @Override
-    protected void end(){
+    protected void end() {
         Robot.intake.stop();
     }
 
     @Override
-    protected void interrupted(){
+    protected void interrupted() {
         end();
     }
 
@@ -53,6 +62,24 @@ public class IntakeInOutCommand extends Command{
     protected boolean isFinished() {
         // TODO Auto-generated method stub
         return isDone;
+    }
+
+    @Override
+    public boolean getIsAutonomousMode() {
+        // TODO Auto-generated method stub
+        return isAuto;
+    }
+
+    @Override
+    public void setIsAutonomousMode(boolean isAutonomousMode) {
+        // TODO Auto-generated method stub
+        isAuto = isAutonomousMode;
+    }
+
+    @Override
+    public void setParameters(List<String> parameters) {
+        // TODO Auto-generated method stub
+
     }
 
 
