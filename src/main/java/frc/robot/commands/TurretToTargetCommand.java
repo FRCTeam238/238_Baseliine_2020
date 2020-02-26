@@ -25,6 +25,7 @@ public class TurretToTargetCommand extends Command {
     private static double delta = 90;
 
     public TurretToTargetCommand() {
+        requires(Robot.turret);
     }
 
     @Override
