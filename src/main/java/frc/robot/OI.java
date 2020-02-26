@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.command.InstantCommand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.core238.wrappers.TriggerButton;
 import frc.robot.commands.FeederCommand;
 import frc.robot.commands.IntakeExtendRetractCommand;
@@ -22,6 +21,7 @@ import frc.robot.commands.ManualReverse;
 import frc.robot.commands.PrepareToShoot;
 import frc.robot.commands.SetShooterSpeedCommand;
 import frc.robot.commands.ShooterCommand;
+import frc.robot.commands.ToggleLimelightZoom;
 import frc.robot.commands.TurnTurretByVision;
 import frc.robot.commands.TurnTurretManually;
 import frc.robot.subsystems.Drivetrain;
@@ -64,44 +64,28 @@ public class OI {
     // JoystickButton rotatePanelNTimesBySensor = new JoystickButton(operatorController, XboxController.Button.kA.value);
     // rotatePanelNTimesBySensor.whenPressed(new RotatePanelNTimesBySensorCommand(FieldConstants.numberOfTimesToRotatePanelManipulator));
 
-    TriggerButton spinUpShooterButton = new TriggerButton(operatorController, XboxController.Axis.kLeftTrigger.value);
-    spinUpShooterButton.whenPressed(new SetShooterSpeedCommand(3750));
-    //InstantCommand manualShoot = new InstantCommand("startshooter", () -> Robot.shooter.setSpeed(4000));
     SmartDashboard.putData(new SetShooterSpeedCommand(4000));
     //spinUpShooterButton.whileHeld(new InstantCommand("startshooter", () -> Robot.shooter.setSpeed(4000)));
     InstantCommand manualStop = new InstantCommand("StopShooter", Robot.shooter, () -> Robot.shooter.neutral());
     SmartDashboard.putData(manualStop);
-
-    JoystickButton trackWhileFeedingButton = new JoystickButton(operatorController, XboxController.Button.kY.value);
-    trackWhileFeedingButton.whileHeld(new TurnTurretByVision());
-    trackWhileFeedingButton.whileHeld(new ManualFeed());
 
     JoystickButton manualFeedButton = new JoystickButton(operatorController, XboxController.Button.kBumperLeft.value);
     manualFeedButton.whileHeld(new ManualFeed());
 
     JoystickButton manualReverseFeeder = new JoystickButton(operatorController, XboxController.Button.kBumperRight.value);
     manualReverseFeeder.whileHeld(new ManualReverse());
-    
-    //spinUpShooterButton.whenReleased(manualStop);
-    //functionality taken over by PrepareToShoot automatically, left here for bench testing purposes
-    //TODO: uncomment if there is a CANSPARKMAX 
-    //spinUpShooterButton.whileHeld(new PrepareToShoot());
-
-    //TriggerButton shootButton = new TriggerButton(operatorController, XboxController.Axis.kRightTrigger.value);
-    //shootButton.whileHeld(new FeederCommand());
 
     JoystickButton retractIntakeJoystick = new JoystickButton(operatorController, XboxController.Button.kStickRight.value);
     retractIntakeJoystick.whenPressed(new IntakeExtendRetractCommand());
 
     TriggerButton automatedShoot = new TriggerButton(operatorController, XboxController.Axis.kRightTrigger.value);
     automatedShoot.whileHeld(new ShooterCommand());
-    //automatedShoot.whileHeld(new ParallelCommandGroup(new TurnTurretByVision(), new SetShooterSpeedCommand(4000)));
 
-    JoystickButton turnTurretByVision = new JoystickButton(operatorController, XboxController.Button.kA.value);
+    TriggerButton turnTurretByVision = new TriggerButton(operatorController, XboxController.Axis.kLeftTrigger.value);
     turnTurretByVision.whileHeld(new TurnTurretByVision());
 
-    JoystickButton prepareToRunShooter = new JoystickButton(operatorController, XboxController.Button.kB.value);
-    prepareToRunShooter.whileHeld(new PrepareToShoot());
+    JoystickButton toggleZoomButton = new JoystickButton(operatorController, XboxController.Button.kA.value);
+    toggleZoomButton.whenPressed(new ToggleLimelightZoom());
 
     Robot.turret.setDefaultCommand(new TurnTurretManually(operatorController, XboxController.Axis.kLeftX.value));
 

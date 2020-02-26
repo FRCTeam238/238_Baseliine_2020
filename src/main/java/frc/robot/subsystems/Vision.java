@@ -29,6 +29,13 @@ public class Vision extends Subsystem {
   double cameraHeight;
   double heightDifference;
 
+  int closeRangePipeline = 0;
+  int longRangePipeline = 9;
+
+  double tolerance = 1;
+
+  boolean isCloseRange = true;
+
   public Vision(double targHeight, double camHeight){
     targetHeight = targHeight;
     cameraHeight = camHeight;
@@ -69,6 +76,7 @@ public class Vision extends Subsystem {
   }
   public void initLimelight(){
     table = NetworkTableInstance.getDefault().getTable("limelight");
+    setPipeline(closeRangePipeline);
     cameraMode();
     ledsOff();
   }
@@ -83,7 +91,12 @@ public class Vision extends Subsystem {
   /** @return linear distance from target, in inches */
   public double getDistanceToTarget(){
     heightDifference = Math.abs(targetHeight - cameraHeight);
-    double distance = Trig238.calculateDistance(heightDifference, getPitch());
+    double distance;
+    if(isCloseRange){
+      distance = Trig238.calculateDistance(heightDifference, getPitch());
+    }else{
+      distance = Trig238.calculateDistance(heightDifference, getPitch() + 17);
+    }
     return distance;
   }
 
@@ -95,7 +108,6 @@ public class Vision extends Subsystem {
 
   public boolean isWithinRange(){
     boolean inRange = false;
-    double tolerance = 0.5;
     double currentYaw = getYaw();
     if(hasTarget()){
       inRange = Math.abs(currentYaw) <= tolerance;
@@ -103,6 +115,23 @@ public class Vision extends Subsystem {
       return inRange;
     }else{
       return false;
+    }
+  }
+
+  private void setPipeline(int pipelineID){
+    if(pipelineID == closeRangePipeline){
+      isCloseRange = true;
+    }else{
+      isCloseRange = false;
+    }
+    table.getEntry("pipeline").setNumber(pipelineID);
+  }
+
+  public void switchPipeline(){
+    if(isCloseRange){
+      setPipeline(longRangePipeline);
+    }else{
+      setPipeline(closeRangePipeline);
     }
   }
 }

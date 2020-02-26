@@ -261,8 +261,10 @@ public class Robot extends TimedRobot {
     Scheduler.getInstance().run();
 
     String getDataFromDriverStation = DriverStation.getInstance().getGameSpecificMessage();
-    SmartDashboard.putString("Assigned Color", getDataFromDriverStation);
+    //SmartDashboard.putString("Assigned Color", getDataFromDriverStation);
     vision.postValues();
+
+    SmartDashboard.putNumber("Shooter Bus Voltage", RobotMap.ShooterDevices.shooterMaster.getBusVoltage());
 
     //SmartDashboard.putData("RUN SHOOTER TEST", new SetShooterSpeedCommand(SmartDashboard.getNumber("Shooter RPM", 0)));
   }
