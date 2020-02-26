@@ -8,8 +8,8 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
-import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.NavigationBoard;
 
 /**
@@ -17,28 +17,33 @@ import frc.robot.subsystems.NavigationBoard;
  */
 public class TurretToTargetCommand extends Command {
     private NavigationBoard navBoard;
-    private double currentDrivetrainAngle = navBoard.getAngle();
+    private double currentDrivetrainAngle = navBoard.getAbsoluteYaw();
     private double currentTurretPos = Robot.turret.getPosition();
     private static double offsetDrivetrain = 0;
     private static double newTurretPosition = 0;
     private static double previousYaw = 0;
+    private static double delta = 90;
 
     public TurretToTargetCommand() {
     }
 
     @Override
     protected void execute() {
-        currentDrivetrainAngle = navBoard.getAngle();
-        currentTurretPos = Robot.turret.getPosition();
-        if (currentDrivetrainAngle > currentTurretPos && currentDrivetrainAngle > offsetDrivetrain) {
-            newTurretPosition = Robot.turret.setPosition(currentTurretPos - currentDrivetrainAngle);
-            currentTurretPos = newTurretPosition;
-        } else if (currentDrivetrainAngle < currentTurretPos && currentDrivetrainAngle < offsetDrivetrain) {
-            newTurretPosition = Robot.turret.setPosition(currentTurretPos - currentDrivetrainAngle);
-            currentTurretPos = newTurretPosition;
-        }
-        // TODO Auto-generated method stub
-    }
+        currentDrivetrainAngle = navBoard.getAbsoluteYaw();
+        newTurretPosition = currentTurretPos - currentDrivetrainAngle + delta; //Robot.turret.setPosition(currentTurretPos - currentDrivetrainAngle);
+        //currentTurretPos = newTurretPosition;
+        SmartDashboard.putNumber("Amount of Degress", newTurretPosition);
+
+        // if (currentDrivetrainAngle > currentTurretPos && currentDrivetrainAngle > offsetDrivetrain) {
+        //     newTurretPosition = currentTurretPos - currentDrivetrainAngle + delta; //Robot.turret.setPosition(currentTurretPos - currentDrivetrainAngle);
+        //     //currentTurretPos = newTurretPosition;
+        //     SmartDashboard.putNumber("Amount of Degress", newTurretPosition);
+        // } else if (currentDrivetrainAngle < currentTurretPos && currentDrivetrainAngle < offsetDrivetrain) {
+        //     newTurretPosition = currentDrivetrainAngle - currentDrivetrainAngle; //Robot.turret.setPosition(currentTurretPos - currentDrivetrainAngle);
+        //     //currentTurretPos = newTurretPosition;
+        //     SmartDashboard.putNumber("Amount of Degress", newTurretPosition);
+        // }
+    } 
 
     /**
      * If the drivetrain orientation(degrees) is greater than the turret
@@ -47,7 +52,7 @@ public class TurretToTargetCommand extends Command {
      */
     public static double greaterDrivetrain(double yaw, double turretAngle) {
         if (yaw > turretAngle) {
-            newTurretPosition = turretAngle - yaw;
+            newTurretPosition = turretAngle - yaw + delta;
             turretAngle = newTurretPosition;
         }
         return turretAngle;

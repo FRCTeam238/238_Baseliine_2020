@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.Sendable;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.core238.wrappers.SendableWrapper;
 import frc.robot.RobotMap;
+import frc.robot.commands.TurretToTargetCommand;
 
 /**
  * Add your docs here.
@@ -47,7 +48,7 @@ public class Turret extends Subsystem {
     @Override
     protected void initDefaultCommand() {
         // TODO Auto-generated method stub
-
+        setDefaultCommand(new TurretToTargetCommand());
     }
     
     public void initTalons() {

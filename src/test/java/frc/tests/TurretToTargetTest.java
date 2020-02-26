@@ -19,9 +19,9 @@ public class TurretToTargetTest {
 
     @Test
     public void greaterAngleOfDriveTrain() {
-        double yaw = 90;
+        double yaw = 1;
         double turretAngle = 0;
-        double expectedOutput = -90;
+        double expectedOutput = 89;
         double function = TurretToTargetCommand.greaterDrivetrain(yaw, turretAngle);
         System.out.println("Yaw: " + yaw);
         System.out.println("turret angle: " + turretAngle);
