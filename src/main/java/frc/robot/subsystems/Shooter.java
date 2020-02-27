@@ -18,7 +18,9 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.ControlType;
 
 import edu.wpi.first.wpilibj.Sendable;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.core238.Logger;
 import frc.core238.wrappers.SendableWrapper;
 import frc.robot.RobotMap;
@@ -47,6 +49,14 @@ public class Shooter extends Subsystem {
     private double desiredPositionPID = 0;
 
     public double shootTimePerBall = 1;
+
+    public double ballsShot = 0;
+    public double shooterVoltageAverage;
+    public double samplesTaken = 1;
+    public double totalVoltage = 0;
+    public boolean hasBegunCounting = false;
+
+    public double restartCounterTime = 0;
 
     public HashMap<Integer, Integer> distanceToShootMap = new HashMap<Integer, Integer>();
 
@@ -125,7 +135,6 @@ public class Shooter extends Subsystem {
         }else{
             inRange = false;
         }
-        Logger.Debug("Shooter wheel in range: " + inRange);
         return inRange;
     }
 
@@ -257,4 +266,54 @@ public class Shooter extends Subsystem {
         }
         return neededRPMS;
     }
+
+    // Takes a sample of what bus voltage is
+    public double getShooterBusVoltage (){
+        return shooterMasterDrive.getBusVoltage();
+    }
+
+    // Finds the difference between current voltage and running average voltage
+    public double getDelta (double averageVoltage){
+        return (Math.abs(averageVoltage - getShooterBusVoltage()));
+    }
+
+    // Adds a new sample to the average and computes it
+    public void computeAverage (double newVoltage){
+        totalVoltage = totalVoltage + newVoltage;
+        shooterVoltageAverage = totalVoltage / samplesTaken;
+    }
+
+    public void ballCounter (){
+        if(hasBegunCounting){
+            if(Timer.getFPGATimestamp() <= restartCounterTime){
+                return;
+            }
+            computeAverage(getShooterBusVoltage());
+            samplesTaken++;
+            if(getDelta(shooterVoltageAverage) >= 2.2){
+                ballsShot++;
+                restartCounterTime = Timer.getFPGATimestamp() + 0.75;
+            }
+            SmartDashboard.putNumber("BALLS SHOT", ballsShot);
+        }else{
+            Logger.Debug("Ball Counter waiting to start");
+        }
+    }
+    public boolean ballShot(){
+        return true;
+    }
+
+    public void beginCounting(){
+        hasBegunCounting = true;
+    }
+    public void stopCounting(){
+        hasBegunCounting = false;
+    }
+    public void delayCounter(double startTime){
+        while((Timer.getFPGATimestamp() - startTime) <= 0.5){
+            stopCounting();
+        }
+        beginCounting();
+    }
+
 }

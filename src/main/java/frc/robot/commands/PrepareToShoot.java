@@ -7,6 +7,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.FieldConstants;
 import frc.robot.Robot;
@@ -24,6 +25,7 @@ public class PrepareToShoot extends Command {
   private final double defaultSpeed = 4000;
   private static double slipValue = 1;
   private double distance = 150; // -1
+  private double firstIsAtSpeedTime = 0;
 
   public PrepareToShoot() {
     requires(theShooter);
@@ -32,6 +34,7 @@ public class PrepareToShoot extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
+    
   }
 
   // Called repeatedly when this Command is scheduled to run
@@ -45,6 +48,13 @@ public class PrepareToShoot extends Command {
       wantedSpeed = (double)theShooter.readSpeedMap((int)distance);
     }
     theShooter.setSpeed(wantedSpeed);
+    if(theShooter.isAtSpeed() && firstIsAtSpeedTime == 0){ 
+      firstIsAtSpeedTime = this.timeSinceInitialized();
+    }
+    if((firstIsAtSpeedTime + 4) <= this.timeSinceInitialized()){
+      theShooter.beginCounting();
+    }
+    theShooter.ballCounter();
   }
   // find speed to run at, in ticks per 100ms
   // tell shooter to run at that speed
@@ -122,6 +132,7 @@ public class PrepareToShoot extends Command {
   @Override
   protected void end() {
     theShooter.neutral();
+    theShooter.stopCounting();
   }
 
   // Called when another command which requires one or more of the same

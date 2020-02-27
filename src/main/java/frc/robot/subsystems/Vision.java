@@ -111,7 +111,6 @@ public class Vision extends Subsystem {
     double currentYaw = getYaw();
     if(hasTarget()){
       inRange = Math.abs(currentYaw) <= tolerance;
-      Logger.Debug("Limelight in range: " + inRange);
       return inRange;
     }else{
       return false;
