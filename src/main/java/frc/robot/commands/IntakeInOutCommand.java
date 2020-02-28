@@ -24,6 +24,7 @@ public class IntakeInOutCommand extends Command implements IAutonomousCommand {
     private GenericHID controller;
     private int axis;
     private boolean isAuto = false;
+    private final double maxSpeed = 0.4;
 
     public IntakeInOutCommand(GenericHID controller, int axis) {
         requires(Robot.intake);
@@ -31,15 +32,15 @@ public class IntakeInOutCommand extends Command implements IAutonomousCommand {
         this.axis = axis;
     }
 
-    public IntakeInOutCommand(){
+    public IntakeInOutCommand() {
     }
 
     @Override
     protected void execute() {
-        if(getIsAutonomousMode()){
-            speed = 0.5;
-        }else{
-            speed = controller.getRawAxis(axis);
+        if (getIsAutonomousMode()) {
+            speed = maxSpeed;
+        } else {
+            speed = controller.getRawAxis(axis) * maxSpeed;
         }
         if (Math.abs(speed) < 0.2) {
             Robot.intake.stop();
@@ -81,6 +82,5 @@ public class IntakeInOutCommand extends Command implements IAutonomousCommand {
         // TODO Auto-generated method stub
 
     }
-
 
 }
