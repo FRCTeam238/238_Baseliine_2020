@@ -9,13 +9,17 @@ package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.core238.Logger;
 import frc.core238.wrappers.SendableWrapper;
+import frc.robot.Dashboard238;
+import frc.robot.Robot;
 
 public class NavigationBoard extends Subsystem {
 
@@ -39,8 +43,21 @@ public class NavigationBoard extends Subsystem {
 	double current = 0;
 	double elapsed = 0;
 
+	private double diagnosticStartTime = 0;
+
+	private NetworkTableEntry entryPitch;
+	private NetworkTableEntry entryYaw;
+	private NetworkTableEntry entryRoll;
+
+    Dashboard238 dashboard;
+
 	public NavigationBoard(){
 		init();
+		dashboard = Robot.dashboard238;
+		entryPitch = Shuffleboard.getTab("DiagnosticTab").add("Pitch", 0).getEntry();
+		entryYaw = Shuffleboard.getTab("DiagnosticTab").add("Yaw", 0).getEntry();
+		entryRoll = Shuffleboard.getTab("DiagnosticTab").add("Roll", 0).getEntry();
+
 	}
 
 	private void init()
@@ -228,4 +245,18 @@ public class NavigationBoard extends Subsystem {
 	addChild("Roll", roll);
 	addChild("Yaw", yaw);
 }
+	public void runNavBoardDiagnostics(){
+		Shuffleboard.selectTab("DiagnosticTab");
+		if(diagnosticStartTime == 0){
+			diagnosticStartTime = Timer.getFPGATimestamp();
+		}
+		//if((diagnosticStartTime + 3) >= Timer.getFPGATimestamp() && diagnosticStartTime != 0){
+			
+		//}else{
+			entryPitch.setDouble(getPitch());
+			entryYaw.setDouble(getYaw());
+			entryRoll.setDouble(getRoll());
+		//}
+	}
+
 }

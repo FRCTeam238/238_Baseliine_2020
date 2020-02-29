@@ -285,5 +285,8 @@ public class Robot extends TimedRobot {
 
     shooter.runShooterDiagnostic();
     turret.runTurretDiagnostic();
+    feeder.runFeederDiagnostics();
+    intake.runIntakeDiagnostics();
+    navigationBoard.runNavBoardDiagnostics();
   }
 }

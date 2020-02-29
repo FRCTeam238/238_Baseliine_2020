@@ -18,12 +18,17 @@ import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.Sendable;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.core238.Logger;
 import frc.core238.wrappers.SendableWrapper;
 import frc.core238.wrappers.TalonSRX_238;
+import frc.robot.Dashboard238;
+import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.commands.TankDrive;
 import frc.robot.commands.drivetrainparameters.DriverJoysticks;
@@ -59,9 +64,20 @@ public class Drivetrain extends Subsystem {
   public static int kTimeoutMs = 30;
   public static double rampRate = 0.25;
 
+  private double diagnosticStartTime = 0;
+
+  private NetworkTableEntry entryLeft;
+
+  private NetworkTableEntry entryRight;
+
+  Dashboard238 dashboard;
+
   public Drivetrain() {
     initTalons();
     // initLiveWindow();
+    dashboard = Robot.dashboard238;
+    entryLeft = Shuffleboard.getTab("DiagnosticTab").add("LeftPower", 0).getEntry();
+    entryRight = Shuffleboard.getTab("DiagnosticTab").add("RightPower", 0).getEntry();
     
   }
 
@@ -214,6 +230,16 @@ public class Drivetrain extends Subsystem {
     return rightDistanceTravelled;
   }
 
+  public double getLeftPower(){
+    double power = leftMasterDrive.getMotorOutputPercent();
+    return power;
+  }
+
+  public double getRightPower(){
+    double power = rightMasterDrive.getMotorOutputPercent();
+    return power;
+  }
+
   public boolean isAtPosition(double distance) {
     double desiredTicks = calcTicks(distance);
     double rightPosition = getTicks(rightMasterDrive);
@@ -274,6 +300,23 @@ public class Drivetrain extends Subsystem {
   private void addChild(String name, SendableWrapper wrapper){
     _sendables.add(wrapper);
     addChild(name, (Sendable)wrapper);
+  }
+
+  public void runDrivetrainDiagnostics(){
+    Shuffleboard.selectTab("DiagnosticTab");
+    if(diagnosticStartTime == 0){
+        diagnosticStartTime = Timer.getFPGATimestamp();
+    }
+    if((diagnosticStartTime + 3) >= Timer.getFPGATimestamp() && diagnosticStartTime != 0){
+       stop();
+    }else{
+      drive(0.5, 0.5);
+      double leftPower = getLeftPower();
+      double rightPower = getRightPower();
+      entryLeft.setDouble(leftPower);
+      entryRight.setDouble(rightPower);
+    }
+
   }
 
 }

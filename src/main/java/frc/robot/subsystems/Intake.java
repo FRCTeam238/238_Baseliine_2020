@@ -12,9 +12,14 @@ import java.util.function.BooleanSupplier;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import frc.robot.Dashboard238;
+import frc.robot.Robot;
 import frc.robot.RobotMap;
 
 /**
@@ -28,9 +33,17 @@ public class Intake extends Subsystem {
 
     private final double INTAKEPOWER = 0.5;
 
+    private double diagnosticStartTime = 0;
+
+    private NetworkTableEntry entry;
+
+    Dashboard238 dashboard;
+
     public Intake() {
         initTalons();
         solenoid = new DoubleSolenoid(forwarChannel, reverseChannel);
+        dashboard = Robot.dashboard238;
+        entry = Shuffleboard.getTab("DiagnosticTab").add("IntakeVelocity", 0).getEntry();
         //solenoid = RobotMap.IntakeDevices.intakeSolenoid;
     }
 
@@ -46,6 +59,11 @@ public class Intake extends Subsystem {
 
     private void setPower(double speedValue){
         intakeMasterDrive.set(ControlMode.PercentOutput, speedValue);
+    }
+
+    private double getPower(){
+        double power = intakeMasterDrive.getMotorOutputPercent();
+        return power;
     }
 
     public void in(double speed) {
@@ -74,6 +92,20 @@ public class Intake extends Subsystem {
 
     public BooleanSupplier isOutsideLimits(GenericHID controller, int axis){
         return () -> -0.2 >= controller.getRawAxis(axis) || controller.getRawAxis(axis) >= 0.2;
+    }
+
+    public void runIntakeDiagnostics(){
+        Shuffleboard.selectTab("DiagnosticTab");
+        if(diagnosticStartTime == 0){
+            diagnosticStartTime = Timer.getFPGATimestamp();
+        }
+        if(((diagnosticStartTime + 3) >= Timer.getFPGATimestamp()) && (diagnosticStartTime !=0 )){
+            stop();
+        } else{
+            setPower(0.3);
+            entry.setDouble(getPower());
+        }
+
     }
 
 }

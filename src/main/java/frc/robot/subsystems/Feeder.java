@@ -13,28 +13,41 @@ import java.util.List;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Sendable;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.core238.wrappers.SendableWrapper;
+import frc.robot.Dashboard238;
+import frc.robot.Robot;
 import frc.robot.RobotMap;
 
 /**
  * Add your docs here.
  */
 public class Feeder extends Subsystem {
-    public final VictorSPX feederMasterDrive = RobotMap.FeederDevices.feederVictor;//FeederDevices.feederTalon;
+    public final VictorSPX feederMasterDrive = RobotMap.FeederDevices.feederVictor;// FeederDevices.feederTalon;
     public final DigitalInput firstDetector = new DigitalInput(0);
     public final DigitalInput secondDetector = new DigitalInput(1);
-    //TODO: change FEEDER_OUTPUT to reasonable value;
+    // TODO: change FEEDER_OUTPUT to reasonable value;
     private final double FEEDER_OUTPUT = 0.7;
     private final double STOP_FEEDER_OUTPUT = 0;
     private int heldBallsNumber = 0;
 
+    private double diagnosticStartTime = 0;
+
+    private NetworkTableEntry entry;
+
+    Dashboard238 dashboard;
+
     public Feeder() {
-        //initLiveWindow();
+        // initLiveWindow();
         SmartDashboard.putData(this);
+        dashboard = Robot.dashboard238;
+        entry = Shuffleboard.getTab("DiagnosticTab").add("FeederPower", 0).getEntry();
     }
 
     @Override
@@ -46,81 +59,94 @@ public class Feeder extends Subsystem {
         feederMasterDrive.set(ControlMode.PercentOutput, FEEDER_OUTPUT);
     }
 
+    public double getPower(){
+        double power = feederMasterDrive.getMotorOutputPercent();
+        return power;
+    }
+
     public void reverse() {
         feederMasterDrive.set(ControlMode.PercentOutput, -1 * FEEDER_OUTPUT);
     }
 
-    /*if(firstDetector == broken){
-     turn on
-    }
+    /*
+     * if(firstDetector == broken){ turn on }
+     * 
+     * if(secondDetector == broken){ secondbroken = true } else { if(secondBroken ==
+     * true){ turn off secondBroken = false } }
+     * 
+     * 
+     * 
+     */
 
-    if(secondDetector == broken){
-        secondbroken = true
-    } else {
-        if(secondBroken == true){
-            turn off
-            secondBroken = false
-        }
-    }
-    
-
-
-    */
-
-    public void stop(){
+    public void stop() {
         feederMasterDrive.set(ControlMode.PercentOutput, STOP_FEEDER_OUTPUT);
     }
-// public BooleanSupplier getSensor1Triggered (){
+    // public BooleanSupplier getSensor1Triggered (){
 
-//     boolean test = firstDetector.get();
+    // boolean test = firstDetector.get();
 
-//     BooleanSupplier testBS = new BooleanSupplier(){
-    
-//         @Override
-//         public boolean getAsBoolean() {
-//             // TODO Auto-generated method stub
-//             return test;
-//         }
-//     };
-//     return testBS;
-// }
-    // public void feederLogicLoop(){
-    //     boolean lastStateBroken = false;
-    //     boolean secondSensorBroken = false;
-    //     boolean firstSensorBroken = false;
-    //     //firstSensorBroken = firstDetector.get();
-    //     //secondSensorBroken = secondDetector.get();
-    //     if(firstSensorBroken == true){
-    //         start();
-    //     }
-    //     if(secondSensorBroken == false && lastStateBroken == true){
-    //         heldBallsNumber++;
-    //         stop();
-    //     }
-    //     //activate LEDs here
-    //     if(secondSensorBroken == true){
-    //         lastStateBroken = true;
-    //     }
+    // BooleanSupplier testBS = new BooleanSupplier(){
+
+    // @Override
+    // public boolean getAsBoolean() {
+    // // TODO Auto-generated method stub
+    // return test;
     // }
-    //for testing moved to feedercommand
+    // };
+    // return testBS;
+    // }
+    // public void feederLogicLoop(){
+    // boolean lastStateBroken = false;
+    // boolean secondSensorBroken = false;
+    // boolean firstSensorBroken = false;
+    // //firstSensorBroken = firstDetector.get();
+    // //secondSensorBroken = secondDetector.get();
+    // if(firstSensorBroken == true){
+    // start();
+    // }
+    // if(secondSensorBroken == false && lastStateBroken == true){
+    // heldBallsNumber++;
+    // stop();
+    // }
+    // //activate LEDs here
+    // if(secondSensorBroken == true){
+    // lastStateBroken = true;
+    // }
+    // }
+    // for testing moved to feedercommand
 
     // private double getMotorOutput(){
-    //     double motorOutput = feederMasterDrive.getSelectedSensorPosition();
-    //     return motorOutput;
+    // double motorOutput = feederMasterDrive.getSelectedSensorPosition();
+    // return motorOutput;
     // }
 
     // private void initLiveWindow() {
-    //     SendableWrapper motor = new SendableWrapper(builder -> {
-    //         builder.addDoubleProperty("Motor", this::getMotorOutput, null);
-    //     });
-        
-    //     addChild("Motor", motor);
+    // SendableWrapper motor = new SendableWrapper(builder -> {
+    // builder.addDoubleProperty("Motor", this::getMotorOutput, null);
+    // });
+
+    // addChild("Motor", motor);
     // }
 
     private List<SendableWrapper> _sendables = new ArrayList<>();
-    private void addChild(String name, SendableWrapper wrapper){
-      _sendables.add(wrapper);
-      addChild(name, (Sendable)wrapper);
+
+    private void addChild(String name, SendableWrapper wrapper) {
+        _sendables.add(wrapper);
+        addChild(name, (Sendable) wrapper);
     }
-    
+
+    public void runFeederDiagnostics(){
+        Shuffleboard.selectTab("DiagnosticTab");
+        if(diagnosticStartTime == 0){
+            diagnosticStartTime = Timer.getFPGATimestamp();
+        }
+        if((diagnosticStartTime + 3) >= Timer.getFPGATimestamp() && diagnosticStartTime != 0){
+            stop();
+        } else {
+            start();
+            entry.setDouble(getPower());
+        }
+
+    }
+
 }
