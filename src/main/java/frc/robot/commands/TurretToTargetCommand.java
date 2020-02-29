@@ -9,6 +9,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.core238.Logger;
 import frc.robot.Robot;
 import frc.robot.subsystems.NavigationBoard;
 
@@ -19,10 +20,12 @@ public class TurretToTargetCommand extends Command {
     private NavigationBoard navBoard;
     private double currentDrivetrainAngle = navBoard.getAbsoluteYaw();
     private double currentTurretPos = Robot.turret.getPosition();
-    private static double offsetDrivetrain = 0;
-    private static double newTurretPosition = 0;
+    private static double desiredTurretMovement = 0;
     private static double previousYaw = 0;
     private static double delta = 90;
+
+    private static double stopperOne = 105; //TODO
+    private static double stopperTwo = 120;
 
     public TurretToTargetCommand() {
         requires(Robot.turret);
@@ -31,9 +34,31 @@ public class TurretToTargetCommand extends Command {
     @Override
     protected void execute() {
         currentDrivetrainAngle = navBoard.getAbsoluteYaw();
-        newTurretPosition = -currentTurretPos - currentDrivetrainAngle - delta; //Robot.turret.setPosition(currentTurretPos - currentDrivetrainAngle);
-        //currentTurretPos = newTurretPosition;
-        SmartDashboard.putNumber("Amount of Degress", newTurretPosition);
+        //calculaing how many degress we NEED to turn
+        desiredTurretMovement = -currentTurretPos - currentDrivetrainAngle - delta;     
+        
+        double distanceToStopperOne = stopperOne - currentTurretPos;
+        double distanceToStopperTwo = -(360-stopperTwo) - currentTurretPos;
+
+        //chooses the most optimal route
+        if (desiredTurretMovement <= 180 && desiredTurretMovement >= -180) {
+            desiredTurretMovement = desiredTurretMovement;
+        } else if (desiredTurretMovement < -180) {
+            desiredTurretMovement += 360;
+        } else if (desiredTurretMovement > 180) {
+            desiredTurretMovement -= 360;
+        }
+
+        //checks for not passing the deadzone
+        if (desiredTurretMovement > distanceToStopperOne) {
+            desiredTurretMovement = distanceToStopperOne;            
+        } 
+        if (desiredTurretMovement < distanceToStopperTwo) {
+            desiredTurretMovement = distanceToStopperTwo;
+        }
+        double desiredTurretPosition = currentTurretPos + desiredTurretMovement;
+        //Robot.turret.setPosition(currentTurretPos + desiredTurretMovement);
+        SmartDashboard.putNumber("Amount of Degress", desiredTurretPosition);
     } 
 
     /**
@@ -43,8 +68,8 @@ public class TurretToTargetCommand extends Command {
      */
     public static double greaterDrivetrain(double yaw, double turretAngle) {
         if (yaw > turretAngle) {
-            newTurretPosition = turretAngle - yaw + delta;
-            turretAngle = newTurretPosition;
+            desiredTurretMovement = turretAngle - yaw + delta;
+            turretAngle = desiredTurretMovement;
         }
         return turretAngle;
     }
@@ -56,8 +81,8 @@ public class TurretToTargetCommand extends Command {
      */
     public static double lesserDrivetrain(double yaw, double turretAngle) {
         if (yaw < turretAngle) {
-            newTurretPosition = turretAngle - yaw;
-            turretAngle = newTurretPosition;
+            desiredTurretMovement = turretAngle - yaw;
+            turretAngle = desiredTurretMovement;
         }
         return turretAngle;
     }
@@ -77,8 +102,8 @@ public class TurretToTargetCommand extends Command {
                 previousYaw = yaw;
                 yaw = 0;
             }
-            newTurretPosition = turretAngle - previousYaw;
-            turretAngle = newTurretPosition;
+            desiredTurretMovement = turretAngle - previousYaw;
+            turretAngle = desiredTurretMovement;
         } else {
             if (yaw == 0) {
                 previousYaw = yaw;
@@ -86,8 +111,8 @@ public class TurretToTargetCommand extends Command {
                 previousYaw = yaw;
                 yaw = 0;
             }
-            newTurretPosition = turretAngle - previousYaw;
-            turretAngle = newTurretPosition;
+            desiredTurretMovement = turretAngle - previousYaw;
+            turretAngle = desiredTurretMovement;
         }
         return turretAngle;
     }
