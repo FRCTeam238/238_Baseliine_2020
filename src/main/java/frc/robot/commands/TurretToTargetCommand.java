@@ -31,7 +31,7 @@ public class TurretToTargetCommand extends Command {
     @Override
     protected void execute() {
         currentDrivetrainAngle = navBoard.getAbsoluteYaw();
-        newTurretPosition = currentTurretPos - currentDrivetrainAngle + delta; //Robot.turret.setPosition(currentTurretPos - currentDrivetrainAngle);
+        newTurretPosition = -currentTurretPos - currentDrivetrainAngle - delta; //Robot.turret.setPosition(currentTurretPos - currentDrivetrainAngle);
         //currentTurretPos = newTurretPosition;
         SmartDashboard.putNumber("Amount of Degress", newTurretPosition);
     } 
