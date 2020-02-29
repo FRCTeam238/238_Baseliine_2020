@@ -17,12 +17,16 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.ControlType;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.Sendable;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.core238.Logger;
 import frc.core238.wrappers.SendableWrapper;
+import frc.robot.Dashboard238;
+import frc.robot.Robot;
 import frc.robot.RobotMap;
 
 /**
@@ -61,8 +65,13 @@ public class Shooter extends Subsystem {
     private final double voltageSpikeSize = 2.2;
     private double ballCounterDelay = 0.75;
 
+    private double diagnosticStartTime = 0;
+
     public HashMap<Integer, Integer> distanceToShootMap = new HashMap<Integer, Integer>();
 
+    private NetworkTableEntry entry;
+
+    Dashboard238 dashboard;
     /*
      * private double integral = 0; private double derivative
      *  = 0; private double
@@ -75,6 +84,8 @@ public class Shooter extends Subsystem {
         initSparkMax();
         // initLiveWindow();
         populateSpeedMap(distanceToShootMap);
+        dashboard = Robot.dashboard238;
+        entry = Shuffleboard.getTab("DiagnosticTab").add("Shooter Velocity", 0).getEntry();
     }
 
     public void initSparkMax() {
@@ -254,21 +265,50 @@ public class Shooter extends Subsystem {
             }
             
         }else{
-            if(distanceRemainder <= 8){
-                if(distanceToShootMap.containsKey(distance - distanceRemainder)){
-                    neededRPMS = distanceToShootMap.get(distance - distanceRemainder);
-                }else{
-                    Logger.Debug("Shooter.java line 239 - key not found");
-                }
-            }else{
-                if(distanceToShootMap.containsKey(distance + (16 - distanceRemainder))){
-                    neededRPMS = distanceToShootMap.get(distance + (16 - distanceRemainder));
-                }else{
-                    Logger.Debug("Shooter.java line 245 - key not found");
-                }
-            }
+            neededRPMS = getSteppedRPMs(distance, distanceRemainder, distanceToShootMap);
         }
         return neededRPMS;
+    }
+
+    private int getSteppedRPMs(int distance, int distanceRemainder, HashMap<Integer, Integer> map){
+        int lowerDistance = distance - distanceRemainder;
+        int upperDistance = distance + (16 - distanceRemainder);
+        int lowerRPM = 0;
+        int upperRPM = 0;
+        if(distanceToShootMap.containsKey(lowerDistance)){
+            lowerRPM = distanceToShootMap.get(lowerDistance);
+            if(distanceToShootMap.containsKey(upperDistance)){
+                upperRPM = distanceToShootMap.get(upperDistance);
+            }
+        }
+        int steppedRPMs = 0;
+        int rpmGap = Math.abs(upperRPM - lowerRPM);
+        int rpmPerInch = rpmGap / 16;
+        int rpmAdjustment = distanceRemainder * rpmPerInch;
+        if(upperRPM < lowerRPM){
+            steppedRPMs = lowerRPM - rpmAdjustment;
+        }else{
+            steppedRPMs = lowerRPM + rpmAdjustment;
+        }
+        return steppedRPMs;
+    }
+
+    private int getClosestRPMs(int distance, int distanceRemainder, HashMap<Integer, Integer> map){
+        int closestRPMs = 0;
+        if(distanceRemainder <= 8){
+            if(map.containsKey(distance - distanceRemainder)){
+                closestRPMs = map.get(distance - distanceRemainder);
+            }else{
+                Logger.Debug("Shooter.java line 239 - key not found");
+            }
+        }else{
+            if(map.containsKey(distance + (16 - distanceRemainder))){
+                closestRPMs = map.get(distance + (16 - distanceRemainder));
+            }else{
+                Logger.Debug("Shooter.java line 245 - key not found");
+            }
+        }
+        return closestRPMs;
     }
 
     /** Takes a sample of what bus voltage is */
@@ -309,5 +349,18 @@ public class Shooter extends Subsystem {
     /** Hard disables the ball counter, even if countBalls() is running */
     public void stopCounting(){
         hasBegunCounting = false;
+    }
+
+    public void runShooterDiagnostic(){
+        Shuffleboard.selectTab("DiagnosticTab");
+        if(diagnosticStartTime == 0){
+            diagnosticStartTime = Timer.getFPGATimestamp();
+        }
+        if((diagnosticStartTime + 3) >= Timer.getFPGATimestamp() && diagnosticStartTime != 0){
+            neutral();
+        }else{
+            setSpeed(3000);
+            entry.setDouble(getSpeed());
+        }
     }
 }

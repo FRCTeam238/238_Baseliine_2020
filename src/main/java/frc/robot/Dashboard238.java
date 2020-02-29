@@ -54,7 +54,7 @@ public class Dashboard238 {
         theWidget.withSize(sizeX, sizeY).withPosition(posX, posY);
     }
 
-    private void buildElement(String elementName, Double value, int sizeX, int sizeY, int posX, int posY) {
+    public void buildElement(String elementName, Double value, int sizeX, int sizeY, int posX, int posY) {
         SimpleWidget theWidget = diagnosticTab.add(elementName, value);
         dashboardEntries.put(elementName, theWidget.getEntry());
         theWidget.withSize(sizeX, sizeY).withPosition(posX, posY);

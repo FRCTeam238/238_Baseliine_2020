@@ -101,7 +101,7 @@ public class Robot extends TimedRobot {
     LiveWindow.disableAllTelemetry();
 
 
-    //SmartDashboard.putNumber("Shooter RPM", 0); //TEST
+    SmartDashboard.putNumber("Shooter Distance (test)", 80); //TEST
   }
 
   private void populateAutomodes() {
@@ -283,5 +283,7 @@ public class Robot extends TimedRobot {
     vision.trackingMode();
     vision.postValues();
 
+    shooter.runShooterDiagnostic();
+    turret.runTurretDiagnostic();
   }
 }

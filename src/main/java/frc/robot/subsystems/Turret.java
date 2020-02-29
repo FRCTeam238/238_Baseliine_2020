@@ -15,9 +15,14 @@ import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
 import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.Sendable;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import frc.core238.wrappers.SendableWrapper;
+import frc.robot.Dashboard238;
+import frc.robot.Robot;
 import frc.robot.RobotMap;
 
 /**
@@ -38,10 +43,16 @@ public class Turret extends Subsystem {
     final double kI = 0.;
     final double kD = 0;
 
+    private double diagnosticStartTime = 0;
+    private NetworkTableEntry entry;
+    Dashboard238 dashboard;
+
     public Turret() {
         initTalons();
         resetEncoder();
         // initLiveWindow();
+        dashboard = Robot.dashboard238;
+        entry = Shuffleboard.getTab("DiagnosticTab").add("Turret Position", 0).getEntry();
     }
 
     @Override
@@ -117,4 +128,16 @@ public class Turret extends Subsystem {
         turretMasterDrive.set(ControlMode.Velocity, velocity);
     }
 
+    public void runTurretDiagnostic(){
+        Shuffleboard.selectTab("DiagnosticTab");
+        if(diagnosticStartTime == 0){
+            diagnosticStartTime = Timer.getFPGATimestamp();
+        }
+        if((diagnosticStartTime + 2) >= Timer.getFPGATimestamp() && diagnosticStartTime != 0){
+            neutral();
+        }else{
+            turretMasterDrive.set(ControlMode.PercentOutput, 0.5);
+            entry.setDouble(getPosition());
+        }
+    }
 }
