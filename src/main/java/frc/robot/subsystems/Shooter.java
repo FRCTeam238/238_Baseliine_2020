@@ -50,13 +50,16 @@ public class Shooter extends Subsystem {
 
     public double shootTimePerBall = 1;
 
-    public double ballsShot = 0;
-    public double shooterVoltageAverage;
-    public double samplesTaken = 1;
-    public double totalVoltage = 0;
-    public boolean hasBegunCounting = false;
+    private double ballsShot = 0;
+    private double shooterVoltageAverage;
+    private double samplesTaken = 1;
+    private double totalVoltage = 0;
+    private boolean hasBegunCounting = false;
 
-    public double restartCounterTime = 0;
+    private double restartCounterTime = 0;
+
+    private final double voltageSpikeSize = 2.2;
+    private double ballCounterDelay = 0.75;
 
     public HashMap<Integer, Integer> distanceToShootMap = new HashMap<Integer, Integer>();
 
@@ -182,6 +185,7 @@ public class Shooter extends Subsystem {
     public void neutral() {
         shooterPID.setReference(0, ControlType.kVoltage);
         desiredSpeedPID = 0;
+        stopCounting();
     }
 
     private void initLiveWindow() {
@@ -267,53 +271,43 @@ public class Shooter extends Subsystem {
         return neededRPMS;
     }
 
-    // Takes a sample of what bus voltage is
-    public double getShooterBusVoltage (){
+    /** Takes a sample of what bus voltage is */
+    private double getShooterBusVoltage (){
         return shooterMasterDrive.getBusVoltage();
     }
 
-    // Finds the difference between current voltage and running average voltage
-    public double getDelta (double averageVoltage){
-        return (Math.abs(averageVoltage - getShooterBusVoltage()));
-    }
-
-    // Adds a new sample to the average and computes it
-    public void computeAverage (double newVoltage){
+    /** Adds a new sample to the average and computes it */
+    private void computeAverage (double newVoltage){
         totalVoltage = totalVoltage + newVoltage;
         shooterVoltageAverage = totalVoltage / samplesTaken;
     }
 
-    public void ballCounter (){
+    /** Counts balls leaving the shooter based on voltage spikes. Delays the counter between shots to prevent fluctuations */
+    public void countBalls (){
         if(hasBegunCounting){
             if(Timer.getFPGATimestamp() <= restartCounterTime){
                 return;
             }
             computeAverage(getShooterBusVoltage());
             samplesTaken++;
-            if(getDelta(shooterVoltageAverage) >= 2.2){
+            double delta = Math.abs(shooterVoltageAverage - getShooterBusVoltage());
+            if(delta >= voltageSpikeSize){
                 ballsShot++;
-                restartCounterTime = Timer.getFPGATimestamp() + 0.75;
+                restartCounterTime = Timer.getFPGATimestamp() + ballCounterDelay;
             }
             SmartDashboard.putNumber("BALLS SHOT", ballsShot);
         }else{
             Logger.Debug("Ball Counter waiting to start");
         }
     }
-    public boolean ballShot(){
-        return true;
-    }
 
+    /** Enables the ball counter - still requires countBalls() to be run periodically */
     public void beginCounting(){
         hasBegunCounting = true;
     }
+
+    /** Hard disables the ball counter, even if countBalls() is running */
     public void stopCounting(){
         hasBegunCounting = false;
     }
-    public void delayCounter(double startTime){
-        while((Timer.getFPGATimestamp() - startTime) <= 0.5){
-            stopCounting();
-        }
-        beginCounting();
-    }
-
 }

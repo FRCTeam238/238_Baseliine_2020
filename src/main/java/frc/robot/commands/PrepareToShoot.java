@@ -26,6 +26,7 @@ public class PrepareToShoot extends Command {
   private static double slipValue = 1;
   private double distance = 150; // -1
   private double firstIsAtSpeedTime = 0;
+  private double initialCounterDelay = 4;
 
   public PrepareToShoot() {
     requires(theShooter);
@@ -51,10 +52,10 @@ public class PrepareToShoot extends Command {
     if(theShooter.isAtSpeed() && firstIsAtSpeedTime == 0){ 
       firstIsAtSpeedTime = this.timeSinceInitialized();
     }
-    if((firstIsAtSpeedTime + 4) <= this.timeSinceInitialized()){
+    if((firstIsAtSpeedTime + initialCounterDelay) <= this.timeSinceInitialized()){
       theShooter.beginCounting();
     }
-    theShooter.ballCounter();
+    theShooter.countBalls();
   }
   // find speed to run at, in ticks per 100ms
   // tell shooter to run at that speed
@@ -132,7 +133,6 @@ public class PrepareToShoot extends Command {
   @Override
   protected void end() {
     theShooter.neutral();
-    theShooter.stopCounting();
   }
 
   // Called when another command which requires one or more of the same
