@@ -34,16 +34,6 @@ public class TurretToTargetCommand extends Command {
         newTurretPosition = currentTurretPos - currentDrivetrainAngle + delta; //Robot.turret.setPosition(currentTurretPos - currentDrivetrainAngle);
         //currentTurretPos = newTurretPosition;
         SmartDashboard.putNumber("Amount of Degress", newTurretPosition);
-
-        // if (currentDrivetrainAngle > currentTurretPos && currentDrivetrainAngle > offsetDrivetrain) {
-        //     newTurretPosition = currentTurretPos - currentDrivetrainAngle + delta; //Robot.turret.setPosition(currentTurretPos - currentDrivetrainAngle);
-        //     //currentTurretPos = newTurretPosition;
-        //     SmartDashboard.putNumber("Amount of Degress", newTurretPosition);
-        // } else if (currentDrivetrainAngle < currentTurretPos && currentDrivetrainAngle < offsetDrivetrain) {
-        //     newTurretPosition = currentDrivetrainAngle - currentDrivetrainAngle; //Robot.turret.setPosition(currentTurretPos - currentDrivetrainAngle);
-        //     //currentTurretPos = newTurretPosition;
-        //     SmartDashboard.putNumber("Amount of Degress", newTurretPosition);
-        // }
     } 
 
     /**

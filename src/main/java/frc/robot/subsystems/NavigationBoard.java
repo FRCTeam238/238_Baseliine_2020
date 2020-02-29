@@ -107,13 +107,8 @@ public class NavigationBoard extends Subsystem {
 
 	public double getAbsoluteYaw() {
 		double currentYaw = getYaw();
-		if (previousYaw < currentYaw) {
-			newYaw = previousYaw - currentYaw;
-			return newYaw;
-		} else if (previousYaw > currentYaw) {
-			newYaw = previousYaw - currentYaw;
-			return newYaw;
-		}
+		previousYaw = currentYaw;
+		newYaw = previousYaw;
 		return newYaw;
 	}
 
