@@ -11,8 +11,11 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.core238.Logger;
+import frc.robot.Dashboard238;
+import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.Trig238;
 
@@ -36,10 +39,22 @@ public class Vision extends Subsystem {
 
   boolean isCloseRange = true;
 
+  private double diagnosticStartTime = 0;
+
+  private NetworkTableEntry entryTrackingMode;
+  private NetworkTableEntry entryLEDsOn;
+  private NetworkTableEntry entryDistance;
+
+  Dashboard238 dashboard;
+
   public Vision(double targHeight, double camHeight){
     targetHeight = targHeight;
     cameraHeight = camHeight;
     initLimelight();
+    dashboard = Robot.dashboard238;
+    entryTrackingMode = Shuffleboard.getTab("DiagnosticTab").add("LL Tracking Mode", 0).getEntry();
+    entryLEDsOn = Shuffleboard.getTab("DiagnosticTab").add("LL Leds On", 0).getEntry();
+    entryDistance = Shuffleboard.getTab("DiagnosticTab").add("LL Distance", 0).getEntry();
   }
 
   @Override
@@ -133,4 +148,10 @@ public class Vision extends Subsystem {
       setPipeline(closeRangePipeline);
     }
   }
+
+  public void visionDiagnostics(){
+    Shuffleboard.selectTab("DiagnosticTab");
+    
+    entryDistance.setDouble(getDistanceToTarget());
+   }
 }

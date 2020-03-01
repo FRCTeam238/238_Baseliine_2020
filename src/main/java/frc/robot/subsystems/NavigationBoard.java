@@ -247,16 +247,11 @@ public class NavigationBoard extends Subsystem {
 }
 	public void runNavBoardDiagnostics(){
 		Shuffleboard.selectTab("DiagnosticTab");
-		if(diagnosticStartTime == 0){
-			diagnosticStartTime = Timer.getFPGATimestamp();
-		}
-		//if((diagnosticStartTime + 3) >= Timer.getFPGATimestamp() && diagnosticStartTime != 0){
-			
-		//}else{
-			entryPitch.setDouble(getPitch());
-			entryYaw.setDouble(getYaw());
-			entryRoll.setDouble(getRoll());
-		//}
+		
+		entryPitch.setDouble(getPitch());
+		entryYaw.setDouble(getYaw());
+		entryRoll.setDouble(getRoll());
+		
 	}
 
 }
