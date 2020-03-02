@@ -24,7 +24,7 @@ public class IntakeInOutCommand extends Command implements IAutonomousCommand {
     private GenericHID controller;
     private int axis;
     private boolean isAuto = false;
-    private final double maxSpeed = 0.4;
+    private final double maxSpeed = 0.5;
 
     public IntakeInOutCommand(GenericHID controller, int axis) {
         requires(Robot.intake);

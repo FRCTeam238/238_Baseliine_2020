@@ -42,9 +42,9 @@ public class Drivetrain extends Subsystem {
 
   public final static double TICKS_PER_INCH = 193;
   private final static double ANGLE_KP = 3;
-  private final double kV = 0.00434;// 0.00455
-  private final double kA = 00.00434 * 0.15;
-  private final double vSetpoint = 0.078;// 0.078
+  private final double kV = 3.47;// 0.00434
+  private final double kA = 0.225;// 00.00434 * 0.15;
+  private final double vSetpoint = 1.078;// 0.078
 
   protected final static WPI_TalonSRX rightMasterDrive = RobotMap.DrivetrainControllers.RightMaster;
   protected final static WPI_TalonSRX leftMasterDrive = RobotMap.DrivetrainControllers.LeftMaster;

@@ -77,10 +77,12 @@ public class AutoShooterCommand extends CommandGroup implements IAutonomousComma
 
   @Override
   public boolean isFinished(){
-    double timeToShoot = theShooter.shootTimePerBall * this.ballsToShoot;
-    boolean isDone = feedCommand.timeSinceInitialized() >= timeToShoot;
-    if(isDone){
-      theShooter.neutral();
+    theShooter.beginCounting();
+    theShooter.countBalls();
+    double ballsShot = theShooter.ballsShot;
+    boolean isDone = false;
+    if(ballsShot >= ballsToShoot){
+      isDone = true;
     }
     return isDone;
   }

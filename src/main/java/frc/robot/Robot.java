@@ -94,7 +94,7 @@ public class Robot extends TimedRobot {
     // panelManipulator.initSensor();
     populateAutomodes();
     List<String> params= new ArrayList<>();
-    params.add("DRIVESTRAIGHT");
+    params.add("Straight");
     TrajectoryDriveCommand driveStraightTrajectory = new TrajectoryDriveCommand();
     driveStraightTrajectory.setParameters(params);
     SmartDashboard.putData("Drive Straight - trajectory", driveStraightTrajectory);

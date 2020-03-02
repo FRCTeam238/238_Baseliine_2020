@@ -54,7 +54,7 @@ public class Shooter extends Subsystem {
 
     public double shootTimePerBall = 1;
 
-    private double ballsShot = 0;
+    public double ballsShot = 0;
     private double shooterVoltageAverage;
     private double samplesTaken = 1;
     private double totalVoltage = 0;
