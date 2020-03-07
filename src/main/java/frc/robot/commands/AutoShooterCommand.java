@@ -16,7 +16,7 @@ import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Turret;
 
-@AutonomousModeAnnotation(parameterNames = { "NumberOfBalls"})
+@AutonomousModeAnnotation(parameterNames = { "NumberOfBalls", "TimeToRun"})
 public class AutoShooterCommand extends CommandGroup implements IAutonomousCommand {
   /**
    * Add your docs here.
@@ -26,7 +26,10 @@ public class AutoShooterCommand extends CommandGroup implements IAutonomousComma
   Turret theTurret = Robot.turret;
   boolean isAuto = false;
   double ballsToShoot = 0;
-  ManualFeed feedCommand = new ManualFeed();
+  double startTime = 0;
+  double timeToRun;
+  AutoFeed feedCommand = new AutoFeed();
+  PrepareToShoot prepareToShootCommand = new PrepareToShoot();
 
   public AutoShooterCommand() {
     requires(theFeeder);
@@ -34,7 +37,7 @@ public class AutoShooterCommand extends CommandGroup implements IAutonomousComma
     requires(theShooter);
 
     addParallel(new TurnTurretByVision());
-    addParallel(new PrepareToShoot());
+    addParallel(prepareToShootCommand);
 
     addSequential(new IsAlignedCommand());
     addSequential(feedCommand);
@@ -72,16 +75,21 @@ public class AutoShooterCommand extends CommandGroup implements IAutonomousComma
   @Override
   public void setParameters(List<String> parameters) {
     this.ballsToShoot = Double.parseDouble(parameters.get(0));
-
+    this.timeToRun = Double.parseDouble(parameters.get(1));
   }
 
   @Override
   public boolean isFinished(){
-    theShooter.beginCounting();
+    if(prepareToShootCommand.timeSinceInitialized() >= 1){
+      theShooter.beginCounting();
+    }
     theShooter.countBalls();
     double ballsShot = theShooter.ballsShot;
     boolean isDone = false;
     if(ballsShot >= ballsToShoot){
+      isDone = true;
+    }
+    if(this.timeSinceInitialized() >= timeToRun){
       isDone = true;
     }
     return isDone;

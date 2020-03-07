@@ -9,6 +9,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.FieldConstants;
 import frc.robot.Robot;
 import frc.robot.Trig238;
@@ -26,7 +27,7 @@ public class PrepareToShoot extends Command {
   private static double slipValue = 1;
   private double distance = 150; // -1
   private double firstIsAtSpeedTime = 0;
-  private double initialCounterDelay = 4;
+  private double initialCounterDelay = 1.5;
 
   public PrepareToShoot() {
     requires(theShooter);
@@ -56,6 +57,7 @@ public class PrepareToShoot extends Command {
       theShooter.beginCounting();
     }
     theShooter.countBalls();
+    SmartDashboard.putNumber("Balls Shot", theShooter.ballsShot);
   }
   // find speed to run at, in ticks per 100ms
   // tell shooter to run at that speed

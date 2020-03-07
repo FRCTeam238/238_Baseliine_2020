@@ -10,10 +10,11 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 
-public class ToggleLimelightZoom extends Command {
-  public ToggleLimelightZoom() {
+public class AutoFeed extends Command {
+  public AutoFeed() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
+    requires(Robot.feeder);
   }
 
   // Called just before this Command runs the first time
@@ -24,23 +25,27 @@ public class ToggleLimelightZoom extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.vision.swapPipeline();
+    if(this.timeSinceInitialized() >= 1){
+      Robot.feeder.start();
+    }
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return true;
+    return false;
   }
 
   // Called once after isFinished returns true
   @Override
   protected void end() {
+    Robot.feeder.stop();
   }
 
   // Called when another command which requires one or more of the same
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
+    Robot.feeder.stop();
   }
 }

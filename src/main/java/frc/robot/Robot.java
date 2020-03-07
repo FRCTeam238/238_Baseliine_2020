@@ -188,6 +188,9 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     SmartDashboard.putBoolean("Can Run Auto", m_allowAuto);
+    feeder.countHeldBalls();
+    SmartDashboard.putNumber("Shooter RPM", shooter.getSpeed());
+    SmartDashboard.putNumber("Turret X error", vision.getYaw());
   }
 
   /**
@@ -265,6 +268,8 @@ public class Robot extends TimedRobot {
     vision.postValues();
 
     SmartDashboard.putNumber("Shooter Bus Voltage", RobotMap.ShooterDevices.shooterMaster.getBusVoltage());
+
+    
 
     //SmartDashboard.putData("RUN SHOOTER TEST", new SetShooterSpeedCommand(SmartDashboard.getNumber("Shooter RPM", 0)));
   }

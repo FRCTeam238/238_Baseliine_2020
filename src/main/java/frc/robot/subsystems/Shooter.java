@@ -43,7 +43,7 @@ public class Shooter extends Subsystem {
 
     private double kP = 0.0008;//0.00005;
     private double kI = 0;
-    private double kD = 0.01;
+    private double kD = 0.025;
     private double kIZ = 0;
     private double kFF = 1.95e-4;
     private double kMinOutput = 0;
@@ -337,7 +337,7 @@ public class Shooter extends Subsystem {
             }
             SmartDashboard.putNumber("BALLS SHOT", ballsShot);
         }else{
-            Logger.Debug("Ball Counter waiting to start");
+            // Logger.Debug("Ball Counter waiting to start");
         }
     }
 

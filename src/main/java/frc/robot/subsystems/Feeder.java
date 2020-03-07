@@ -41,6 +41,8 @@ public class Feeder extends Subsystem {
 
     private NetworkTableEntry entry;
 
+    private boolean lastStateBroken = true;
+
     Dashboard238 dashboard;
 
     public Feeder() {
@@ -80,6 +82,14 @@ public class Feeder extends Subsystem {
 
     public void stop() {
         feederMasterDrive.set(ControlMode.PercentOutput, STOP_FEEDER_OUTPUT);
+    }
+
+    public void countHeldBalls(){
+        if(secondDetector.get() == true && lastStateBroken == false){ // Second sensor is NOT tripped, but just WAS
+            heldBallsNumber++;
+        }
+        lastStateBroken = secondDetector.get();
+        SmartDashboard.putNumber("Held Balls", heldBallsNumber - Robot.shooter.ballsShot);
     }
     // public BooleanSupplier getSensor1Triggered (){
 

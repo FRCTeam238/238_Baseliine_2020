@@ -132,7 +132,7 @@ public class Vision extends Subsystem {
     }
   }
 
-  private void setPipeline(int pipelineID){
+  public void setPipeline(int pipelineID){
     if(pipelineID == closeRangePipeline){
       isCloseRange = true;
     }else{
@@ -141,7 +141,7 @@ public class Vision extends Subsystem {
     table.getEntry("pipeline").setNumber(pipelineID);
   }
 
-  public void switchPipeline(){
+  public void swapPipeline(){
     if(isCloseRange){
       setPipeline(longRangePipeline);
     }else{

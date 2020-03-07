@@ -40,7 +40,7 @@ public class Turret extends Subsystem {
 
     final double kF = 0;
     final double kP = 0.3;
-    final double kI = 0.;
+    final double kI = 0.0001;
     final double kD = 0;
 
     private double diagnosticStartTime = 0;
