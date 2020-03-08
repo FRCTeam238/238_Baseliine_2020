@@ -42,9 +42,13 @@ public class Turret extends Subsystem {
     final double kP = 0.3;
     final double kI = 0.0001;
     final double kD = 0;
+    
+    private boolean isAtFirst = false;
+    private boolean isAtSecond = false;
 
     private double diagnosticStartTime = 0;
-    private NetworkTableEntry entry;
+    private NetworkTableEntry entry1;
+    private NetworkTableEntry entry2;
     Dashboard238 dashboard;
 
     public Turret() {
@@ -52,7 +56,8 @@ public class Turret extends Subsystem {
         resetEncoder();
         // initLiveWindow();
         dashboard = Robot.dashboard238;
-        entry = Shuffleboard.getTab("DiagnosticTab").add("Turret Position", 0).getEntry();
+        entry1 = Shuffleboard.getTab("DiagnosticTab").add("Turret at First Position", false).getEntry();
+        entry2 = Shuffleboard.getTab("DiagnosticTab").add("Turret at Second Position", false).getEntry();
     }
 
     @Override
@@ -128,16 +133,22 @@ public class Turret extends Subsystem {
         turretMasterDrive.set(ControlMode.Velocity, velocity);
     }
 
-    public void runTurretDiagnostic(){
+    public void runTurretDiagnostics(){
         Shuffleboard.selectTab("DiagnosticTab");
-        if(diagnosticStartTime == 0){
-            diagnosticStartTime = Timer.getFPGATimestamp();
+        if(getPosition() >= 4900 && isAtFirst == false){
+            isAtFirst = true;
         }
-        if((diagnosticStartTime + 2) >= Timer.getFPGATimestamp() && diagnosticStartTime != 0){
+        if(isAtFirst == false){
+            setPosition(5000);
+        }
+        if(isAtFirst && getPosition() >= -4900){
+            setPosition(- 5000);
+        }
+        if(getPosition() <= -4900){
+            isAtSecond = true;
             neutral();
-        }else{
-            turretMasterDrive.set(ControlMode.PercentOutput, 0.5);
-            entry.setDouble(getPosition());
         }
+        entry1.setBoolean(isAtFirst);
+        entry2.setBoolean(isAtSecond);
     }
 }

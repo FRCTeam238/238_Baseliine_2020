@@ -30,7 +30,7 @@ public class ShooterCommand extends CommandGroup {
     addParallel(new PrepareToShoot());
 
     addSequential(new IsAlignedCommand());
-    addSequential(new ManualFeed());
+    addSequential(new AutoFeed(1));
 
     // Add Commands here:
     // e.g. addSequential(new Command1());

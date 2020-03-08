@@ -307,7 +307,7 @@ public class Drivetrain extends Subsystem {
     if(diagnosticStartTime == 0){
         diagnosticStartTime = Timer.getFPGATimestamp();
     }
-    if((diagnosticStartTime + 3) >= Timer.getFPGATimestamp() && diagnosticStartTime != 0){
+    if((diagnosticStartTime + 3) <= Timer.getFPGATimestamp() && diagnosticStartTime != 0){
        stop();
     }else{
       drive(0.5, 0.5);

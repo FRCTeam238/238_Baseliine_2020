@@ -99,11 +99,16 @@ public class Intake extends Subsystem {
         if(diagnosticStartTime == 0){
             diagnosticStartTime = Timer.getFPGATimestamp();
         }
-        if(((diagnosticStartTime + 3) >= Timer.getFPGATimestamp()) && (diagnosticStartTime !=0 )){
+        if((diagnosticStartTime + 2) <= Timer.getFPGATimestamp() && diagnosticStartTime != 0){
             stop();
-        } else{
-            setPower(0.3);
-            entry.setDouble(getPower());
+            retractIntake();
+        }
+        if((diagnosticStartTime + 1) <= Timer.getFPGATimestamp() && diagnosticStartTime != 0){
+            setPower(-0.5);
+            extendIntake();
+        } else if(diagnosticStartTime != 0){
+            setPower(0.5);
+            retractIntake();
         }
 
     }

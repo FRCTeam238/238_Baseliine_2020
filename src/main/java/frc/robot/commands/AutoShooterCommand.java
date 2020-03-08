@@ -28,7 +28,7 @@ public class AutoShooterCommand extends CommandGroup implements IAutonomousComma
   double ballsToShoot = 0;
   double startTime = 0;
   double timeToRun;
-  AutoFeed feedCommand = new AutoFeed();
+  AutoFeed feedCommand = new AutoFeed(0.5);
   PrepareToShoot prepareToShootCommand = new PrepareToShoot();
 
   public AutoShooterCommand() {

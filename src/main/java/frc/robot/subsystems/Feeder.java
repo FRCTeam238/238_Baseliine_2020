@@ -33,13 +33,11 @@ public class Feeder extends Subsystem {
     public final DigitalInput firstDetector = new DigitalInput(0);
     public final DigitalInput secondDetector = new DigitalInput(1);
     // TODO: change FEEDER_OUTPUT to reasonable value;
-    private final double FEEDER_OUTPUT = 0.7;
+    private final double FEEDER_OUTPUT = 1;
     private final double STOP_FEEDER_OUTPUT = 0;
     private int heldBallsNumber = 0;
 
     private double diagnosticStartTime = 0;
-
-    private NetworkTableEntry entry;
 
     private boolean lastStateBroken = true;
 
@@ -49,7 +47,6 @@ public class Feeder extends Subsystem {
         // initLiveWindow();
         SmartDashboard.putData(this);
         dashboard = Robot.dashboard238;
-        entry = Shuffleboard.getTab("DiagnosticTab").add("FeederPower", 0).getEntry();
     }
 
     @Override
@@ -150,11 +147,13 @@ public class Feeder extends Subsystem {
         if(diagnosticStartTime == 0){
             diagnosticStartTime = Timer.getFPGATimestamp();
         }
-        if((diagnosticStartTime + 3) >= Timer.getFPGATimestamp() && diagnosticStartTime != 0){
+        if((diagnosticStartTime + 2) <= Timer.getFPGATimestamp() && diagnosticStartTime != 0){
             stop();
-        } else {
+        }
+        if((diagnosticStartTime + 1) <= Timer.getFPGATimestamp() && diagnosticStartTime != 0){
+            reverse();
+        } else if(diagnosticStartTime != 0){
             start();
-            entry.setDouble(getPower());
         }
 
     }

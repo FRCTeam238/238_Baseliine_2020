@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.core238.autonomous.AutonomousModesReader;
@@ -68,6 +69,9 @@ public class Robot extends TimedRobot {
   boolean m_allowAuto = true;
 
   SendableChooser<String> m_chooser = new SendableChooser<>();
+
+  boolean fmsConnected = false;
+  boolean enteredTeleop = false;
 
   public Robot() {
     navigationBoard = new NavigationBoard();
@@ -200,6 +204,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void disabledInit() {
+    if(enteredTeleop){
+      Shuffleboard.stopRecording();
+    }
   }
 
   @Override
@@ -232,6 +239,10 @@ public class Robot extends TimedRobot {
 
     // prevent the robot from rerunning auto mode a second time without a restart
     m_allowAuto = false;
+    if(DriverStation.getInstance().isFMSAttached()){
+      Shuffleboard.startRecording();
+      fmsConnected = true;
+    }
   }
 
   /**
@@ -253,6 +264,10 @@ public class Robot extends TimedRobot {
     // this line or comment it out.
     if (m_autoCommandGroup != null) {
       m_autoCommandGroup.cancel();
+    }
+
+    if(fmsConnected){
+      enteredTeleop = true;
     }
   }
 
@@ -288,10 +303,11 @@ public class Robot extends TimedRobot {
     vision.trackingMode();
     vision.postValues();
 
-    shooter.runShooterDiagnostic();
-    turret.runTurretDiagnostic();
-    feeder.runFeederDiagnostics();
-    intake.runIntakeDiagnostics();
-    navigationBoard.runNavBoardDiagnostics();
+    shooter.runShooterDiagnostics();
+    turret.runTurretDiagnostics();
+    //feeder.runFeederDiagnostics();
+    //intake.runIntakeDiagnostics();
+    //navigationBoard.runNavBoardDiagnostics();
+    //drivetrain.runDrivetrainDiagnostics();
   }
 }

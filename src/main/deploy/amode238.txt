@@ -7,7 +7,7 @@
           "IsParallel": false,
           "Parameters": [
             "5",
-            "7"
+            "4"
           ]
         },
         {
@@ -39,7 +39,7 @@
           "IsParallel": true,
           "Parameters": [
             "10",
-            "10"
+            "20"
           ]
         }
       ],
@@ -79,7 +79,7 @@
           "IsParallel": false,
           "Parameters": [
             "10",
-            "7"
+            "5"
           ]
         },
         {
@@ -91,7 +91,7 @@
           "Name": "TrajectoryDriveCommand",
           "IsParallel": true,
           "Parameters": [
-            "TrenchRunSLOW"
+            "TrenchRun"
           ]
         },
         {

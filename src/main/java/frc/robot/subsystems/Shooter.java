@@ -43,7 +43,7 @@ public class Shooter extends Subsystem {
 
     private double kP = 0.0008;//0.00005;
     private double kI = 0;
-    private double kD = 0.025;
+    private double kD = 0.09;
     private double kIZ = 0;
     private double kFF = 1.95e-4;
     private double kMinOutput = 0;
@@ -71,6 +71,8 @@ public class Shooter extends Subsystem {
 
     private NetworkTableEntry entry;
 
+    private boolean shooterAtSpeed = false;
+
     Dashboard238 dashboard;
     /*
      * private double integral = 0; private double derivative
@@ -85,7 +87,8 @@ public class Shooter extends Subsystem {
         // initLiveWindow();
         populateSpeedMap(distanceToShootMap);
         dashboard = Robot.dashboard238;
-        entry = Shuffleboard.getTab("DiagnosticTab").add("Shooter Velocity", 0).getEntry();
+        entry = Shuffleboard.getTab("DiagnosticTab").add("Shooter At Speed", false).getEntry();
+        
     }
 
     public void initSparkMax() {
@@ -351,16 +354,16 @@ public class Shooter extends Subsystem {
         hasBegunCounting = false;
     }
 
-    public void runShooterDiagnostic(){
+    public void runShooterDiagnostics(){
         Shuffleboard.selectTab("DiagnosticTab");
-        if(diagnosticStartTime == 0){
-            diagnosticStartTime = Timer.getFPGATimestamp();
-        }
-        if((diagnosticStartTime + 3) >= Timer.getFPGATimestamp() && diagnosticStartTime != 0){
+        if(shooterAtSpeed){
             neutral();
         }else{
             setSpeed(3000);
-            entry.setDouble(getSpeed());
+            if(getSpeed() >= 2900){
+                shooterAtSpeed = true;
+            }
         }
+        entry.setBoolean(shooterAtSpeed);
     }
 }

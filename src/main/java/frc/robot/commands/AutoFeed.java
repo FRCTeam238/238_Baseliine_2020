@@ -11,9 +11,11 @@ import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 
 public class AutoFeed extends Command {
-  public AutoFeed() {
+  private double delay;
+  public AutoFeed(double delayTime) {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
+    this.delay = delayTime;
     requires(Robot.feeder);
   }
 
@@ -25,7 +27,7 @@ public class AutoFeed extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    if(this.timeSinceInitialized() >= 1){
+    if(this.timeSinceInitialized() >= delay){
       Robot.feeder.start();
     }
   }
