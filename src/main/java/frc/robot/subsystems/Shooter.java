@@ -73,6 +73,8 @@ public class Shooter extends Subsystem {
 
     private boolean shooterAtSpeed = false;
 
+    private double speedIncrease = 0;
+
     Dashboard238 dashboard;
     /*
      * private double integral = 0; private double derivative
@@ -270,7 +272,8 @@ public class Shooter extends Subsystem {
         }else{
             neededRPMS = getSteppedRPMs(distance, distanceRemainder, distanceToShootMap);
         }
-        return neededRPMS;
+        double increasedRPMS = neededRPMS * (speedIncrease);
+        return (int) increasedRPMS;
     }
 
     private int getSteppedRPMs(int distance, int distanceRemainder, HashMap<Integer, Integer> map){
@@ -293,7 +296,8 @@ public class Shooter extends Subsystem {
         }else{
             steppedRPMs = lowerRPM + rpmAdjustment;
         }
-        return steppedRPMs;
+        double increasedRPMS = steppedRPMs * (1 + speedIncrease);
+        return (int) increasedRPMS;
     }
 
     private int getClosestRPMs(int distance, int distanceRemainder, HashMap<Integer, Integer> map){
@@ -365,5 +369,9 @@ public class Shooter extends Subsystem {
             }
         }
         entry.setBoolean(shooterAtSpeed);
+    }
+    /** Multiplies RPM by a scalar */
+    public void increaseSpeed(double increase){
+        speedIncrease = increase;
     }
 }

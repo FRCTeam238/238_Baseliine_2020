@@ -97,15 +97,14 @@ public class Robot extends TimedRobot {
     vision.initLimelight();
     // panelManipulator.initSensor();
     populateAutomodes();
-    List<String> params= new ArrayList<>();
-    params.add("Straight");
-    TrajectoryDriveCommand driveStraightTrajectory = new TrajectoryDriveCommand();
-    driveStraightTrajectory.setParameters(params);
-    SmartDashboard.putData("Drive Straight - trajectory", driveStraightTrajectory);
-    LiveWindow.disableAllTelemetry();
+    // List<String> params= new ArrayList<>();
+    // params.add("Straight");
+    // TrajectoryDriveCommand driveStraightTrajectory = new TrajectoryDriveCommand();
+    // driveStraightTrajectory.setParameters(params);
+    // SmartDashboard.putData("Drive Straight - trajectory", driveStraightTrajectory);
+    // LiveWindow.disableAllTelemetry();
 
-
-    SmartDashboard.putNumber("Shooter Distance (test)", 80); //TEST
+    SmartDashboard.putNumber("Shooter Speed Scalar", 1);
   }
 
   private void populateAutomodes() {
@@ -195,6 +194,8 @@ public class Robot extends TimedRobot {
     feeder.countHeldBalls();
     SmartDashboard.putNumber("Shooter RPM", shooter.getSpeed());
     SmartDashboard.putNumber("Turret X error", vision.getYaw());
+
+    shooter.increaseSpeed(SmartDashboard.getNumber("Shooter Speed Scalar", 1));
   }
 
   /**
@@ -282,7 +283,6 @@ public class Robot extends TimedRobot {
     //SmartDashboard.putString("Assigned Color", getDataFromDriverStation);
     vision.postValues();
 
-    SmartDashboard.putNumber("Shooter Bus Voltage", RobotMap.ShooterDevices.shooterMaster.getBusVoltage());
 
     
 
