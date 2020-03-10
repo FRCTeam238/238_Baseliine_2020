@@ -7,11 +7,12 @@
 
 package frc.robot.subsystems;
 
-import java.lang.reflect.Field;
-
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.FieldConstants;
 import frc.robot.RobotMap;
@@ -21,12 +22,22 @@ import frc.robot.RobotMap;
  */
 public class Hanger extends Subsystem {
 
-    //private final TalonSRX hangerMasterDrive = RobotMap.HangerDevices.hangerTalon;
+    // private final TalonSRX hangerMasterDrive =
+    // RobotMap.HangerDevices.hangerTalon;
     double hangHeight = FieldConstants.hangHeight;
     double ticksPerInch;
-	public Object resetEncoder;
+    public Object resetEncoder;
+    private final DoubleSolenoid brakeSolenoid = RobotMap.ClimberDevices.brakeSolenoid;
+    private final DoubleSolenoid deploySolenoid = RobotMap.ClimberDevices.deploySolenoid;
+    private final TalonSRX climberTalon = RobotMap.ClimberDevices.climberTalon;
+    final private double yMinimum = 0.5;
+    //brakeDelayed is the time of delay we want between stopping the motor and braking. if zero, we assume we can brake immediately after starting motor.
+    private final double brakeDelayTime = 0;
+    private double timeToEngageBrake = -1;
+    public DoubleSolenoid.Value isDeployed = Value.kReverse;
 
     public Hanger() {
+        initTalon();
     }
 
     @Override
@@ -35,32 +46,71 @@ public class Hanger extends Subsystem {
 
     }
 
-    public void resetEncoder() {
-        //hangerMasterDrive.setSelectedSensorPosition(0, 0, 0);
+    private void initTalon(){
+        climberTalon.configFactoryDefault();
+        climberTalon.setNeutralMode(NeutralMode.Brake);
     }
 
-    private double getPosition() {
-        double encoderTicks = 111;
-        //double encoderTicks = hangerMasterDrive.getSelectedSensorPosition();
-        return encoderTicks;
+    public void deploy() {
+
+        deploySolenoid.set(DoubleSolenoid.Value.kForward);
+
     }
 
-    public void hang(){
-        //hangerMasterDrive.set(ControlMode.Position, inchesToTicks(hangHeight));
+    public DoubleSolenoid.Value getBrakeStatus() {
+        return brakeSolenoid.get();
+
     }
 
-    private double inchesToTicks(double inches){
-        double ticks = inches * ticksPerInch;
-        return ticks;
+    public DoubleSolenoid.Value getDeployStatus() {
+        return deploySolenoid.get();
     }
 
-    private double ticksToInches(double ticks){
-        double inches = ticks / ticksPerInch;
-        return inches;
+    /*
+     * public void toggleBrake(){ DoubleSolenoid.Value brakeStatus =
+     * getBrakeStatus(); if(brakeStatus == Value.kForward){
+     * brakeSolenoid.set(DoubleSolenoid.Value.kReverse); } else {
+     * brakeSolenoid.set(DoubleSolenoid.Value.kForward); } }
+     */
+
+    public void brake() {
+
+        climberTalon.set(ControlMode.PercentOutput, 0);
+        brakeSolenoid.set(Value.kForward);
     }
 
-    private double getHeight(){
-        double height = ticksToInches(getPosition());
-        return height;
+    public void unBrake() {
+
+        brakeSolenoid.set(Value.kReverse);
     }
+
+    // raising or lowering the climbing mechanism
+    // magnitude is the offset of the joystick used to control raising and lowering
+    // the climber
+    public void raise(double magnitude) {
+        // (tuningValue * (leftJsValue * leftJsValue * leftJsValue) + (1-tuningValue) *
+        // leftJsValue);
+
+        if ((Math.abs(magnitude) >= yMinimum) && (isDeployed == Value.kForward)) {
+
+            unBrake();
+            timeToEngageBrake = -1;
+            climberTalon.set(ControlMode.PercentOutput, magnitude);
+
+        } else {
+
+            if (brakeDelayTime == 0) {
+                brake();
+            } else if (timeToEngageBrake != -1) {
+
+                if (System.currentTimeMillis() >= timeToEngageBrake) {
+                    brake();
+                }
+            } else {
+                timeToEngageBrake = System.currentTimeMillis() + (brakeDelayTime*1000);
+            }
+
+        }
+    }
+
 }

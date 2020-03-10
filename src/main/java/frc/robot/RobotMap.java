@@ -109,6 +109,12 @@ public final class RobotMap {
 
   public static class ClimberDevices {
     public static int CLIMBER_MASTER = 4;
-    public static int CLIMBER_SLAVE = 5;
+    public static int CLIMBER_DEPLOY_FORWARD = 5;
+    public static int CLIMBER_DEPLOY_REVERSE = 2;
+    public static int CLIMBER_BRAKE_FORWARD = 1;
+    public static int CLIMBER_BRAKE_REVERSE = 7;
+    public static DoubleSolenoid brakeSolenoid = new DoubleSolenoid(CLIMBER_BRAKE_FORWARD, CLIMBER_BRAKE_REVERSE);
+    public static DoubleSolenoid deploySolenoid = new DoubleSolenoid(CLIMBER_DEPLOY_FORWARD, CLIMBER_DEPLOY_REVERSE);
+    public static TalonSRX climberTalon = new TalonSRX(CLIMBER_MASTER);
   }
 }
