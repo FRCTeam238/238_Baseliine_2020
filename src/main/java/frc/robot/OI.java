@@ -93,6 +93,11 @@ public class OI {
 
     Robot.feeder.setDefaultCommand(new FeederCommand());
 
+    // Robot.shooter.setDefaultCommand(new MotorCommand(operatorController, XboxController.Axis.kLeftY.value));
+
+    
+    
+
     //Trigger feedMe = new Trigger( () -> Robot.feeder.getSensor1Triggered());
     //feedMe.whenActive(new FeederCommand;
   }

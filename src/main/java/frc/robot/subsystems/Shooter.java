@@ -261,8 +261,9 @@ public class Shooter extends Subsystem {
 
     public int readSpeedMap(int distance){
         int neededRPMS = 0;
+        Logger.Debug("Distance: " + distance);
         int distanceRemainder = distance % 16;
-        if(distanceRemainder == 0){
+        if(distanceRemainder == 0){   
             if(distanceToShootMap.containsKey(distance)){
                 neededRPMS = distanceToShootMap.get(distance);
             }else{
@@ -273,6 +274,8 @@ public class Shooter extends Subsystem {
             neededRPMS = getSteppedRPMs(distance, distanceRemainder, distanceToShootMap);
         }
         double increasedRPMS = neededRPMS * (speedIncrease);
+        Logger.Debug("Needed RPMS: " + neededRPMS);
+        Logger.Debug("increasedRPMS: " + increasedRPMS);
         return (int) increasedRPMS;
     }
 
@@ -296,8 +299,7 @@ public class Shooter extends Subsystem {
         }else{
             steppedRPMs = lowerRPM + rpmAdjustment;
         }
-        double increasedRPMS = steppedRPMs * (1 + speedIncrease);
-        return (int) increasedRPMS;
+        return (int) steppedRPMs;
     }
 
     private int getClosestRPMs(int distance, int distanceRemainder, HashMap<Integer, Integer> map){
