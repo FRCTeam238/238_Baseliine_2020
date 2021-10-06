@@ -99,9 +99,7 @@ public class Hanger extends Subsystem {
 
         } else {
 
-            if (brakeDelayTime == 0) {
-                brake();
-            } else if (timeToEngageBrake != -1) {
+            if (timeToEngageBrake != -1) {
 
                 if (System.currentTimeMillis() >= timeToEngageBrake) {
                     brake();
