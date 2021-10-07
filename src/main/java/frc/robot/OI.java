@@ -14,12 +14,14 @@ import edu.wpi.first.wpilibj.command.InstantCommand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.core238.wrappers.TriggerButton;
 import frc.robot.commands.FeederCommand;
+import frc.robot.commands.HangerCommand;
 import frc.robot.commands.IntakeExtendRetractCommand;
 import frc.robot.commands.IntakeInOutCommand;
 import frc.robot.commands.ManualFeed;
 import frc.robot.commands.ManualReverse;
 import frc.robot.commands.PrepareToShoot;
 import frc.robot.commands.SetShooterSpeedCommand;
+import frc.robot.commands.ShootAtMinPower;
 import frc.robot.commands.ShooterCommand;
 import frc.robot.commands.ToggleLimelightZoom;
 import frc.robot.commands.TurnTurretByVision;
@@ -93,9 +95,19 @@ public class OI {
 
     Robot.feeder.setDefaultCommand(new FeederCommand());
 
+    // Robot.hanger.setDefaultCommand(new HangerCommand(operatorController, XboxController.Axis.kLeftY.value));
+
+    //FOR DEMO, USE THIS BUTTON FOR SHOOTING WITHOUT TARGET--------
+    // JoystickButton shootMinPower = new JoystickButton(operatorController, XboxController.Button.kX.value);
+    // shootMinPower.whileHeld(new ShootAtMinPower());
+    //---------------------------------------------------------------
+
     // Robot.shooter.setDefaultCommand(new MotorCommand(operatorController, XboxController.Axis.kLeftY.value));
 
-    
+    //feeder: bumpers -> DPAD
+    //intake toggle: right joystick -> left bumper
+    //climber: right bumper
+
     
 
     //Trigger feedMe = new Trigger( () -> Robot.feeder.getSensor1Triggered());

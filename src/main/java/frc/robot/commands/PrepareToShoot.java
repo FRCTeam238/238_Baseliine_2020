@@ -50,6 +50,9 @@ public class PrepareToShoot extends Command {
       wantedSpeed = (double)theShooter.readSpeedMap((int)distance);
     }
     theShooter.setSpeed(wantedSpeed);
+
+    theShooter.isShooting = true;
+
     if(theShooter.isAtSpeed() && firstIsAtSpeedTime == 0){ 
       firstIsAtSpeedTime = this.timeSinceInitialized();
     }
@@ -134,6 +137,7 @@ public class PrepareToShoot extends Command {
   // Called once after isFinished returns true
   @Override
   protected void end() {
+    theShooter.isShooting = false;
     theShooter.neutral();
   }
 

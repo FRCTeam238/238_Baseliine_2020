@@ -30,6 +30,7 @@ import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.DrivetrainTrajectoryExtensions;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Hanger;
+import frc.robot.subsystems.Hanger2021;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LED;
 import frc.robot.subsystems.NavigationBoard;
@@ -56,6 +57,7 @@ public class Robot extends TimedRobot {
   public static Turret turret;
   public static Feeder feeder;
   public static Hanger hanger;
+  public static Hanger2021 hanger2021;
   public static Intake intake;
   public static PanelManipulator panelManipulator;
   public static LED led;
@@ -279,7 +281,7 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     Scheduler.getInstance().run();
 
-    String getDataFromDriverStation = DriverStation.getInstance().getGameSpecificMessage();
+    // String getDataFromDriverStation = DriverStation.getInstance().getGameSpecificMessage();
     //SmartDashboard.putString("Assigned Color", getDataFromDriverStation);
     vision.postValues();
 

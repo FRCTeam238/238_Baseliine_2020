@@ -75,6 +75,8 @@ public class Shooter extends Subsystem {
 
     private double speedIncrease = 0;
 
+    public boolean isShooting = false;
+
     Dashboard238 dashboard;
     /*
      * private double integral = 0; private double derivative
@@ -160,7 +162,6 @@ public class Shooter extends Subsystem {
     public void simpleSetSpeed(double speedValue){
         //shooterMasterDrive.set(speedValue);
     }
-
 
     //Changed from percent to raw
     public double getCurrent() {

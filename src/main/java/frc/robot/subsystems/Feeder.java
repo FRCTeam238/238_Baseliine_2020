@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.core238.Logger;
 import frc.core238.wrappers.SendableWrapper;
 import frc.robot.Dashboard238;
 import frc.robot.Robot;
@@ -32,6 +33,8 @@ public class Feeder extends Subsystem {
     public final VictorSPX feederMasterDrive = RobotMap.FeederDevices.feederVictor;// FeederDevices.feederTalon;
     public final DigitalInput firstDetector = new DigitalInput(0);
     public final DigitalInput secondDetector = new DigitalInput(1);
+    public final DigitalInput thirdDetector = new DigitalInput(2);
+
     // TODO: change FEEDER_OUTPUT to reasonable value;
     private final double FEEDER_OUTPUT = 1;
     private final double STOP_FEEDER_OUTPUT = 0;
