@@ -96,6 +96,7 @@ public class OI {
     Robot.feeder.setDefaultCommand(new FeederCommand());
 
     // Robot.hanger.setDefaultCommand(new HangerCommand(operatorController, XboxController.Axis.kLeftY.value));
+    Robot.hanger2021.setDefaultCommand(new HangerCommand(operatorController, XboxController.Axis.kLeftY.value));
 
     //FOR DEMO, USE THIS BUTTON FOR SHOOTING WITHOUT TARGET--------
     // JoystickButton shootMinPower = new JoystickButton(operatorController, XboxController.Button.kX.value);

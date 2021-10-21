@@ -14,7 +14,6 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
@@ -124,7 +123,7 @@ public class Drivetrain extends Subsystem {
     setPosition(leftMasterDrive, ticks);
   }
 
-  // method to accelerate rather than set straigt power
+  // method to accelerate rather than set straight power
   public void accelerate(double leftSpeed, double rightSpeed, double leftAccel, double rightAccel) {
 
     /*

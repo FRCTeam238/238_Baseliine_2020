@@ -99,20 +99,13 @@ public final class RobotMap {
   //   public static TalonSRX hangerTalon = TalonSRX_238.create(HANGER_DEVICES, Robot.isSimulation()); 
   // }
 
-  public static class PanelManipulatorDevices {
-    //TODO: Change to real number
-    public static double power = 0.5;
-
-    //TODO: change the number to real numbers
-    public static DoubleSolenoid panelSolenoid = new DoubleSolenoid(1,6);
-  }
-
+ 
   public static class ClimberDevices {
     public static int CLIMBER_MASTER = 4;
     public static int CLIMBER_DEPLOY_FORWARD = 5;
     public static int CLIMBER_DEPLOY_REVERSE = 2;
-    public static int CLIMBER_BRAKE_FORWARD = 1;
-    public static int CLIMBER_BRAKE_REVERSE = 7;
+    public static int CLIMBER_BRAKE_FORWARD = 6;
+    public static int CLIMBER_BRAKE_REVERSE = 1;
     public static DoubleSolenoid brakeSolenoid = new DoubleSolenoid(CLIMBER_BRAKE_FORWARD, CLIMBER_BRAKE_REVERSE);
     public static DoubleSolenoid deploySolenoid = new DoubleSolenoid(CLIMBER_DEPLOY_FORWARD, CLIMBER_DEPLOY_REVERSE);
     public static TalonSRX climberTalon = new TalonSRX(CLIMBER_MASTER);

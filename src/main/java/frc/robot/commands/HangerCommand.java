@@ -24,6 +24,7 @@ public class HangerCommand extends Command {
 
         this.controller = controller;
         this.axis = axis;
+        driverStation = DriverStation.getInstance();
     }
 
     @Override
@@ -32,8 +33,8 @@ public class HangerCommand extends Command {
 
     protected void execute() {
         double matchTime = driverStation.getMatchTime(); 
-        double speed = controller.getRawAxis(axis);
-
+        double speed = -1 * controller.getRawAxis(axis);
+        matchTime = 25;
         if (matchTime <= 30) {
             // neutral
             if ((speed < minAxis) && (speed > -minAxis) && (pullingRobotUp == true)) { //do we need button or joystick? -Aarush 

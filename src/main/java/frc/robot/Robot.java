@@ -34,7 +34,6 @@ import frc.robot.subsystems.Hanger2021;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LED;
 import frc.robot.subsystems.NavigationBoard;
-import frc.robot.subsystems.PanelManipulator;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Turret;
 import frc.robot.subsystems.Vision;
@@ -59,7 +58,6 @@ public class Robot extends TimedRobot {
   public static Hanger hanger;
   public static Hanger2021 hanger2021;
   public static Intake intake;
-  public static PanelManipulator panelManipulator;
   public static LED led;
 
   // Dictionary of auto mode names and commands to run
@@ -83,8 +81,9 @@ public class Robot extends TimedRobot {
     dashboard238 = new Dashboard238();
     feeder = new Feeder();
     //hanger = new Hanger();
+    hanger2021 = new Hanger2021();
     intake = new Intake();
-    panelManipulator = new PanelManipulator();
+    //panelManipulator = new PanelManipulator();
     turret = new Turret();
     led = new LED(2, 150);
 
@@ -105,7 +104,7 @@ public class Robot extends TimedRobot {
     // driveStraightTrajectory.setParameters(params);
     // SmartDashboard.putData("Drive Straight - trajectory", driveStraightTrajectory);
     // LiveWindow.disableAllTelemetry();
-
+    hanger2021.retractBrake();
     SmartDashboard.putNumber("Shooter Speed Scalar", 1);
   }
 
