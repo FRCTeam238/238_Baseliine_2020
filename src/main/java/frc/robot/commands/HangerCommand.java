@@ -1,9 +1,12 @@
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.command.Command;
+import frc.core238.Logger;
 import frc.robot.Robot;
+import frc.robot.RobotMap;
 import frc.robot.subsystems.Hanger2021;
 
 /**
@@ -13,8 +16,7 @@ public class HangerCommand extends Command {
     Hanger2021 theHanger = Robot.hanger2021;
     private GenericHID controller;
     private int axis;
-    private double minAxis = 0.25; //THIS IS NOT ALLOWED; I, AARUSH, WILL CHANGE THIS OR ELSE I WILL BE
-    //SUBJECT TO PUSH UPS
+    private double minAxis = RobotMap.ClimberDevices.DEADBAND_MINIMUM_AXIS; //DOUBLE CHECK AXIS
     DriverStation driverStation;
 
     boolean pullingRobotUp = false;
@@ -34,27 +36,22 @@ public class HangerCommand extends Command {
     protected void execute() {
         double matchTime = driverStation.getMatchTime(); 
         double speed = -1 * controller.getRawAxis(axis);
-        matchTime = 25;
         if (matchTime <= 30) {
-            // neutral
-            if ((speed < minAxis) && (speed > -minAxis) && (pullingRobotUp == true)) { //do we need button or joystick? -Aarush 
-                theHanger.deployBrake();
-            }
-
             // elevator up
-            if (speed > minAxis) {
+            if ((speed > minAxis) && (theHanger.topSwitch.get() == true)) {
                 theHanger.retractBrake();
                 theHanger.controlTalon(speed);
-                // DOUBLE CHECK MECHANICAL VIEW OF THE HANGER MOVEMENT OF MOTOR
-                theHanger.deployClawSolenoid();
                 pullingRobotUp = false;
             }
-
-            // elevator down
-            if (speed < -minAxis) {
+            else if ((speed < -minAxis) && (theHanger.bottomSwitch.get() == true)) { // elevator down
                 theHanger.retractBrake();
                 theHanger.controlTalon(speed);
                 pullingRobotUp = true;
+            }
+            else if ((pullingRobotUp == true)) { //default/neutral
+                theHanger.deployBrake();
+            } else {
+                theHanger.controlTalon(0);
             }
 
         }
@@ -65,29 +62,15 @@ public class HangerCommand extends Command {
     //deploy hanger when AT CERTAIN HEIGHT
     //-------------------
 
-    // if time > 30 {
-    //   brake fired
-    // }
-    // if time <= 30 {
-    //   if stick pressed up {
-    //     move elevtor up
-    //     if first time moving elevtor {
-    //       fire hook;
-    //       retract brake; (pulling piston back)
-    //     }
-    //   }
-    //   if stick pressed down {
-    //     applying brake; (firing)
-    //     move elevator down;
-    //   }
-    //   if no stick pressed {
-    //     brake fired automatically
-    //   }
-    // }
-
     @Override
     protected boolean isFinished() {
         // TODO Auto-generated method stub
         return false;
+    }
+
+    @Override
+    protected void end() {
+        theHanger.deployBrake();
+        super.end();
     }
 }

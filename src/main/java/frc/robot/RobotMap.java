@@ -14,6 +14,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -109,5 +110,10 @@ public final class RobotMap {
     public static DoubleSolenoid brakeSolenoid = new DoubleSolenoid(CLIMBER_BRAKE_FORWARD, CLIMBER_BRAKE_REVERSE);
     public static DoubleSolenoid deploySolenoid = new DoubleSolenoid(CLIMBER_DEPLOY_FORWARD, CLIMBER_DEPLOY_REVERSE);
     public static TalonSRX climberTalon = new TalonSRX(CLIMBER_MASTER);
+
+    public static DigitalInput topSwitch = new DigitalInput(4);
+    public static DigitalInput bottomSwitch = new DigitalInput(3);
+
+    public static double DEADBAND_MINIMUM_AXIS = 0.1; //DOUBLE CHECK VALUE
   }
 }

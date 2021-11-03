@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import edu.wpi.cscore.UsbCamera;
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.CommandGroup;
@@ -19,6 +21,7 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.core238.Logger;
 import frc.core238.autonomous.AutonomousModesReader;
 import frc.core238.autonomous.DataFileAutonomousModeDataSource;
 import frc.core238.autonomous.IAutonomousModeDataSource;
@@ -60,6 +63,8 @@ public class Robot extends TimedRobot {
   public static Intake intake;
   public static LED led;
 
+  public static UsbCamera camera;
+
   // Dictionary of auto mode names and commands to run
   HashMap<String, CommandGroup> m_autoModes;
   CommandGroup m_autoCommandGroup;
@@ -86,7 +91,7 @@ public class Robot extends TimedRobot {
     //panelManipulator = new PanelManipulator();
     turret = new Turret();
     led = new LED(2, 150);
-
+    camera = CameraServer.getInstance().startAutomaticCapture();
     //SmartDashboard.putData(TrajectoryDrive.getExampleCommand());
   }
   
@@ -105,6 +110,7 @@ public class Robot extends TimedRobot {
     // SmartDashboard.putData("Drive Straight - trajectory", driveStraightTrajectory);
     // LiveWindow.disableAllTelemetry();
     hanger2021.retractBrake();
+    hanger2021.retractClawSolenoid();
     SmartDashboard.putNumber("Shooter Speed Scalar", 1);
   }
 

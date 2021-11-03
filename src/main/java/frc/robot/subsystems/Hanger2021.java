@@ -4,8 +4,8 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.RobotMap;
 
@@ -17,6 +17,8 @@ public class Hanger2021 extends Subsystem {
     private final DoubleSolenoid brakeSolenoid = RobotMap.ClimberDevices.brakeSolenoid; // RECHECK CHANNEL NUMBER
     private final DoubleSolenoid deploySolenoid = RobotMap.ClimberDevices.deploySolenoid; // RECHECK CHANNEL NUMBER
     private final TalonSRX climberTalon = RobotMap.ClimberDevices.climberTalon;
+    public final DigitalInput topSwitch = RobotMap.ClimberDevices.topSwitch;
+    public final DigitalInput bottomSwitch = RobotMap.ClimberDevices.bottomSwitch;
 
     public Hanger2021() {
         initTalon();

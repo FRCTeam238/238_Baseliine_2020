@@ -13,6 +13,8 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.command.InstantCommand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.core238.wrappers.TriggerButton;
+import frc.robot.commands.DefaultHangerCommand;
+import frc.robot.commands.DeployClawSolenoidCommand;
 import frc.robot.commands.FeederCommand;
 import frc.robot.commands.HangerCommand;
 import frc.robot.commands.IntakeExtendRetractCommand;
@@ -86,8 +88,8 @@ public class OI {
     TriggerButton turnTurretByVision = new TriggerButton(operatorController, XboxController.Axis.kLeftTrigger.value);
     turnTurretByVision.whileHeld(new TurnTurretByVision());
 
-    JoystickButton toggleZoomButton = new JoystickButton(operatorController, XboxController.Button.kA.value);
-    toggleZoomButton.whenPressed(new ToggleLimelightZoom());
+    // JoystickButton toggleZoomButton = new JoystickButton(operatorController, XboxController.Button.kA.value);
+    // toggleZoomButton.whenPressed(new ToggleLimelightZoom());
 
     Robot.turret.setDefaultCommand(new TurnTurretManually(operatorController, XboxController.Axis.kLeftX.value));
 
@@ -95,8 +97,15 @@ public class OI {
 
     Robot.feeder.setDefaultCommand(new FeederCommand());
 
-    // Robot.hanger.setDefaultCommand(new HangerCommand(operatorController, XboxController.Axis.kLeftY.value));
+    //Robot.hanger2021.setDefaultCommand(new DefaultHangerCommand());
+    //TriggerButton runHangerCommand = new TriggerButton(operatorController, XboxController.Button.kB.value);
+    //runHangerCommand.whileHeld(new HangerCommand(operatorController, XboxController.Axis.kLeftY.value));
+    
+    //just in case
     Robot.hanger2021.setDefaultCommand(new HangerCommand(operatorController, XboxController.Axis.kLeftY.value));
+    JoystickButton deployClawSolenoid = new JoystickButton(operatorController, XboxController.Button.kB.value);
+    deployClawSolenoid.whenPressed(new DeployClawSolenoidCommand());
+    
 
     //FOR DEMO, USE THIS BUTTON FOR SHOOTING WITHOUT TARGET--------
     // JoystickButton shootMinPower = new JoystickButton(operatorController, XboxController.Button.kX.value);
